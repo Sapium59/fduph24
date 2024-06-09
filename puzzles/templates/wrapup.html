@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block top-left-actions %}
+<a href="{% url 'hunt-stats' %}" class="btn">{% translate "Hunt Stats" %}</a>
+<a href="{% url 'finishers' %}" class="btn">{% translate "Finishers" %}</a>
+<a href="{% url 'biggraph' %}" class="btn">{% translate "Big Graph" %}</a>
+{% endblock %}
+
+{% block content %}
+
+<style>
+  aside {
+    display: none;
+  }
+
+  @media screen and (min-width: 961px) {
+    aside {
+      display: block;
+      position: fixed;
+      width: 240px;
+      top: 120px;
+      left: 0;
+    }
+
+    aside div {
+      color: var(--link-text-color);
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    aside :hover {
+      text-decoration: underline;
+    }
+
+    aside .highlight {
+      font-weight: bold;
+    }
+
+    .content {
+      margin-left: calc(240px - 10vw);
+    }
+  }
+</style>
+
+<h1>{% translate "Wrap-Up" %}</h1>
+
+<main>
+
+<p>{% translate "Congratulations!" %}</p>
+
+</main>
+
+<aside>
+  <script>
+    const heads = [...$('h1,h2,h3,h4,h5,h6')].map(head => [head, $('<div>')
+      .text(head.textContent)
+      .css('padding-left', head.tagName.substr(1) + 'em')
+      .click(() => head.scrollIntoView())
+      .appendTo('aside')]);
+    function highlight() {
+      const rects = heads.map(([head]) => head.getBoundingClientRect());
+      heads.forEach(([head, link], i) => link.toggleClass('highlight',
+        (!rects[i + 1] || rects[i + 1].top > 0) && rects[i].top < innerHeight));
+    }
+    document.addEventListener('scroll', highlight, { passive: true });
+    highlight();
+  </script>
+</aside>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load puzzle_tags %}
+
+{% block top-left-actions %}
+{% if is_superuser %}
+<a href="{% url 'admin:puzzles_erratum_add' %}" class="btn">{% translate "New erratum" %}</a>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<h1>{% translate "Errata / Updates" %}</h1>
+<main>
+    {% for erratum in visible_errata %}
+    {% if erratum.updates_text %}
+    <div class="puzzle-erratum">
+        {% if not erratum.published %}
+        <strong>[<a href="{% url 'admin:puzzles_erratum_change' erratum.id %}">{% translate "UNPUBLISHED" %}</a>]</strong>
+        {% endif %}
+        {% format_time erratum.timestamp "DATE_AT_TIME" as erratum_time %}
+        {% blocktranslate %}On {{ erratum_time }}, {% endblocktranslate %}
+        {{ erratum.formatted_updates_text|safe }}
+        {% if is_superuser and erratum.puzzle %}
+        <details>
+            <summary>{% translate "Emails:" %}</summary>
+            <textarea>{{ erratum.get_emails|join:', ' }}</textarea>
+        </details>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% endfor %}
+</main>
+{% endblock %}

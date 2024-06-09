@@ -1,0 +1,15 @@
+2024-06-08 23:23:17,922 (PID 17456) [INFO] puzzles.messaging (Test) Discord alert:
+[23:23:17] Team created: sapium-test-0-tname
+2024-06-08 23:23:17,929 (PID 17456) [INFO] puzzles.messaging (Test) Discord alert:
+[23:23:17] Team sapium-test-0-tname added member sapium-test-0-member0 (sapium-test-0@sapium.site)
+2024-06-08 23:23:17,943 (PID 17456) [INFO] puzzles.messaging Sending mail <Team created> to <sapium-test-0@sapium.site>:
+
+
+You have successfully registered team sapium-test-0-tname for the FIXME Puzzle Hunt.
+
+If you need to modify your team information, you can do so at http://127.0.0.1:8000/team/sapium-test-0-tname
+
+See you at the hunt!
+FIXME Puzzlesetters
+
+

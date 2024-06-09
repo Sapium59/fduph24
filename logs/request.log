@@ -1,0 +1,8 @@
+2024-06-08 23:19:34,052 (PID 16699) [INFO] puzzles.request / AnonymousUser
+2024-06-08 23:19:35,285 (PID 16699) [INFO] puzzles.request /favicon.ico AnonymousUser
+2024-06-08 23:21:25,468 (PID 17456) [INFO] puzzles.request / AnonymousUser
+2024-06-08 23:21:25,801 (PID 17456) [INFO] puzzles.request /jsi18n/ AnonymousUser
+2024-06-08 23:21:59,526 (PID 17456) [INFO] puzzles.request /register AnonymousUser
+2024-06-08 23:22:35,525 (PID 17456) [INFO] puzzles.request /register AnonymousUser
+2024-06-08 23:23:17,711 (PID 17456) [INFO] puzzles.request /register AnonymousUser
+2024-06-08 23:23:17,998 (PID 17456) [INFO] puzzles.request / sapium-test-0-usr
