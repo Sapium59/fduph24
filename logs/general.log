@@ -13,3 +13,28 @@ See you at the hunt!
 FIXME Puzzlesetters
 
 
+2024-07-14 08:20:21,484 (PID 9302) [INFO] puzzles.messaging (Test) Discord alert:
+[08:20:21] Team created: reg
+2024-07-14 08:20:21,489 (PID 9302) [INFO] puzzles.messaging (Test) Discord alert:
+[08:20:21] Team reg added member reg (reg@reg.reg)
+2024-07-14 08:20:21,504 (PID 9302) [INFO] puzzles.messaging Sending mail <Team created> to <reg@reg.reg>:
+
+
+You have successfully registered team reg for the FIXME Puzzle Hunt.
+
+If you need to modify your team information, you can do so at http://fduph24.sapium.site/team/reg
+
+See you at the hunt!
+FIXME Puzzlesetters
+
+
+2024-07-14 08:25:56,955 (PID 11480) [INFO] puzzles.messaging (Test) Discord alert:
+[08:25:56] Team reg added member 123456 (12345@1234.123)
+2024-07-14 09:00:15,004 (PID 18412) [INFO] puzzles.messaging (Test) Discord alert:
+[09:00:15] Team created: admin
+2024-07-14 09:13:01,791 (PID 31189) [INFO] puzzles.messaging (Test) Discord alert:
+[09:13:01] Team created: admin
+2024-07-14 09:13:01,792 (PID 31189) [INFO] puzzles.messaging (Test) Discord alert:
+[09:13:01] Team created: test
+2024-11-26 23:10:47,377 (PID 9402) [INFO] puzzles.messaging (Test) Discord alert:
+[23:10:47] :x: :question: Team admin submitted `ANSWER` for Ambiguity: Incorrect.
