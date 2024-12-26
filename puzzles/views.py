@@ -9,6 +9,7 @@ import requests
 import traceback
 from collections import defaultdict, OrderedDict, Counter
 from functools import wraps
+from typing import List
 from urllib.parse import quote, unquote
 
 from django.conf import settings
@@ -571,6 +572,18 @@ def puzzle(request):
                 team.num_free_answers_remaining > 0
             ),
     }
+
+    # Puzzles with extra inputs
+    # r2q8: 宾果黑箱
+    if request.context.puzzle.body_template == "r2q8":
+        r2q8_hint_num: int = getattr(team, "r2q8_hint_num", 0)  # FIXME
+        r2q8_known_rules: List[int] = getattr(team, "r2q8_known_rules", [])  # FIXME
+        r2q8_is_bought: bool = getattr(team, "r2q8_is_bought", False)  # FIXME
+        data['r2q8_hint_num'] = r2q8_hint_num
+        data['r2q8_known_rules'] = r2q8_known_rules
+        data['r2q8_is_bought'] = r2q8_is_bought
+    # ...
+
     try:
         return render(request, template_name, data)
     except (TemplateDoesNotExist, IsADirectoryError):
