@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>宾果黑箱</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        .square {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            background-color: black;
+            border: 2px solid black;
+            margin: 2px;
+        }
+        .white-square {
+            background-color: white;
+        }
+        .hover-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            display: none;
+            pointer-events: none;
+        }
+        .square:hover .hover-text {
+            display: block;
+            color: white;
+        }
+        /* 当方块是白色时悬浮显示黑色文字 */
+        .square.white-square:hover .hover-text {
+            display: block;
+            color: black;
+        }
+
+        .custom-tooltip {
+            --bs-tooltip-bg: #808080;
+            --bs-tooltip-color: #ffffff;
+            --bs-tooltip-opacity: 1;
+        }
+
+        .index-placeholder {
+            width: 50px;
+            height: 50px;
+        }
+
+        .column-index, .row-index {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            margin: 2px;
+        }
+        
+        #singleColumn {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 0 10px;
+        }
+
+        .fixed-width-btn {
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .tooltip-inner {
+            max-width: 170px;
+            white-space: normal;
+        }
+
+        .underline-text {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body class="bg-body-tertiary">
+    <div class="container">
+        <div class="d-flex justify-content-center align-items-center flex-column">
+            <div class="mt-5 mb-4" style="text-align: center;">达成BINGO领取奖金！如果同时满足额外条件更有超级大奖哦~</div>
+
+            <div class="col-10 col-md-6 col-lg-4 mb-3">
+                <div class="input-group">
+                    <input type="text" class="form-control focus-ring text-center border border-dark" placeholder="请输入" style="--bs-focus-ring-color: rgba(var(--bs-dark-rgb), .25);" id="wordInput">
+                    <button class="btn btn-dark" type="button" id="submitButton">提交</button>
+                </div>
+            </div>
+
+            <div class="collapse col-8 col-md-4 mb-3" id="infoCollapse">
+                <div class="card card-body">
+                    <div class="d-flex justify-content-between">
+                        <span id="infoText">placeholder</span>
+                        <span><button type="button" class="btn-close focus-ring" id="closeInfoButton" style="--bs-focus-ring-color: rgba(var(--bs-dark-rgb), .25)"></button></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center justify-content-between col-8 col-md-4 col-lg-3">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-coin fs-5 me-2"></i>
+                    <div class="fw-bold" id="coinCount">0</div>
+                </div>
+
+                <button type="button" class="btn btn-outline-dark" id="historyButton" data-bs-toggle="modal" data-bs-target="#historyModal" title="上100个去重合法输入，刷新页面后不保留" data-bs-placement="right">历史记录</button>
+            </div>
+
+            <div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">历史记录</h5>
+                    <button type="button" class="btn-close focus-ring" data-bs-dismiss="modal" aria-label="Close" style="--bs-focus-ring-color: rgba(var(--bs-dark-rgb), .25)" id="historyCloseButton"></button>
+                    </div>
+                    <div class="modal-body">
+                    <ul class="list-group column" id="inputHistory">
+                        没有历史输入
+                    </ul>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-dark fixed-width-btn" id="copyButton">复制到剪贴板</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-center">
+                <div class="column-index">1</div> <!-- 左上角占位 -->
+                <div class="column-index">2</div>
+                <div class="column-index">8</div>
+                <div class="column-index">3</div>
+                <div class="column-index">4</div>
+                <div class="column-index">9</div>
+                <div class="column-index">12</div>
+            </div>
+        
+            <!-- 正方形阵列 -->
+            <div class="d-flex flex-column align-items-center">
+                <div class="d-flex align-items-center">
+                    <div class="row-index">6</div>
+                    <button class="square"></button>
+                    <button class="square"></button>
+                    <button class="square"></button>
+                    <button class="square"></button>
+                    <button class="square"></button>
+                    <div class="index-placeholder"></div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="row-index">10</div>
+                    <button class="square"></button>
+                    <button class="square"></button>
+                    <button class="square"></button>
+                    <button class="square"></button>
+                    <button class="square"></button>
+                    <div class="index-placeholder"></div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="row-index">7</div>
+                    <button class="square"></button>
+                    <button class="square"></button>
+                    <button class="square"></button>
+                    <button class="square"></button>
+                    <button class="square"></button>
+                    <div class="index-placeholder"></div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="row-index">5</div>
+                    <button class="square"></button>
+                    <button class="square"></button>
+                    <button class="square"></button>
+                    <button class="square"></button>
+                    <button class="square"></button>
+                    <div class="index-placeholder"></div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="row-index">11</div>
+                    <button class="square"></button>
+                    <button class="square"></button>
+                    <button class="square"></button>
+                    <button class="square"></button>
+                    <button class="square"></button>
+                    <div class="index-placeholder"></div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center mt-3 mb-5" id="extraSquares">
+                <button class="square" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" title="无重复字母"></button>
+                <button class="square" data-bs-toggle="tooltip" data-bs-custom-class="custom-tooltip" title="差一点BIJNGO"></button>
+            </div>
+
+            <div class="d-flex justify-content-center mb-5">
+                <p>
+                    <span class="underline-text fw-bold" data-bs-toggle="modal" data-bs-target="#cheatPurchaseModal" id="cheatButton">暗箱操作</span>
+                    <span id="cheatWords" style="display: none;">：BADGER BLAMEWORTHY CLIMBED DOUBTING ICELAND METABOLIC PLATINUM POINTY RAVEN SILVER TOYED VIETNAM</span>
+                </p>
+            </div>
+
+            <div class="modal fade" id="purchaseModal">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5">购买确认</h1>
+                      <button type="button" class="btn-close focus-ring" data-bs-dismiss="modal" style="--bs-focus-ring-color: rgba(var(--bs-dark-rgb), .25)"></button>
+                    </div>
+                    <div class="modal-body" id="purchaseModalBody">
+                        您当前拥有<i class="bi bi-coin fs-5 px-1" style="vertical-align: middle;"></i>0，
+                        购买本格随机示例词消耗<i class="bi bi-coin fs-5 px-1" style="vertical-align: middle;"></i>0，
+                        购买后剩余<i class="bi bi-coin fs-5 px-1" style="vertical-align: middle;"></i>0，确定要购买吗？
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-dark" data-bs-dismiss="modal" id="purchaseButton">确认</button>
+                      </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="cheatPurchaseModal">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5">购买确认</h1>
+                      <button type="button" class="btn-close focus-ring" data-bs-dismiss="modal" style="--bs-focus-ring-color: rgba(var(--bs-dark-rgb), .25)"></button>
+                    </div>
+                    <div class="modal-body" id="cheatPurchaseModalBody">
+                        您可以花费<i class="bi bi-coin fs-5 px-1" style="vertical-align: middle;"></i>50购买本题最终提取用到的单词，但您的余额好像不够哦。
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-dark" data-bs-dismiss="modal" id="cheatPurchaseButton">确认</button>
+                      </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <script>
+        const historyButton = document.getElementById('historyButton');
+        const tooltip = new bootstrap.Tooltip(historyButton);
+        
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+        function toggleCollapse(collapse, isShow) {
+            let bsCollapse = new bootstrap.Collapse(collapse, {
+            toggle: false
+            });
+            if (isShow) {
+                bsCollapse.show();
+            } else {
+                bsCollapse.hide();
+            }
+        }
+
+        historyButton.addEventListener('click', () => {
+            const tooltipInstance = bootstrap.Tooltip.getInstance(historyButton);
+            if (tooltipInstance) {
+                tooltipInstance.hide(); // 隐藏 tooltip
+            }
+        })
+
+        document.getElementById('historyModal').addEventListener('hidden.bs.modal', () => {
+            historyButton.blur();
+        });
+
+        document.getElementById('wordInput').addEventListener('focus', function() {
+            const paddingTop = 5; // 顶部空隙（像素）
+            const inputTop = this.getBoundingClientRect().top + window.pageYOffset;
+            window.scrollTo({
+                top: inputTop - paddingTop,
+                behavior: 'smooth' // 平滑滚动
+            });
+        });
+        
+        let nCoin = 10;
+        let nCoinNeeded = 1;
+        let nCoinNeededCheat = 50;
+        let nCoinReward = 5;
+
+        const squares = document.querySelectorAll('.square');
+        for (let square of squares) {
+            square.setAttribute('data-bs-toggle', 'modal');
+            square.setAttribute('data-bs-target', '#purchaseModal');
+            square.innerHTML = `<span class="hover-text"><i class="bi bi-coin"></i> ${nCoinNeeded}</span>`;
+        }
+
+        // 只允许字母输入并转换为大写
+        document.getElementById("wordInput").addEventListener("input", function() {
+            let value = this.value.toUpperCase();
+            value = value.replace(/[^A-Z]/g, '');
+            this.value = value;
+        });
+
+        // 回车提交
+        document.getElementById("wordInput").addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                document.getElementById("submitButton").click();
+            }
+        });
+
+        let wordSet;
+        let wordArray;
+        fetch("./assets/dictionary.txt")
+        .then(response => {
+            if (!response.ok) {
+            throw new Error("读取失败");
+            }
+            return response.text();
+        })
+        .then(text => {
+            wordSet = new Set(text.toUpperCase().split(/\r\n|\n/));
+            wordArray = Array.from(wordSet);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+        let adjSet;
+        fetch("./assets/adjectives.txt")
+        .then(response => {
+            if (!response.ok) {
+            throw new Error("读取失败");
+            }
+            return response.text();
+        })
+        .then(text => {
+            adjSet = new Set(text.toUpperCase().split(/\r\n|\n/));
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+        let compoundWordSet;
+        fetch("./assets/compound_words.txt")
+        .then(response => {
+            if (!response.ok) {
+            throw new Error("读取失败");
+            }
+            return response.text();
+        })
+        .then(text => {
+            compoundWordSet = new Set(text.toUpperCase().split(/\r\n|\n/));
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+        let subFiveLetterWordSet;
+        fetch("./assets/sub_five_letter_words.txt")
+        .then(response => {
+            if (!response.ok) {
+            throw new Error("读取失败");
+            }
+            return response.text();
+        })
+        .then(text => {
+            subFiveLetterWordSet = new Set(text.toUpperCase().split(/\r\n|\n/));
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+        let ipaDict;
+        fetch("./assets/ipa.json")
+        .then(response => {
+            if (!response.ok) {
+            throw new Error("读取失败");
+            }
+            return response.json();
+        })
+        .then(data => {
+            ipaDict = data;
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+        let animalSet;
+        fetch("./assets/animals.txt")
+        .then(response => {
+            if (!response.ok) {
+            throw new Error("读取失败");
+            }
+            return response.text();
+        })
+        .then(text => {
+            animalSet = new Set(text.toUpperCase().split(/\r\n|\n/));
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+        let last100WordArray = [];
+        let last100MatchArray = [];
+        let conditionArray = [
+            '含有音标/ɪ/', '化学元素', '偶数长度', '含有E和L', '长度为6',
+            'ED结尾', '含有L', '哑音B', '含有I', '去1字母成词',
+            '含有Y', '含有M', '形容词', '合成词', '含有5字母词', 
+            '元辅音相间', '大写字母有2个封闭区域', '含有N', '辅音比元音多1个', '动物',
+            '含有T', '3个元音', '长度7或8', '国家', '含有A和E'
+        ];
+        let bingoWordArray = [];
+        let selectedSquareIndex = -1;
+        let inputHistoryString = '';
+        
+        function updateCoin(update) {
+            nCoin += update;
+            document.getElementById('coinCount').textContent = nCoin.toString();
+        }
+        updateCoin(0);
+
+        function matchCondition(index, needUpdateHistory) {
+            let square = squares[index];
+            square.classList.add('white-square');
+            if (understoodConditionArray.includes(index)) {
+                const check = square.querySelector('.bi-check-lg');
+                check.classList.remove('text-light');
+                check.classList.add('text-dark');
+            }
+            
+            if (needUpdateHistory) {
+                last100MatchArray[last100MatchArray.length - 1].push(index);
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+            }).catch(function(error) {
+                console.error('复制失败: ', error);
+            });
+        }
+
+        for (let i = 0; i < squares.length; i++) {
+            let square = squares[i];
+            square.addEventListener('click', () => {
+                selectedSquareIndex = i;
+                if (nCoin >= nCoinNeeded) {
+                    document.getElementById('purchaseModalBody').innerHTML = `您当前拥有<i class="bi bi-coin fs-5 px-1" style="vertical-align: middle;"></i>${nCoin}，购买本格随机示例词消耗<i class="bi bi-coin fs-5 px-1" style="vertical-align: middle;"></i>${nCoinNeeded}，购买后剩余<i class="bi bi-coin fs-5 px-1" style="vertical-align: middle;"></i>${nCoin - nCoinNeeded}，随机示例词极低概率会重复，确定要购买吗？`;
+                } else {
+                    document.getElementById('purchaseModalBody').innerHTML = '<i class="bi bi-coin fs-5 px-1" style="vertical-align: middle;"></i>不足！'
+                }
+            })
+        }
+
+        document.getElementById('purchaseButton').addEventListener('click', () => {
+            if (nCoin >= nCoinNeeded) {
+                updateCoin(-nCoinNeeded);
+                let randomMatchWord = getRandomMatchWord(selectedSquareIndex);
+                document.getElementById('wordInput').value = randomMatchWord.toUpperCase();
+                document.getElementById("submitButton").click();
+            }
+        })
+        document.getElementById('cheatButton').addEventListener('click', () => {
+            const cheatPurchaseModalBody = document.getElementById('cheatPurchaseModalBody');
+            if (nCoin >= nCoinNeededCheat) {
+                cheatPurchaseModalBody.innerHTML = `您可以花费<i class="bi bi-coin fs-5 px-1" style="vertical-align: middle;"></i>${nCoinNeededCheat}购买本题最终提取用到的单词，确定要购买吗？`;
+            } else {
+                cheatPurchaseModalBody.innerHTML = `您可以花费<i class="bi bi-coin fs-5 px-1" style="vertical-align: middle;"></i>${nCoinNeededCheat}购买本题最终提取用到的单词，但您的余额好像不够哦。`;
+            }
+        })
+
+        document.getElementById('cheatPurchaseButton').addEventListener('click', () => {
+            if (nCoin >= nCoinNeededCheat) {
+                updateCoin(-nCoinNeededCheat);
+                document.getElementById('cheatWords').style.display = 'inline';
+            }
+        })
+
+        const copyButton = document.getElementById('copyButton');
+        copyButton.addEventListener('click', () => {
+            copyToClipboard(inputHistoryString);
+            copyButton.textContent = '复制成功';
+        });
+        copyButton.addEventListener('mouseleave', () => {
+            copyButton.textContent = '复制到剪贴板';
+        });
+
+        const chemicalElements = new Set([
+            "Hydrogen", "Helium", "Lithium", "Beryllium", "Boron", "Carbon", 
+            "Nitrogen", "Oxygen", "Fluorine", "Neon", "Sodium", "Magnesium", 
+            "Aluminum", "Silicon", "Phosphorus", "Sulfur", "Chlorine", "Argon", 
+            "Potassium", "Calcium", "Scandium", "Titanium", "Vanadium", 
+            "Chromium", "Manganese", "Iron", "Cobalt", "Nickel", "Copper", 
+            "Zinc", "Gallium", "Germanium", "Arsenic", "Selenium", "Bromine", 
+            "Krypton", "Rubidium", "Strontium", "Yttrium", "Zirconium", 
+            "Niobium", "Molybdenum", "Technetium", "Ruthenium", "Rhodium", 
+            "Palladium", "Silver", "Cadmium", "Indium", "Tin", "Antimony", 
+            "Tellurium", "Iodine", "Xenon", "Cesium", "Caesium", "Barium", "Lanthanum", 
+            "Cerium", "Praseodymium", "Neodymium", "Promethium", "Samarium", 
+            "Europium", "Gadolinium", "Terbium", "Dysprosium", "Holmium", 
+            "Erbium", "Thulium", "Ytterbium", "Lutetium", "Hafnium", "Tantalum", 
+            "Tungsten", "Rhenium", "Osmium", "Iridium", "Platinum", "Gold", 
+            "Mercury", "Thallium", "Lead", "Bismuth", "Polonium", "Astatine", 
+            "Radon", "Francium", "Radium", "Actinium", "Thorium", "Protactinium", 
+            "Uranium", "Neptunium", "Plutonium", "Americium", "Curium", 
+            "Berkelium", "Californium", "Einsteinium", "Fermium", "Mendelevium", 
+            "Nobelium", "Lawrencium", "Rutherfordium", "Dubnium", "Seaborgium", 
+            "Bohrium", "Hassium", "Meitnerium", "Darmstadtium", "Roentgenium", 
+            "Copernicium", "Nihonium", "Flerovium", "Moscovium", "Livermorium", 
+            "Tennessine", "Oganesson"
+        ]);
+        const countrySet = new Set([
+            "AFGHANISTAN", "ALBANIA", "ALGERIA", "AMERICA", "ANDORRA", "ANGOLA", "ARGENTINA", "ARMENIA",
+            "AUSTRALIA", "AUSTRIA", "AZERBAIJAN", "BAHAMAS", "BAHRAIN", "BANGLADESH", "BARBADOS", "BELARUS",
+            "BELGIUM", "BELIZE", "BENIN", "BHUTAN", "BOLIVIA", "BOTSWANA", "BRAZIL", "BRITAIN", "BRUNEI",
+            "BULGARIA", "BURUNDI", "CAMBODIA", "CAMEROON", "CANADA", "CHAD", "CHILE", "CHINA", "COLOMBIA",
+            "COMOROS", "CONGO", "CROATIA", "CUBA", "CYPRUS", "CZECH", "DENMARK", "DJIBOUTI", "DOMINICA",
+            "DOMINICAN", "ECUADOR", "EGYPT", "ERITREA", "ESTONIA", "ESWATINI", "ETHIOPIA", "FIJI", "FINLAND",
+            "FRANCE", "GABON", "GAMBIA", "GEORGIA", "GERMANY", "GHANA", "GREECE", "GRENADA", "GUATEMALA",
+            "GUINEA", "GUYANA", "HAITI", "HONDURAS", "HUNGARY", "ICELAND", "INDIA", "INDONESIA", "IRAN",
+            "IRAQ", "IRELAND", "ISRAEL", "ITALY", "JAMAICA", "JAPAN", "JORDAN", "KOREA", "KAZAKHSTAN", "KENYA",
+            "KIRIBATI", "KOSOVO", "KUWAIT", "KYRGYZSTAN", "LAOS", "LATVIA", "LEBANON", "LESOTHO", "LIBERIA",
+            "LIBYA", "LIECHTENSTEIN", "LITHUANIA", "LUXEMBOURG", "MADAGASCAR", "MALAWI", "MALAYSIA", "MALDIVES",
+            "MALI", "MALTA", "MAURITANIA", "MAURITIUS", "MEXICO", "MICRONESIA", "MOLDOVA", "MONACO", "MONGOLIA",
+            "MONTENEGRO", "MOROCCO", "MOZAMBIQUE", "MYANMAR", "NAMIBIA", "NAURU", "NEPAL", "NETHERLANDS",
+            "NICARAGUA", "NIGER", "NIGERIA", "NORWAY", "OMAN", "PAKISTAN", "PALAU", "PALESTINE", "PANAMA",
+            "PARAGUAY", "PERU", "PHILIPPINES", "POLAND", "PORTUGAL", "QATAR", "ROMANIA", "RUSSIA", "RWANDA",
+            "SAMOA", "SENEGAL", "SERBIA", "SEYCHELLES", "SINGAPORE", "SLOVAKIA", "SLOVENIA", "SOMALIA", "SPAIN",
+            "SUDAN", "SURINAME", "SWEDEN", "SWITZERLAND", "SYRIA", "TAJIKISTAN", "TANZANIA", "THAILAND", "TOGO",
+            "TONGA", "TUNISIA", "TURKEY", "TURKMENISTAN", "TUVALU", "UGANDA", "UKRAINE", "URUGUAY", "UZBEKISTAN",
+            "VANUATU", "VATICAN", "VENEZUELA", "VIETNAM", "YEMEN", "ZAMBIA", "ZIMBABWE"
+        ]);
+
+        function count(str, char) {
+            return str.split(char).length - 1;
+        }
+
+        function CanMatchCondition(word, index) {
+            const vowels = 'AEIOU';
+            let nVowel = 0;
+            let nConsonant = 0;
+            for (let letter of word) {
+                if (vowels.includes(letter)) {
+                    nVowel++;
+                }
+            }
+            nConsonant = word.length - nVowel;
+
+            switch (index) {
+                case 0: 
+                    // 含有音标ɪ
+                    return word in ipaDict && ipaDict[word].includes('ɪ');
+
+                case 1:
+                    // 化学元素
+                    return chemicalElements.has(word.charAt(0).toUpperCase() + word.slice(1).toLowerCase());
+
+                case 2: 
+                    // 偶数长度
+                    return word.length % 2 === 0;
+
+                case 3: 
+                    // 包含E和L
+                    return word.includes('E') && word.includes('L');
+
+                case 4: 
+                    // 长度6
+                    return word.length === 6;
+
+                case 5: 
+                    // ED结尾
+                    return word.endsWith('ED');
+
+                case 6:
+                    // 包含L
+                    return word.includes('L');
+
+                case 7: 
+                    // 含有B且B不发音
+                    let word_wo_repeat = word.replace(/(.)\1+/g, '$1');
+                    return word in ipaDict && count(ipaDict[word], 'b') < count(word_wo_repeat, 'B');
+
+                case 8: 
+                    // 包含I
+                    return word.includes('I');
+
+                case 9: 
+                    // 去1字母成词
+                    function canFormWordByRemovingOneLetter(word) {
+                        for (let i = 0; i < word.length; i++) {
+                            let newWord = word.slice(0, i) + word.slice(i + 1);
+                            if (wordSet.has(newWord)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                    return canFormWordByRemovingOneLetter(word);
+                
+                case 10: 
+                    //包含Y
+                    return word.includes('Y');
+
+                case 11: 
+                    // 包含M
+                    return word.includes('M');
+
+                case 12: 
+                    // 形容词
+                    return adjSet.has(word);
+
+                case 13: 
+                    // 合成词，可以由2个词组成的词都视为合成词
+                    function isComponentWord(word) {
+                        if (word == 'IRELAND') {
+                            return false;
+                        }
+                        if (word.length < 4) {
+                            return false
+                        }
+                        for (let i = 2; i < word.length - 2; i++) {
+                            let prefix = word.slice(0, i);
+                            let suffix = word.slice(i);
+                            if (wordSet.has(prefix) && wordSet.has(suffix)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                    return isComponentWord(word);
+
+                case 14:
+                    // 含有5字母词
+                    function containsFiveLetterWord(word) {
+                        if (word.length < 6) {
+                            return false;
+                        }
+                        for (let dictWord of wordSet) {
+                            if (dictWord.length === 5 && word.includes(dictWord)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                    return containsFiveLetterWord(word);
+                
+                case 15: 
+                    // 元辅音相间
+                    function isAlternatingVowelConsonant(word) {
+                        const vowels = 'AEIOUaeiou';
+                        const consonants = 'BCDFGHJKLMNPQRSTVWXYZbcdfghjklmnpqrstvwxyz';
+                        for (let i = 0; i < word.length - 1; i++) {
+                            let currentChar = word[i];
+                            let nextChar = word[i + 1];
+                            let isCurrentVowel = vowels.includes(currentChar);
+                            let isNextVowel = vowels.includes(nextChar);
+                            if (isCurrentVowel === isNextVowel) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    }
+                    return isAlternatingVowelConsonant(word);
+
+                case 16: 
+                    // 字母有2个封闭区域
+                    function getNClosedRegion(word) {
+                        const closedRegions = {
+                            'A': 1, 'B': 2, 'D': 1, 'O': 1, 'P': 1, 'Q': 1, 'R': 1,
+                        };
+                        let totalRegions = 0;
+                        for (let i = 0; i < word.length; i++) {
+                            let char = word[i];
+                            if (closedRegions[char]) {
+                                totalRegions += closedRegions[char];
+                            }
+                        }
+
+                        return totalRegions;
+                    }
+                    return getNClosedRegion(word) === 2;
+
+                case 17: 
+                    // 含有N
+                    return word.includes('N');
+
+                case 18: 
+                    // 辅音比元音多1个
+                    return nConsonant - nVowel === 1;
+
+                case 19: 
+                    // 动物
+                    return animalSet.has(word);
+
+                case 20: 
+                    // 包含T
+                    return word.includes('T');
+
+                case 21: 
+                    // 3个元音
+                    return nVowel === 3;
+
+                case 22: 
+                    // 长度7或8
+                    return word.length === 7 || word.length === 8;
+
+                case 23: 
+                    // 国家
+                    function isCountryName(word) {
+                        for (let country of countrySet) {
+                            if (country.replace(/[\s-]/g, "").toUpperCase() === word) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                    return isCountryName(word);
+
+                case 24: 
+                    // 包含A和E
+                    return word.includes('A') && word.includes('E');
+                
+                case 25:  
+                    // 无重复字母
+                    function hasDuplicateLetters(word) {
+                        const letterSet = new Set();
+                        for (let char of word) {
+                            if (letterSet.has(char)) {
+                                return true;
+                            }
+                            letterSet.add(char);
+                        }
+                        return false;
+                    }
+                    return !hasDuplicateLetters(word);
+                case 26:
+                    // 恰在一条线上差一点BINGO
+                    function getMatchDeg(word, line) {
+                        let matchCount = 0;
+                        for (let letter of word) {
+                            if (line.toUpperCase().includes(letter)) {
+                                matchCount += 1;
+                            }
+                        }
+                        return matchCount;
+                    }
+                    let lines = new Set(['abcde', 'fghik', 'fghjk', 'lmnop', 'qrstu', 'vwxyz',
+                                        'aflqv', 'bgmrw', 'chnsx', 'dioty', 'djoty', 'ekpuz',
+                                        'agntz', 'einrv', 'ejnrv'])
+                    function getRemainLetter(word, line) {
+                        for (let letter of line.toUpperCase()) {
+                            if (!word.includes(letter)) {
+                                return letter;
+                            }
+                        }
+                        return null;
+                    }
+                    function hasAlmostLine(word) {
+                        if (hasDuplicateLetters(word)) {
+                            return false;
+                        }
+                        let nAlmostLine = 0;
+                        let remainLetter = '';
+
+                        for (let line of lines) {
+                            if (getMatchDeg(word, line) === 4) {
+                                remainLetter = getRemainLetter(word, line);
+                                if (remainLetter === 'J') {
+                                    continue
+                                }
+                                if (remainLetter === 'I' && getMatchDeg(word, 'djoty') != 4 && getMatchDeg(word, 'ejnrv') != 4) {
+                                    continue
+                                }
+                                nAlmostLine += 1;
+                            }
+                        }
+                        
+                        if (nAlmostLine === 1) {
+                            return true;
+                        }
+                        return false;
+                    }
+                    return hasAlmostLine(word);
+                
+                default: 
+                    return false;
+            }
+        }
+
+        function getRandomItemFromSet(set) {
+            const array = Array.from(set);
+            const randomIndex = Math.floor(Math.random() * array.length);
+            return array[randomIndex];
+        }
+
+        function getRandomMatchWord(index) {
+            wordArray.sort(() => Math.random() - 0.5);
+
+            let placeholder = 'PLACEHOLDER';
+            switch (index) {
+                case 1: 
+                    // 化学元素
+                    return getRandomItemFromSet(chemicalElements);
+                case 12: 
+                    // 形容词
+                    return getRandomItemFromSet(adjSet);
+                case 14: 
+                    // 含有5字母词
+                    return getRandomItemFromSet(subFiveLetterWordSet);
+                case 19: 
+                    // 动物
+                    return getRandomItemFromSet(animalSet);
+                case 23: 
+                    // 国家
+                    return getRandomItemFromSet(countrySet);
+                default: 
+                    for (let word of wordArray) {
+                        if (CanMatchCondition(word, index)) {
+                            return word;
+                        }
+                    }
+                    return null;
+            }
+        }
+        
+        function showInfo(info) {
+            toggleCollapse(document.getElementById("infoCollapse"), false);
+            toggleCollapse(document.getElementById("infoCollapse"), true);
+            document.getElementById("infoText").innerHTML = info;
+        }
+
+        let understoodConditionArray = [];
+        function understandCondition(index) {
+            if (understoodConditionArray.includes(index)) {
+                return;
+            }
+            understoodConditionArray.push(index);
+
+            let square = squares[index];
+            // 在 squares[index] 中添加打勾图标
+            const checkIcon = document.createElement('i');
+            checkIcon.classList.add('bi', 'bi-check-lg', 'fs-5', 'text-dark');
+            square.innerHTML = '';
+            square.appendChild(checkIcon);
+
+            square.disabled = true;
+
+            square.setAttribute('data-bs-toggle', 'tooltip');
+            square.setAttribute('data-bs-custom-class', 'custom-tooltip');
+            square.setAttribute('title', conditionArray[index]);
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+        }
+
+        const answerArray = ['SILVER', 'CLIMBED', 'BLAMEWORTHY', 'RAVEN', 'VIETNAM', 
+                'TOYED', 'PLATINUM', 'DOUBTING', 'ICELAND', 'BADGER', 'METABOLIC', 'POINTY']
+        let inputtedAnswerArray = []
+        document.getElementById('submitButton').addEventListener('click', () => {
+            // 默认所有正方形都是黑色
+            for (let i = 0; i < squares.length; i++) {
+                let square = squares[i];
+                square.classList.remove('white-square');
+                if (understoodConditionArray.includes(i)) {
+                    const check = square.querySelector('.bi-check-lg');
+                    check.classList.remove('text-dark');
+                    check.classList.add('text-light');
+                }
+            }
+
+            let word = document.getElementById('wordInput').value;
+            let milestone = 'DIYBINGOCARD'
+            wordSet.add(milestone);
+            if (word === '') {
+                return;
+            }
+            if (word === milestone) {
+                showInfo('BINGO! FDUPH账户已到账 <i class="bi bi-coin"></i> 999999999。现在给我们发送一份你自己制作的BINGO卡片吧~');
+                updateCoin(999999999);
+            }
+
+            if (answerArray.includes(word)) {
+                if (!inputtedAnswerArray.includes(word)) {
+                    inputtedAnswerArray.push(word);
+                }
+                if (inputtedAnswerArray.length < answerArray.length) {
+                    showInfo(`恭喜你找到了一个既BINGO又满足额外条件的单词！但还要找到剩下的${answerArray.length - inputtedAnswerArray.length}个词才能领取奖金哦……`);
+                } else {
+                    showInfo(`恭喜你找到了所有既BINGO又满足额外条件的单词！还差一点就能提取最终大奖啦`);
+                }
+            }
+
+            let needUpdateHistory = wordSet.has(word) && !last100WordArray.includes(word);
+            if (needUpdateHistory) {
+                if (last100WordArray.length === 100) {
+                    last100WordArray.shift();
+                }
+                last100WordArray.push(word)
+
+                if (last100MatchArray.length === 100) {
+                    last100MatchArray.shift();
+                }
+                last100MatchArray.push([]);
+            }
+            
+            if (!wordSet.has(word)) {
+                showInfo('我们的<a href="./assets/dictionary.txt" class="text-dark fw-bold" target="_blank">字典</a>里不存在该单词');
+                return;
+            } else {
+                toggleCollapse(document.getElementById("infoCollapse"), false);
+            }
+
+            let matchIndexArray = [];
+            for (let index = 0; index < 27; index++) {
+                if (CanMatchCondition(word, index)) {
+                    matchIndexArray.push(index);
+                    matchCondition(index, needUpdateHistory);
+                }
+            }
+
+            // bingo则揭示规则
+            function checkLine(indices, matchSet, callback) {
+                const allClear = indices.every(index => matchSet.has(index));
+                if (allClear) {
+                    indices.forEach(index => callback(index));
+                    if (!bingoWordArray.includes(word)) {
+                        updateCoin(nCoinReward);
+                        bingoWordArray.push(word);
+                    }
+                }
+            }
+
+            const matchSet = new Set(matchIndexArray);
+            // 横向检查
+            for (let row = 0; row < 5; row++) {
+                const indices = Array.from({ length: 5 }, (_, col) => row * 5 + col);
+                checkLine(indices, matchSet, understandCondition);
+            }
+            // 纵向检查
+            for (let col = 0; col < 5; col++) {
+                const indices = Array.from({ length: 5 }, (_, row) => row * 5 + col);
+                checkLine(indices, matchSet, understandCondition);
+            }
+            // 主对角线检查
+            const mainDiagonal = Array.from({ length: 5 }, (_, i) => i * 6);
+            checkLine(mainDiagonal, matchSet, understandCondition);
+            // 副对角线检查
+            const secondaryDiagonal = Array.from({ length: 5 }, (_, i) => (i + 1) * 4);
+            checkLine(secondaryDiagonal, matchSet, understandCondition);
+            
+            function hasDuplicates(array) {
+                for (let i = 0; i < array.length; i++) {
+                    for (let j = i + 1; j < array.length; j++) {
+                        if (array[i] === array[j]) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            function getCommonElements(arrays) {
+                if (arrays.length === 0) return [];
+
+                return arrays[0].filter(item =>
+                    arrays.every(subArray => subArray.includes(item))
+                );
+            }
+
+            if (needUpdateHistory) {
+                const history = document.createElement('li');
+                history.classList.add('list-group-item');
+                let lastMatchArray = last100MatchArray[last100MatchArray.length - 1]
+                let lastMatchStr = ''
+                for (let match of lastMatchArray) {
+                    lastMatchStr += String(match + 1) + ' '
+                }
+                let inputString = `${word}: ${lastMatchStr}`;
+                inputHistoryString += inputString + '\n';
+                history.innerText = inputString;
+                const historyContainer = document.getElementById('inputHistory');
+                if (last100MatchArray.length === 1) {
+                    historyContainer.innerHTML = '';
+                }
+                historyContainer.appendChild(history);
+            }
+        })
+
+        document.getElementById("closeInfoButton").addEventListener("click", () => {
+            toggleCollapse(document.getElementById("infoCollapse"), false);
+        });
+    </script>
+</body>
+</html>
