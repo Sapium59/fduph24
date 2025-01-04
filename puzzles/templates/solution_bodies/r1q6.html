@@ -1,0 +1,74 @@
+{% extends "solution.html" %}
+
+{% block puzzle-author %}
+inequality
+{% endblock %}
+
+{% block solution-body-md %}
+
+本题为音频ISIS题目。根据标题和ft搜索“新世纪音乐”可以知道本题的主题，通过听歌识曲相关的工具可以识别出音乐如下：
+歌曲	index	提取
+morning air	(5)	i
+tears on love 	(2)	e
+run away with me	(2)	u
+amazing grace	(9)	r
+fairy wings	(5)	a
+AMPHORA～地中海の壷～	(4)	o
+if i could tell you	(2)	f
+the memory of trees	(4)	m
+dawn of a new century	(9)	e
+always with me	(6)	s
+palace memories	(11)	r
+beatrix	(7)	x
+santorini	(1)	s
+you raise me up	(12)	p
+kiss the rain	(11)	n
+through your eyes	(12)	e
+take my hand	(10)	d
+caribbean blue	(7)	e
+chariots of fire	(8)	s
+conquest of paradise	(13)	r
+假如按照网页上的排序是提取不出来有意义的短语的。注意ft中的“长短不一”，提示我们按照时长排序，按照从短到长的顺序排序可以得到 use performers as index。然后我们按照对应歌曲演奏者的名字长度提取。（尽量取了常用的名字，虽然有的是全名有的不是）
+
+歌曲	作者	提取
+morning air	bandari	g
+tears on love 	yiruma	o
+run away with me	omar akram	i
+amazing grace	sojiro	n
+fairy wings	kevin kern	g
+AMPHORA～地中海の壷～	sens	h
+if i could tell you	yanni	o
+the memory of trees	enya	m
+dawn of a new century	secret garden	e
+always with me	sojiro	s
+palace memories	sens	a
+beatrix	bandari	x
+santorini	yanni	o
+you raise me up	secret garden	p
+kiss the rain	yimura	h
+through your eyes	kevin kern	o
+take my hand	omar akram	n
+caribbean blue	enya	i
+chariots of fire	vangelis	s
+conquest of paradise	vangelis	t
+得到going home saxophonist，答案为Kenny G。
+
+
+{% endblock %}
+
+{% block author-notes-html %}
+这道题目是我出的第一道ph题目，看到这个答案就想到要出这样的一道题。凑答案加上找音乐用了一个下午，ISIS真的是太好出啦！
+{% endblock %}
+
+
+
+{% block appendix-md %}
+Length | Answer        | Double Letter
+------ | ------------- | -------------
+4      | BA**SS**      | S
+5      | IS**AA**C     | A
+6      | HA**MM**ER    | M
+7      | SCRI**PP**S   | P
+8      | PARA**LL**EL  | L
+9      | ENGIN**EE**RS | E
+{% endblock %}
