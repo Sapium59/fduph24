@@ -1,8 +1,28 @@
+.border-container {
+    width: 10px; /* Set the total width of the container */
+    border: 2px solid white; /* Apply a border to the container */
+    overflow: hidden; /* Hide the overflow content */
+    position: relative; /* Establish positioning context for pseudo-element */
+}
+
+.border-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(33.33% - 1px); /* Position the pseudo-element at one-third width minus half the border width */
+    width: 2px; /* Set the width of the border */
+    background-color: black; /* Color of the border */
+}
+
 {% extends "puzzle.html" %}
 {% block puzzle-body-md %}
 
 insert flavortext here
 {: .flavor}
+
+Content with <span class="border-container">border in the middle</span> one-third length
+
 
 <button class="btn clipboard-button"></button>
 

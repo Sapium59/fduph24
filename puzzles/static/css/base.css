@@ -141,9 +141,9 @@ code {
     background-color: var(--primary-800);
 }
 
-tr:last-child td {
+/* tr:last-child td {
     border-bottom: none;
-}
+} */
 
 a, .btn {
     color: var(--link-text-color);
@@ -592,9 +592,9 @@ a.main-content-anchor {
     padding: 4px 8px;
 }
 
-.list-table td:first-child, .list-table th:first-child {
+/* .list-table td:first-child, .list-table th:first-child {
     padding-left: 0;
-}
+} */
 
 .list-table td {
     word-break: break-word;
@@ -965,3 +965,37 @@ footer {
         display: none;
     }
 }
+
+/* fduph24 use this to implement underlined enums; Inequality found its prototype from: https://2024.galacticpuzzlehunt.com/puzzle/never_will_i_ever */
+.blanks {
+    display: inline-flex;
+    align-items: baseline;
+    gap: .2em;
+}
+
+.blanks > long {
+    display: inline-block;
+    position: relative;
+    height: 1em; /* Adjust the height to match the text */
+    width: 1.2em;
+    border-bottom: 1px solid currentColor;
+    text-align: center;
+    line-height: 1em; /* Set the line height to match the height */
+}
+
+/* Adjust the position of the underline for different scenarios */
+.blanks > long:empty::before {
+    content: "\00a0"; /* Non-breaking space */
+}
+
+.blanks > long:empty {
+    height: 1em;
+}
+
+.blanks > long:empty::before {
+    display: inline-block;
+    vertical-align: bottom;
+    height: 0;
+    content: "\00a0"; /* Non-breaking space */
+}
+
