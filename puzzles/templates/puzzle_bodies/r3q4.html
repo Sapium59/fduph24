@@ -1,0 +1,261 @@
+<style>
+    .grid-cell {
+        border: 1px solid white;
+        padding: 8px;
+        font-size: 1.2em;
+    }
+</style>
+
+{% extends "puzzle.html" %}
+{% block puzzle-body-md %}
+
+最近迷上了一款四消游戏，同类对象横向或竖向连在一起就会被消掉，把下面的块全部消去吧！
+{: .flavor}
+
+<table align="center" style="border: 1px solid white;">
+    <tr>
+        <td class="grid-cell" style="padding: 8px 8px 8px 8px;">喜</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">怒</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+    </tr>
+    <tr>
+        <td class="grid-cell" style="padding: 8px 8px 8px 8px;">格</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">乐</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">病</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+    </tr>
+    <tr>
+        <td class="grid-cell" style="padding: 8px 8px 8px 8px;">和</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">乎</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">河</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">击</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+    </tr>
+    <tr>
+        <td class="grid-cell" style="padding: 8px 8px 8px 8px;">过</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">湖</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">娇</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+    </tr>
+    <tr>
+        <td class="grid-cell" style="padding: 8px 8px 8px 8px;">米</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">豹</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">豺</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">奢</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">起</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">痕</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">食</td>
+        <td class="grid-cell"></td>
+    </tr>
+    <tr>
+        <td class="grid-cell" style="padding: 8px 8px 8px 8px;">承</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">弹</td>
+        <td class="grid-cell">死</td>
+        <td class="grid-cell">梅</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">东</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">甜</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+    </tr>
+    <tr>
+        <td class="grid-cell" style="padding: 8px 8px 8px 8px;">滑</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">虎</td>
+        <td class="grid-cell">💣</td>
+        <td class="grid-cell">迹</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">兰</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">苦</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">南</td>
+        <td class="grid-cell">生</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+    </tr>
+    <tr>
+        <td class="grid-cell" style="padding: 8px 8px 8px 8px;">火</td>
+        <td class="grid-cell">时</td>
+        <td class="grid-cell">风</td>
+        <td class="grid-cell">的</td>
+        <td class="grid-cell">围</td>
+        <td class="grid-cell">江</td>
+        <td class="grid-cell">竹</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell">西</td>
+        <td class="grid-cell">盆</td>
+        <td class="grid-cell">意</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+    </tr>
+    <tr>
+        <td class="grid-cell" style="padding: 8px 8px 8px 8px;">🚀</td>
+        <td class="grid-cell">青</td>
+        <td class="grid-cell">魑</td>
+        <td class="grid-cell">花</td>
+        <td class="grid-cell">炸</td>
+        <td class="grid-cell">其</td>
+        <td class="grid-cell">春</td>
+        <td class="grid-cell">在</td>
+        <td class="grid-cell">之</td>
+        <td class="grid-cell">行</td>
+        <td class="grid-cell">瓢</td>
+        <td class="grid-cell">有</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+    </tr>
+    <tr>
+        <td class="grid-cell" style="padding: 8px 8px 8px 8px;">除</td>
+        <td class="grid-cell">柴</td>
+        <td class="grid-cell">魅</td>
+        <td class="grid-cell">雪</td>
+        <td class="grid-cell">哀</td>
+        <td class="grid-cell">墨</td>
+        <td class="grid-cell">衣</td>
+        <td class="grid-cell">抑</td>
+        <td class="grid-cell">老</td>
+        <td class="grid-cell">注</td>
+        <td class="grid-cell">碗</td>
+        <td class="grid-cell">看</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+    </tr>
+    <tr>
+        <td class="grid-cell" style="padding: 8px 8px 8px 8px;">琴</td>
+        <td class="grid-cell">王</td>
+        <td class="grid-cell">魍</td>
+        <td class="grid-cell">礼</td>
+        <td class="grid-cell">酸</td>
+        <td class="grid-cell">斧</td>
+        <td class="grid-cell">消</td>
+        <td class="grid-cell">扬</td>
+        <td class="grid-cell">点</td>
+        <td class="grid-cell">北</td>
+        <td class="grid-cell">者</td>
+        <td class="grid-cell">鳏</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+    </tr>
+    <tr>
+        <td class="grid-cell" style="padding: 8px 8px 8px 8px;">棋</td>
+        <td class="grid-cell">侯</td>
+        <td class="grid-cell">箭</td>
+        <td class="grid-cell">消</td>
+        <td class="grid-cell">除</td>
+        <td class="grid-cell">钺</td>
+        <td class="grid-cell">除</td>
+        <td class="grid-cell">顿</td>
+        <td class="grid-cell">狼</td>
+        <td class="grid-cell">锅</td>
+        <td class="grid-cell">海</td>
+        <td class="grid-cell">寡</td>
+        <td class="grid-cell"></td>
+        <td class="grid-cell"></td>
+    </tr>
+    <tr>
+        <td class="grid-cell" style="padding: 8px 8px 8px 8px;">书</td>
+        <td class="grid-cell">将</td>
+        <td class="grid-cell">红</td>
+        <td class="grid-cell">皂</td>
+        <td class="grid-cell">笔</td>
+        <td class="grid-cell">钩</td>
+        <td class="grid-cell">所</td>
+        <td class="grid-cell">砚</td>
+        <td class="grid-cell">行</td>
+        <td class="grid-cell">的</td>
+        <td class="grid-cell">所</td>
+        <td class="grid-cell">孤</td>
+        <td class="grid-cell">块</td>
+        <td class="grid-cell"></td>
+    </tr>
+    <tr>
+        <td class="grid-cell" style="padding: 8px 8px 8px 8px;">消</td>
+        <td class="grid-cell">廉</td>
+        <td class="grid-cell">义</td>
+        <td class="grid-cell">月</td>
+        <td class="grid-cell">白</td>
+        <td class="grid-cell">盐</td>
+        <td class="grid-cell">周</td>
+        <td class="grid-cell">挫</td>
+        <td class="grid-cell">夏</td>
+        <td class="grid-cell">秋</td>
+        <td class="grid-cell">冬</td>
+        <td class="grid-cell">💣</td>
+        <td class="grid-cell">也</td>
+        <td class="grid-cell"></td>
+    </tr>
+    <tr>
+        <td class="grid-cell" style="padding: 8px 8px 8px 8px;">耻</td>
+        <td class="grid-cell">画</td>
+        <td class="grid-cell">相</td>
+        <td class="grid-cell">魉</td>
+        <td class="grid-cell">合</td>
+        <td class="grid-cell">油</td>
+        <td class="grid-cell">叉</td>
+        <td class="grid-cell">纸</td>
+        <td class="grid-cell">住</td>
+        <td class="grid-cell">菊</td>
+        <td class="grid-cell">的</td>
+        <td class="grid-cell">逸</td>
+        <td class="grid-cell">独</td>
+        <td class="grid-cell" style="padding: 8px 8px 8px 8px;">🚀</td>
+    </tr>
+</table>
+
+
+<button class="btn clipboard-button"></button>
+
+{% endblock %}

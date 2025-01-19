@@ -1,0 +1,117 @@
+{% extends "solution.html" %}
+
+{% block puzzle-author %}
+Inequality
+{% endblock %}
+
+{% block solution-body-md %}
+本题为metamatch题目，需要将给出的数字和每个小题对应。
+
+第一题为摩斯等价对。首先可以解出每句话中的单词，通过观察单词或者搜索17910427（摩斯诞辰）可以意识到摩斯主题。经过尝试可以将数字转二进制得到相关对应：1表示点，111表示横，0表示分隔，因此可以得到下表：
+
+|(17910427)|答案|对应数字|二进制表示|对应摩斯|提取|
+|--        |-- |--     |--      |--     |-- |
+|Victims of these _ _ _ _ _ were all found in _ _ _ _ _ cans.(?)[4][6]|cases trash|1976948053|1110101110101011101010101010101|-.-..-.......|.-|
+|At _ _ _ _ _ he didn't want to _ _ _ _ _ _ this company.(?)[2][3]|first invest|1465218391|1010111010101010111010101010111|..-....-....-|.-|
+|This biology thesis of _ _ _ _ expression is _ _ _ _.(?)[3][5]|gene mine|488821|1110111010101110101|--..-..|.-|
+|I _ _ _ _ _ _ to sweep these fallen _ _ _ _ _ _.(?)[6][7]|refuse leaves|25054500693|10111010101010111010101011101010101|.-....-...-....|.-|
+|He has been here _ _ _ _ _ ten years ago, and _ _ _ _ _ is familiar to this place. (?)[8][10]|since hence|358047093|10101010101110101110101110101|.....-.-.-..|--|
+|The _ _ _ _ _ _ gives a wonderful concert, she is really a _ _ _ _ _ star!(?)[9][11]|singer super|22915020125|10101010101110101110111010101011101|.....-.--...-.|-.|
+|Today is _ _ _ _ _ _ _ _, happy _ _ _ _ _ _ _ _ to you!(?)[13][14]|thursday birthday|2113698358678117751|1110101010101010111010111010101010111010101011101110101110111|-......-.-....-...--.--|..|
+
+最终提取出.-.-.-.----...，转英文得到**encode**。
+
+第二题为普通线索题。首先根据标题猜测数字与颜色的联系，经过观察和尝试可以得知答案的单词是十六进制下的颜色代码，答案见下表：
+
+|Colors|答案|十六进制表示|对应数字|
+|--    |-- |--        |--     |
+|an entrance or exit(?)|ACCESS|ACCE55|11325013|
+|a tower(?)|EIFFEL|E1FFE1|14811105|
+|a type of electronic devices(?)|TABLET|7AB1E7|8040935|
+|a synonym for choose(?)|SELECT|5E1EC7|6168263|
+|a keyword in C(?)|STATIC|57A71C|5744412|
+|a type of dance(?)|BALLET|BA11A7|12194215|
+
+注意到答案都是6位并且有6个答案，自然想到对角线提取，得到**A1BE17**，即**ALBEIT**。
+
+第三题为普通线索题。首先可以解出题目中的线索，观察结构都是数字中间加了某个单词或者短语，猜测它们对应了某种运算符。通过观察和搜索可以得知它们都是Ed sheeran的《+》《-》《*》《/》中的某一首歌曲的名字，标题为19910217也同时是Ed sheeran的诞辰，得到答案如下表：
+
+|答案|提取|
+|-- |-- |
+|number of Alice (2760889966651) borderline(-) number of Mattia Balossino (2760889966649) = 2|B|
+|the secret of psalm (46) perfect(/) the number of chromosomes of humans(46) = 1|A|
+|date of tenth anniversary of miku(20170831) boat(-) date of Jie Ke was defeated by AlphaGo (20170527) curtains(-) (300):rise of an empire = 4|D|
+|number of constellations(88) dive(/) remember(11) by kotaro uchikoshi=8|H|
+|(8) Second Ride spark(-) (7) Year Ache=1|A|
+|(1000) years by Christina Perri eraser(/) (500) miles by Hedy West=2|B|
+|The (3) Musketeers sing(*) (3) Men in a Boat=9|I|
+|The (5) Orange Pips runaway(*) The Sign of the (4)=20|T|
+|(12) Angry men wake me up(+) (7) deadly sins =19|S|
+
+运算结果转A1Z26得到**Bad Habits**。
+
+第四题为OEIS数列。通过观察和尝试可以猜测左边是数列，右面对应某种编号，而关于整数序列的数据库自然会去OEIS上查找，此时也可能意识到标题为0315，右边提示了A sequence。经过一些观察和搜寻后，细心的做题者可能会发现这些都是被称为某种numbers的序列，而左边的长度就是序列名称的长度，因此可以得到下表：
+
+|对应数字|数列名称|OEIS序号|提取|
+|--     |--    |--      |-- |
+|8589869056|perfect numbers|396|c|
+|29|Markov numbers|2559|o|
+|257|fermat numbers|215|m|
+|836|weird numbers|6037|e|
+|2311|Euclid numbers|6862|d|
+|13|lucky numbers|959|y|
+
+最后得到答案**comedy**。
+
+第五题为普通线索题。通过“taxicab”“π approching formula”等关键词可以猜测是拉马努金主题，标题为拉马努金的生卒日期。解出线索如下表：
+
+|(18871222)-(19200426)|答案|提取|
+|--                   |-- |-- |
+|the eleventh value of tau function|534612|6|
+|the first taxicab number|1729|9|
+|the first difference place by calculating the π approching formula in 1910|7|7|
+|the eighteenth of his primes|181|8|
+|almost an integer|262537412640768744|20|
+
+最后按A1Z26转换得到答案**Fight**。
+
+第六题为crossword。通过搜索标题“Prime Lexicon”可以得到质数单词表，并且要按36进制转换。解出线索如下表：
+
+|Across|线索|缺少的线索单词|对应数字|答案|对应数字|
+|--    |-- |--          |--    |--  |--    |
+|1|from side to side| | |width|54605429|
+|5|earned| | |won|42359|
+|6|related group| | |kin|26591|
+|7|___ mahal| | |taj|37963|
+|8|(?) way to|great|28152101|ahead|17607829|
+|10|(?) ledgers|checked|27173413957|audited|23604521557|
+|Down| | | | | |
+|1|(?) of heaven|vault|52574321|welkin|1959438623|
+|2|lower| | |downward|1072951965049|
+|3|(?) activity you are doing|what|1515413|hunt|832889|
+|4|still (?)|fresh|26473121|unjaded|66726588757|
+|9|(?) time zone, for short|Brooklyn|922271388719|est|19181|
+
+完成的crossword盘面如下：
+
+<img src="/static/puzzle_resources/s-r3q2.png">
+
+从上往下，从左往右提取黄色位置字母得到答案**dined**。
+
+现在得到了6个小题答案，如果直接按照meta中的index提取得不到有意义的单词或短语，通过观察可以得知六个小题答案为A-F开头，这提示我们要按照字典序排列。对比现有的单词和剩下的数字，经过观察和尝试可以得知ft中提示做差，我们按照A1Z26转换单词后去掉与数字重合的部分，可以得到下表：
+
+|答案|a1z26|对应数字|对应字母|
+|-- |--    |--    |--    |
+|albeit|1 12 2 5 9 20|1259|l t|
+|bad habits|2 1 4 8 1 2 9 20 19|24812919|a t|
+|comedy|3 15 13 5 4 25|31554|m y|
+|dined|4 9 14 5 4|494|n e|
+|encode|5 14 3 15 4 5|5345|n o|
+|fight|6 9 7 8 20|678|
+
+按照题目中的顺序排列这些字母可以得到**title antonym(7)**，答案为**drought**。（其他7长度的flood的反义词给了里程碑）
+{% endblock %}
+
+{% block author-notes-html %}
+数字metamatch是很早就有的想法，最初只有等价对的想法，但是大家感觉一整道题都是各种等价对过于同质化，因此就搁置了这个想法。在尝试出mangled clue和汉听题无果后，笔者决定出一道metamatch，很自然地重新捡拾之前等价对的想法，但是又希望增加一些别的主题。在花了一天思考可能的主题之后，用了一天凑出了这道题目。虽然后面还有一些小修改，整体框架基本就是目前的样子了。Ed sheeran作为洋hunt常客很自然联想到了，Prime Lexicon是在翻找matrix67的博客中发现的，还有很多有趣的主题，期待以后能与大家相见！
+{% endblock %}

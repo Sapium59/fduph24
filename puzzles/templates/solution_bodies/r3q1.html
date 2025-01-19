@@ -1,0 +1,59 @@
+{% extends "solution.html" %}
+
+{% block puzzle-author %}
+xxuurruuii
+{% endblock %}
+
+{% block solution-body-md %}
+
+这是一个逻辑推理题，注意到文本涉及了很多“有几个字母”的语句，因此需要填的答案是表示数字的英文单词，解这个谜题得到如下结果：
+
+|编号|答案|数字|字母|
+|--|--|--|--|
+|1|eighteen|18|R|
+|2|five|5|E|
+|3|sixteen|16|P|
+|4|five|5|E|
+|5|one|1|A|
+|6|twenty|20|T|
+|7|twenty-three|23|W|
+|8|nine|9|I|
+|9|twenty|20|T|
+|10|eight|8|H|
+|11|sixteen|16|P|
+|12|nine|9|I|
+|13|fourteen|14|N|
+|14|twenty-five|25|Y|
+|15|nine|9|I|
+|16|fourteen|14|N|
+
+对答案做A1Z26转换得到 REPEAT WITH PINYIN。重新做一遍此题，但是不再使用英文单词，而是使用中文拼音，得到如下结果：
+
+|编号|答案|数字|字母|
+|--|--|--|--|
+|1|yi|1|A|
+|2|shisi|14|N|
+|3|shijiu|19|S|
+|4|ershisan|23|W|
+|5|wu|5|E|
+|6|shiba|18|R|
+|7|shiwu|15|O|
+|8|shier|12|L|
+|9|si|4|D|
+|10|wu|5|E|
+|11|si|4|D|
+|12|jiu|9|I|
+|13|ershi|20|T|
+|14|jiu|9|I|
+|15|shiwu|15|O|
+|16|shisi|14|N|
+
+因此本题的答案为 OLD EDITION。
+
+{% endblock %}
+
+{% block author-notes-html %}
+这题参考了 MITMH2018 的 <a href="https://puzzles.mit.edu/2018/full/puzzle/self_referential_mania.html">Self-Referential_Mania</a>，做两遍的想法看起来不错所以直接照抄了，以及本题采用了程序验证所以答案和原版一样没有逻辑部分解析（长期接受逻辑解投稿！）。零测的时候超级锤子高手小汤圆在前6格直接填写了 ANSWER，导致直接跳过了第一步把答案爆了出来，好在一测的时候完整地把这题流程过了一遍。警惕ph玩家携带锤子做题（！）
+<img src="/static/puzzle_resources/s-r3q1.png" width="80%" height="auto">
+
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends "solution.html" %}
+
+{% block puzzle-author %}
+inequality
+{% endblock %}
+
+{% block solution-body-md %}
+本题为普通的ISIS题目。通过搜索可以得出对应线索如下：
+
+<table>
+    <tr>
+      <td>前半句的线索</td>
+      <td>后半句的线索</td>
+    </tr>
+    <tr>
+      <td>pirates</td>
+      <td>X</td>
+    </tr>
+    <tr>
+      <td>kalahari</td>
+      <td>sorting</td>
+    </tr>
+    <tr>
+      <td>stalin</td>
+      <td>peacocks</td>
+    </tr>
+    <tr>
+      <td>bauxite</td>
+      <td>kaleta</td>
+    </tr>
+    <tr>
+      <td>russia</td>
+      <td>soroca</td>
+    </tr>
+    <tr>
+      <td>south asia</td>
+      <td>antelopes</td>
+    </tr>
+    <tr>
+      <td>OPEC</td>
+      <td>nkpokiti</td>
+    </tr>
+    <tr>
+      <td>land</td>
+      <td>khyber</td>
+    </tr>
+  </table>
+
+在搜索过程中可以发现后半句中的数字实际上是对应国家货币的面值。根据index我们可以得到中间答案**take ex iso letters**。通过搜索可以知道国家有二字母代码和三字母代码，同时货币也是三字母代码！因此我们按照指示提取多余的iso字母得到下表：
+
+<table>
+    <tr>
+      <td>二字母国家代码</td>
+      <td>三字母国家代码</td>
+      <td>多余字母</td>
+      <td>货币代码</td>
+      <td>多余字母</td>
+    </tr>
+    <tr>
+      <td>BS</td>
+      <td>BHS</td>
+      <td>H</td>
+      <td>BSD</td>
+      <td>D</td>
+    </tr>
+    <tr>
+      <td>BW</td>
+      <td>BWA</td>
+      <td>A</td>
+      <td>BWP</td>
+      <td>P</td>
+    </tr>
+    <tr>
+      <td>GE</td>
+      <td>GEO</td>
+      <td>O</td>
+      <td>GEL</td>
+      <td>L</td>
+    </tr>
+    <tr>
+      <td>GN</td>
+      <td>GIN</td>
+      <td>I</td>
+      <td>GNF</td>
+      <td>F</td>
+    </tr>
+    <tr>
+      <td>MD</td>
+      <td>MDA</td>
+      <td>A</td>
+      <td>MDL</td>
+      <td>L</td>
+    </tr>
+    <tr>
+      <td>NP</td>
+      <td>NPL</td>
+      <td>L</td>
+      <td>NPR</td>
+      <td>R</td>
+    </tr>
+    <tr>
+      <td>NG</td>
+      <td>NGA</td>
+      <td>A</td>
+      <td>NGN</td>
+      <td>N</td>
+    </tr>
+    <tr>
+      <td>PK</td>
+      <td>PAK</td>
+      <td>A</td>
+      <td>PKR</td>
+      <td>R</td>
+    </tr>
+</table>
+
+最后按照最开始的数字顺序排列可以得到**half a dollar in rap**，答案为**fifty cent**。
+{% endblock %}
+
+{% block author-notes-html %}
+看到这个答案就想到出一道有关货币的题，通过翻列表发现iso的货币代码也是三位，因此联想到取两字母国家代码的多余字母。运气很好能够把这样一个cluephrase凑出来。从展现形式来看没达到个人的预期，不过从内测反应来看意外地是一道好题？
+{% endblock %}

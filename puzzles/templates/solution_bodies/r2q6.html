@@ -1,0 +1,135 @@
+{% extends "solution.html" %}
+
+{% block puzzle-author %}
+Wonderepublic
+{% endblock %}
+
+{% block solution-body-md %}
+
+题目中展示了一些按字典序排列的声母和韵母，仔细观察可以发现以下特点：
+
+- 每行逗号前后的声韵母数量一致，且只有6和10两种数量；
+
+- 每个分句中的声母与韵母数量一致；
+
+因此可以猜测需要将每个分句中的声韵母进行组合，从数量为6的句子入手是一个比较好的切入点，可以拼出一些比较熟悉的词组，如第五句中的“牵牛星”与“河汉女”就是一个比较明显的例子。在拼出了一些词句后，我们可以意识到这些都是包含了叠词的诗句，而在给出的声韵母碎片中删去了叠词。在掌握了这一规律之后，可以很快解出所有的这些诗句。
+
+用括号中的数字作index提取该分句中被删去叠词的拼音，逐句阅读可以得到**thirtieth sentai**，即可得到最终答案**GOGO SENTAI**。
+
+<table>
+    <tr>
+      <td>b ch i iao sh u, a b en t u zh(1)</td>
+      <td>凛凛出师表</td>
+      <td>堂堂八阵图</td>
+      <td>t</td>
+    </tr>
+    <tr>
+      <td>d i ian ie iu l l u w x(2), ai i i i iao ing j t y z z</td>
+      <td>留连戏蝶时时舞</td>
+      <td>自在娇莺恰恰啼</td>
+      <td>h</td>
+    </tr>
+    <tr>
+      <td>b ia ian l m u u uo w x(2), ai ang b ch iang in j j l u</td>
+      <td>无边落木萧萧下</td>
+      <td>不尽长江滚滚来</td>
+      <td>i</td>
+    </tr>
+    <tr>
+      <td>h i l l ua uan ue uo y y(1), ang ch eng f I iu l t u x</td>
+      <td>梨花院落溶溶月</td>
+      <td>柳絮池塘淡淡风</td>
+      <td>r</td>
+    </tr>
+    <tr>
+      <td>ian ing iu n q x(1), an e h h n v</td>
+      <td>迢迢牵牛星</td>
+      <td>皎皎河汉女</td>
+      <td>t</td>
+    </tr>
+    <tr>
+      <td>an ang ch h ing q sh u uan y(2), ang ao c f ing ou u w y zh</td>
+      <td>晴川历历汉阳树</td>
+      <td>芳草萋萋鹦鹉洲</td>
+      <td>i</td>
+    </tr>
+    <tr>
+      <td>a d i ian j r u u x y, i ian iao r s u u x x y(3)</td>
+      <td>大弦嘈嘈如急雨</td>
+      <td>小弦切切如私语</td>
+      <td>e</td>
+    </tr>
+    <tr>
+      <td>an ang ong s sh sh(1), eng f g ong u zh</td>
+      <td>亭亭山上松</td>
+      <td>瑟瑟谷中风</td>
+      <td>t</td>
+    </tr>
+    <tr>
+      <td>ei h i ie j m sh u uang y, a ang ao c ch I ing q t w(2)</td>
+      <td>黄梅时节家家雨</td>
+      <td>青草池塘处处蛙</td>
+      <td>h</td>
+    </tr>
+    <tr>
+      <td>ch d h ia ian ie j j ua uan(1), d ei f ian ing ing q sh t ui</td>
+      <td>穿花蛱蝶深深见</td>
+      <td>点水蜻蜓款款飞</td>
+      <td>s</td>
+    </tr>
+    <tr>
+      <td>ang ch ch e g ong u u y zh, e h ian ing sh t u u x y(2)</td>
+      <td>迟迟钟鼓初长夜</td>
+      <td>耿耿星河欲曙天</td>
+      <td>e</td>
+    </tr>
+    <tr>
+      <td>en eng i iong q r s u w y, i i iang iang j s ue x y zh(1)</td>
+      <td>人生代代无穷已</td>
+      <td>江月年年只相似</td>
+      <td>n</td>
+    </tr>
+    <tr>
+      <td>eng f h i in ing q q ua y, ai i iang iu k l r u x y(1)</td>
+      <td>晴花处处因风起</td>
+      <td>御柳条条向日开</td>
+      <td>t</td>
+    </tr>
+    <tr>
+      <td>c en r uan un y(1), an i l u x y</td>
+      <td>暧暧远人村</td>
+      <td>依依墟里烟</td>
+      <td>a</td>
+    </tr>
+    <tr>
+      <td>eng f in ing l x(2), g i k ong ui y</td>
+      <td>临行密密缝</td>
+      <td>意恐迟迟归</td>
+      <td>i</td>
+    </tr>
+</table>
+
+
+{% endblock %}
+
+{% block author-notes-html %}
+这道题的灵感来自于GPH2022中的Extreme Anagram，一开始的设想是将汉语中一些有独特拼音特征的句子作类似的处理，但是后来一是觉得这样的形式缺乏主题性，二是没有找到足够多的特殊句子，于是就暂时搁置了这个想法。
+<br>
+在我尝试了用另一个思路出这道题未果后，我注意到了答案中的GOGO，忽然想到也许可以将叠词诗句作为处理的对象，于是先依原版将拼音的所有字母按字典序排列，然而验证下来可解性极低。后来改成了声韵母为对象，算是达到了一个比较好的平衡。
+<br>
+下面是一些为这道题一开始准备的句子，你能认出这些都是什么吗？
+<br>
+aacceeggggiiiiiiiillmmnnnnnnnnqqqqqquuxx
+<br>
+aaabbbbbbeegiiiinnoop
+<br>
+aaaaghiiiiiinnnnnsssuuux, aabegiiiinnnnnnorsstuuu
+<br>
+aaaaabbccdhhiiiioooooppppppttttttuuuuuuuu
+<br>
+aeegiiinnnnuuuuuwyyyyyyyy
+<br>
+fiiiijjjju
+<br>
+hhhhhiiiiisssss
+{% endblock %}
