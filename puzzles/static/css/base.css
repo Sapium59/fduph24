@@ -984,10 +984,6 @@ footer {
 }
 
 /* Adjust the position of the underline for different scenarios */
-.blanks > long:empty::before {
-    content: "\00a0"; /* Non-breaking space */
-}
-
 .blanks > long:empty {
     height: 1em;
 }
