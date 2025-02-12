@@ -495,40 +495,4 @@
     unlock_global: -1
     unlock_local: -1
     emoji: ':question:'
-- model: puzzles.team
-  pk: 1
-  fields:
-    user: 1
-    team_name: admin
-    creation_time: 9001-01-01 00:00:00+00:00
-    start_offset: 00:00:00
-    allow_time_unlocks: true
-    total_hints_awarded: 0
-    total_free_answers_awarded: 0
-    last_solve_time: null
-    is_prerelease_testsolver: true
-    is_hidden: false
-    puzzle_bingo_game_data: {}
-- model: puzzles.team
-  pk: 2
-  fields:
-    user: 2
-    team_name: test
-    creation_time: 9001-01-01 00:00:00+00:00
-    start_offset: 00:00:00
-    allow_time_unlocks: true
-    total_hints_awarded: 0
-    total_free_answers_awarded: 0
-    last_solve_time: null
-    is_prerelease_testsolver: false
-    is_hidden: false
-    puzzle_bingo_game_data: {}
-- model: puzzles.answersubmission
-  pk: 1
-  fields:
-    team: 1
-    puzzle: 1
-    submitted_answer: ANSWER
-    is_correct: false
-    submitted_datetime: 2024-11-27 04:10:47.363916+00:00
-    used_free_answer: false
+
