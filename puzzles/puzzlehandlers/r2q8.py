@@ -6,7 +6,7 @@ from collections import OrderedDict
 from django.views.decorators.http import require_POST
 
 from puzzles.messaging import log_puzzle_info
-from r2q8_data import IPA_DICT, CHEMICAL_ELEMENTS, VOWELS
+from .r2q8_data import IPA_DICT, CHEMICAL_ELEMENTS, VOWELS
 
 
 
