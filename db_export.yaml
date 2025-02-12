@@ -1,0 +1,534 @@
+- model: puzzles.round
+  pk: 1
+  fields:
+    name: Sample Round
+    slug: sample
+    meta: 7
+    order: 0
+- model: puzzles.round
+  pk: 2
+  fields:
+    name: Sample Round II
+    slug: sample-ii
+    meta: null
+    order: 0
+- model: puzzles.round
+  pk: 3
+  fields:
+    name: 一区
+    slug: round1
+    meta: null
+    order: 0
+- model: puzzles.round
+  pk: 4
+  fields:
+    name: 二区
+    slug: round2
+    meta: null
+    order: 1
+- model: puzzles.round
+  pk: 5
+  fields:
+    name: 三区
+    slug: round3
+    meta: null
+    order: 2
+- model: puzzles.puzzle
+  pk: 1
+  fields:
+    name: Ambiguity
+    slug: ambiguity
+    body_template: ambiguity.html
+    answer: ISAAC
+    round: 1
+    order: 0
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: 0
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 7
+  fields:
+    name: 'Meta: Sample'
+    slug: sample
+    body_template: sample.html
+    answer: SAMPLE
+    round: 1
+    order: 0
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: 0
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 8
+  fields:
+    name: Interactive Demo
+    slug: interactive-demo
+    body_template: interactive-demo.html
+    answer: DEMO
+    round: 2
+    order: 0
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: 0
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 9
+  fields:
+    name: 【待修改】先进命名法
+    slug: r1q1
+    body_template: r1q1.html
+    answer: AVAILABILITY
+    round: 3
+    order: 1
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 10
+  fields:
+    name: 【已录入】五角大楼
+    slug: r1q2
+    body_template: r1q2.html
+    answer: MAP OF LA
+    round: 3
+    order: 2
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 11
+  fields:
+    name: '[WIP]一剪梅'
+    slug: r1q3
+    body_template: r1q3.html
+    answer: MONARCH
+    round: 3
+    order: 3
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 12
+  fields:
+    name: 【待修改】不畏浮云遮望眼
+    slug: r1q4
+    body_template: r1q4.html
+    answer: CHINA DAILY
+    round: 3
+    order: 4
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 13
+  fields:
+    name: 【已录入】季姬击鸡记
+    slug: r1q5
+    body_template: r1q5.html
+    answer: SIRIMAVO
+    round: 3
+    order: 5
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 14
+  fields:
+    name: 【已修改】新世纪音乐
+    slug: r1q6
+    body_template: r1q6.html
+    answer: KENNY G
+    round: 3
+    order: 6
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 15
+  fields:
+    name: 【出题中】1-7正在重出
+    slug: r1q7
+    body_template: r1q7.html
+    answer: KITSCH
+    round: 3
+    order: 7
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 16
+  fields:
+    name: 【已录入】META-1
+    slug: r1m
+    body_template: r1m.html
+    answer: emotion
+    round: 3
+    order: 0
+    is_meta: true
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: 6
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 17
+  fields:
+    name: 【已录入】古筝行动DLC
+    slug: r2q1
+    body_template: r2q1.html
+    answer: CHERISHING
+    round: 4
+    order: 1
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 18
+  fields:
+    name: 【已录入】A Rule-Explorer's Adventure
+    slug: r2q2
+    body_template: r2q2.html
+    answer: AGE
+    round: 4
+    order: 2
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 19
+  fields:
+    name: 【已录入】五行棋盘密码
+    slug: r2q3
+    body_template: r2q3.html
+    answer: TAKE OFF
+    round: 4
+    order: 3
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 20
+  fields:
+    name: 【待验收】Crosslink
+    slug: r2q4
+    body_template: r2q4.html
+    answer: AFTERMATH
+    round: 4
+    order: 4
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 21
+  fields:
+    name: 【改题中】xr在玩Arcaea
+    slug: r2q5
+    body_template: r2q5.html
+    answer: KOBE BRYANT
+    round: 4
+    order: 5
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 22
+  fields:
+    name: 【待验收】破碎词句
+    slug: r2q6
+    body_template: r2q6.html
+    answer: GOGO SENTAI
+    round: 4
+    order: 6
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 23
+  fields:
+    name: 【已录入】奇怪的旅程
+    slug: r2q7
+    body_template: r2q7.html
+    answer: FIFTY CENT
+    round: 4
+    order: 7
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 24
+  fields:
+    name: 【待录入】宾果黑箱
+    slug: r2q8
+    body_template: r2q8.html
+    answer: AIRBNB USER
+    round: 4
+    order: 8
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 25
+  fields:
+    name: 【待验收】填字游戏
+    slug: r2q9
+    body_template: r2q9.html
+    answer: JEJU ISLAND
+    round: 4
+    order: 9
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 26
+  fields:
+    name: '[WIP]二区meta'
+    slug: r2m
+    body_template: r2m.html
+    answer: launching
+    round: 4
+    order: 0
+    is_meta: true
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 27
+  fields:
+    name: 【待验收】Self-Reference
+    slug: r3q1
+    body_template: r3q1.html
+    answer: OLD EDITION
+    round: 5
+    order: 1
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 28
+  fields:
+    name: 【待验收】洪水
+    slug: r3q2
+    body_template: r3q2.html
+    answer: DROUGHT
+    round: 5
+    order: 2
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 29
+  fields:
+    name: 谜题扭蛋
+    slug: r3q3
+    body_template: r3q3.html
+    answer: NINJA
+    round: 5
+    order: 3
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 30
+  fields:
+    name: 同类四消
+    slug: r3q4
+    body_template: r3q4.html
+    answer: JUPITER
+    round: 5
+    order: 4
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 31
+  fields:
+    name: 25 groups
+    slug: r3q5
+    body_template: r3q5.html
+    answer: TRADE
+    round: 5
+    order: 5
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 32
+  fields:
+    name: 文件谜
+    slug: r3q6
+    body_template: r3q6.html
+    answer: DEPTH OF FIELD
+    round: 5
+    order: 6
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 33
+  fields:
+    name: 'wuti by nobody. # TODO'
+    slug: r3q7
+    body_template: r3q7.html
+    answer: HUNDRED EYES
+    round: 5
+    order: 7
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 34
+  fields:
+    name: 盛开的百合花
+    slug: r3q8
+    body_template: r3q8.html
+    answer: MAPPING
+    round: 5
+    order: 8
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 35
+  fields:
+    name: 违章建筑
+    slug: r3q9
+    body_template: r3q9.html
+    answer: SYLLABLE
+    round: 5
+    order: 9
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 36
+  fields:
+    name: 【待验收】植物大战僵尸
+    slug: r3q10
+    body_template: r3q10.html
+    answer: WHITE HOUSE
+    round: 5
+    order: 10
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 37
+  fields:
+    name: 【待验收】忆往昔
+    slug: r3q11
+    body_template: r3q11.html
+    answer: YESTERDAY
+    round: 5
+    order: 11
+    is_meta: false
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.puzzle
+  pk: 38
+  fields:
+    name: '[WIP]三区meta'
+    slug: r3m
+    body_template: r3m.html
+    answer: SLEEP ALL DAY
+    round: 5
+    order: 0
+    is_meta: true
+    unlock_hours: -1
+    unlock_global: -1
+    unlock_local: -1
+    emoji: ':question:'
+- model: puzzles.team
+  pk: 1
+  fields:
+    user: 1
+    team_name: admin
+    creation_time: 9001-01-01 00:00:00+00:00
+    start_offset: 00:00:00
+    allow_time_unlocks: true
+    total_hints_awarded: 0
+    total_free_answers_awarded: 0
+    last_solve_time: null
+    is_prerelease_testsolver: true
+    is_hidden: false
+    puzzle_bingo_game_data: {}
+- model: puzzles.team
+  pk: 2
+  fields:
+    user: 2
+    team_name: test
+    creation_time: 9001-01-01 00:00:00+00:00
+    start_offset: 00:00:00
+    allow_time_unlocks: true
+    total_hints_awarded: 0
+    total_free_answers_awarded: 0
+    last_solve_time: null
+    is_prerelease_testsolver: false
+    is_hidden: false
+    puzzle_bingo_game_data: {}
+- model: puzzles.answersubmission
+  pk: 1
+  fields:
+    team: 1
+    puzzle: 1
+    submitted_answer: ANSWER
+    is_correct: false
+    submitted_datetime: 2024-11-27 04:10:47.363916+00:00
+    used_free_answer: false
