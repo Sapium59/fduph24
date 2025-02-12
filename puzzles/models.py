@@ -17,6 +17,9 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
+# from django.contrib.postgres.fields import JSONField  # Use this if you're using PostgreSQL
+from django.db.models import JSONField  # Use this if you're using Django 3.1 or later and a supported database
+
 from puzzles.context import context_cache
 
 from puzzles.messaging import (
@@ -196,18 +199,25 @@ class Team(models.Model):
         help_text=_('''Number of additional free answers to award the team (on
         top of the default amount per day)'''),
     )
-
     last_solve_time = models.DateTimeField(null=True, blank=True, verbose_name=_('Last solve time'))
-
     is_prerelease_testsolver = models.BooleanField(
         default=False, verbose_name=_('Is prerelease testsolver'),
         help_text=_('''Whether this team is a prerelease testsolver. If true, the
         team will have access to puzzles before the hunt starts'''),
     )
-
     is_hidden = models.BooleanField(
         default=False, verbose_name=_('Is hidden'),
         help_text=_('If a team is hidden, it will not be visible to the public')
+    )
+
+    # 宾果黑箱进度
+    # 1. 提示币数量
+    # 2. 已破解规则的列表（当猜词满足条件连成一条线，视为破解该条线上的所有规则）
+    # 3. 是否发动暗箱操作直接购买最终提取所用的词
+    # {"bingo_coin_num": 10, "bingo_known_rules": [0, 1, 23, 24], "bingo_spoiled": False}
+    puzzle_bingo_game_data = JSONField(
+        default=dict, verbose_name=_('puzzle bingo game Data'),
+        help_text=_('A dictionary to store flexible data related to puzzle bingo game (r2q8).')
     )
 
     class Meta:
@@ -923,3 +933,8 @@ def notify_on_hint_update(sender, instance, created, update_fields, **kwargs):
                 {'hint': instance, 'link': link},
                 instance.recipients())
             show_hint_notification(instance)
+
+
+class PuzzleBingoGameInput(models.Model):
+    word = models.CharField(max_length=100)
+    timestamp = models.DateTimeField(auto_now_add=True)

@@ -90,6 +90,7 @@ urlpatterns = [
     path('puzzle/interactive-demo/submit',
         puzzlehandlers.interactive_demo_submit,
         name='interactive_demo_submit'),
+    path('puzzle/r2q8/submit', puzzlehandlers.r2q8_submit, name='r2q8'),
 
     path('story', views.story, name='story'),
     path('victory', views.victory, name='victory'),
@@ -111,3 +112,6 @@ urlpatterns = [
         (JavaScriptCatalog.as_view()), name='javascript-catalog'),
 
 ]
+
+
+

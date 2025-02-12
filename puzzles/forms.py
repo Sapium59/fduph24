@@ -209,3 +209,7 @@ class PasswordResetForm(forms.Form):
             raise forms.ValidationError(_('That username doesn’t exist.'))
         cleaned_data['team'] = team
         return cleaned_data
+
+
+class PuzzleBingoGameInputForm(forms.Form):
+    word = forms.CharField(max_length=100, label='Enter a Word for puzzle gingo game')

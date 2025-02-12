@@ -7,6 +7,8 @@ from django.views.decorators.http import require_POST
 from ratelimit.decorators import ratelimit
 from ratelimit.utils import get_usage_count
 
+# Example usage:
+from . import interactive_demo, r2q8
 
 # django-ratelimit needs to see REMOTE_ADDR for user_or_ip to work for
 # logged-out people
@@ -27,10 +29,6 @@ def simple_ratelimit(handler, rate):
     def rate_limiter(request):
         return HttpResponse(handler(request))
     return rate_limiter
-
-# Usage: mypuzzle_submit = simple_ratelimit(mypuzzle.submit, '10/s')
-# See https://django-ratelimit.readthedocs.io/en/stable/rates.html for the rate
-# limit string.
 
 def check_ratelimit(request, rate):
     data = get_usage_count(request, group=request.path, rate=rate, key='user_or_ip')
@@ -74,6 +72,24 @@ def error_ratelimit(handler, rate, error, check_response=None, encode_response=N
         return HttpResponse(response)
     return rate_limiter
 
+
+# Usage: mypuzzle_submit = simple_ratelimit(mypuzzle.submit, '10/s')
+# See https://django-ratelimit.readthedocs.io/en/stable/rates.html for the rate
+# limit string.
+
 # Example usage:
-from . import interactive_demo
-interactive_demo_submit = error_ratelimit(interactive_demo.submit, '2/m', {'error': 'Please limit your attempts to two per minute.'}, lambda response: response['correct'], json.dumps)
+interactive_demo_submit = error_ratelimit(
+    interactive_demo.submit, 
+    '2/m', 
+    {'error': 'Please limit your attempts to two per minute.'}, 
+    lambda response: response['correct'], 
+    json.dumps
+)
+
+r2q8_submit = error_ratelimit(
+    r2q8.submit, 
+    '60/m', 
+    {'error': 'Please limit your attempts to 60 per minute.'}, 
+    lambda response: response['correct'], 
+    json.dumps
+)
