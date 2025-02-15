@@ -109,7 +109,13 @@
             <div id="output">...</div>
         </form>
     </div>
+    <div>
+        <form id="r2q8-do_spoil" autocomplete="off" action="javascript:void(0);">
+            {% csrf_token %}
+            <input type="submit" value="do_spoil">
 
+        </form>
+    </div>
 </div>
 
 
@@ -120,7 +126,7 @@
 // This demo code uses jQuery and modern JavaScript features flagrantly.
 // You should evaluate your own needs.
 document.addEventListener('DOMContentLoaded', () => {
-    async function submit() {
+    async function guess_a_word() {
         console.log('1234567')
         const wordInput = document.getElementById('wordInput');
         const outputDiv = document.getElementById('output');
@@ -133,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let result = await fetch("/puzzle/r2q8/submit", {  // 替换为你的 URL
                 method: 'POST',
                 body: JSON.stringify({
+                    mode: "guess_a_word",
                     word: wordInput.value,
                 }),
                 headers: {
@@ -201,6 +208,84 @@ document.addEventListener('DOMContentLoaded', () => {
         wordInput.disabled = false;
     }
 
+    async function do_spoil() {
+        console.log('1234567')
+        const outputDiv = document.getElementById('output');
+
+        let csrftoken = getCookie('csrftoken');
+        try {
+            let result = await fetch("/puzzle/r2q8/submit", {  // 替换为你的 URL
+                method: 'POST',
+                body: JSON.stringify({
+                    mode: "do_spoil",
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrftoken,
+                },
+            });
+
+            if (!result.ok) {
+                outputDiv.textContent = `Error: ${result.status} ${result.statusText}`;
+            } else {
+                let res = await result.json();
+
+                if (res.error) {
+                    outputDiv.textContent = `Error: ${res.error}`;
+                } else {
+                    // if (res.triggered_rules) {
+                    //     // Create a container for the grid
+                    //     const gridContainer = document.createElement('div');
+                    //     gridContainer.style.display = 'grid';
+                    //     gridContainer.style.gridTemplateColumns = 'repeat(5, 50px)'; // 5 columns
+                    //     gridContainer.style.gridTemplateRows = 'repeat(5, 50px)'; // 5 rows
+                    //     gridContainer.style.gap = '5px'; // Gap between squares
+                    //     gridContainer.style.margin = '10px';
+                    
+                    //     // Create an array to keep track of triggered rules
+                    //     const triggeredRules = Object.entries(res.triggered_rules); // Convert to array of [key, value]
+                    
+                    //     // Fill the 5x5 grid
+                    //     for (let i = 0; i < 25; i++) {
+                    //         const square = document.createElement('div');
+                    //         square.style.width = '50px';
+                    //         square.style.height = '50px';
+                    //         square.style.backgroundColor = 'black';
+                    //         square.style.color = 'white';
+                    //         square.style.display = 'flex';
+                    //         square.style.alignItems = 'center';
+                    //         square.style.justifyContent = 'center';
+                    //         square.style.fontSize = '12px';
+                            
+                    //         // Check if the current index is one of the triggered rules
+                    //         const rule = triggeredRules.find(([key]) => parseInt(key) === i);
+                    //         if (rule) {
+                    //             square.textContent = `${rule[1]}`; // Rule string and index
+                    //         } else {
+                    //             square.textContent = ''; // Empty square
+                    //         }
+                            
+                    //         gridContainer.appendChild(square);
+                    //     }
+                    
+                    //     outputDiv.innerHTML = ''; // Clear previous content
+                    //     outputDiv.appendChild(gridContainer);
+                    // } else {
+                    //     outputDiv.textContent = "[W] no res.triggered_rules";
+                    // }
+                    outputDiv.textContent = "todo spoil"
+                    
+                }
+            }
+        } catch (e) {
+            outputDiv.textContent = `Error: ${e}`;
+        }
+
+        // 启用输入框和按钮
+        wordInput.disabled = false;
+    }
+
+
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -216,7 +301,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return cookieValue;
     }
 
-    $('#r2q8-form').on('submit', submit);
+    $('#r2q8-form').on('submit', guess_a_word);
+    $('#r2q8-do_spoil').on('submit', do_spoil);
+    // TODO other submit function (buy_a_sample, do_spoil)
 });
 </script>
 

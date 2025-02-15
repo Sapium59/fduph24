@@ -214,7 +214,7 @@ class Team(models.Model):
     # 1. 提示币数量
     # 2. 已破解规则的列表（当猜词满足条件连成一条线，视为破解该条线上的所有规则）
     # 3. 是否发动暗箱操作直接购买最终提取所用的词
-    # {"bingo_coin_num": 10, "bingo_known_rules": [0, 1, 23, 24], "bingo_spoiled": False}
+    # {"bingo_coin_num": 10, "triggered_rules": [0, 1, 23, 24], "bingo_spoiled": False}
     puzzle_bingo_game_data = JSONField(
         default=dict, verbose_name=_('puzzle bingo game Data'),
         help_text=_('A dictionary to store flexible data related to puzzle bingo game (r2q8).')

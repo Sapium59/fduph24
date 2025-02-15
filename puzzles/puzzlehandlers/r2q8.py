@@ -1,3 +1,4 @@
+import re
 import traceback
 import json
 from typing import Tuple, Dict, List, Callable
@@ -6,46 +7,42 @@ from collections import OrderedDict
 from django.views.decorators.http import require_POST
 
 from puzzles.messaging import log_puzzle_info
+from ..models import Team
 from .r2q8_data import IPA_DICT, CHEMICAL_ELEMENTS, VOWELS
 
 
-
-
-# RULES_LIST: List[Tuple[int, str, Callable[str, bool]]] = [
-#     (0,  '含有音标/ɪ/', lambda word: bool(word in IPA_DICT and 'ɪ' in IPA_DICT[word])),
-#     (1,  '化学元素',    lambda word: bool(word in CHEMICAL_ELEMENTS)),  # TODO check
-#     (2,  '偶数长度',    lambda word: bool(len(word) % 2 == 0)),
-#     (3,  '含有E和L',    lambda word: bool('E' in word and 'L' in word)),
-#     (4,  '长度为6',     lambda word: bool(len(word) == 6)),
-#     (5,  'ED结尾',     lambda word: bool(word.endswith('ED'))),
-#     (6,  '含有L',       lambda word: bool('L' in word)),
-#     (7,  '哑音B', )
-#     (8,  '含有I', )
-#     (9,  '去1字母成词', )
-#     (10, '含有Y', )
-#     (11, '含有M', )
-#     (12, '形容词', )
-#     (13, '合成词', )
-#     (14, '含有5字母词', )
-#     (15, '元辅音相间', )
-#     (16, '大写字母有2个封闭区域', )
-#     (17, '含有N', )
-#     (18, '辅音比元音多1个', )
-#     (19, '动物', )
-#     (20, '含有T', )
-#     (21, '3个元音', )
-#     (22, '长度7或8', )
-#     (23, '国家', )
-#     (24, '含有A和E', )
-# ]
-
-
-# Assuming these dictionaries and sets are defined elsewhere in your code
+# constants
 WORD_SET = set()
 ADJ_SET = set()
 ANIMAL_SET = set()
 COUNTRY_SET = set()
+DEFAULT_PUZZLE_BINGO_GAME_DATA = {
+    "bingo_coin_num": 10, 
+    "known_rules": [],  # List[int]
+    "bingo_spoiled": False,
+    "word_history": [],  # List[str]
+}
 
+
+# key operations
+def clear_word(word: str):
+    cleared_word = "".join(re.findall("[A-Z]", word.upper()))
+    return cleared_word
+
+def _get_triggered_indice(triggered_rules_indice: List[int]) -> List[int]:
+    LINES = [{i + 5 * j for i in range(5)} for j in range(5)] + \
+        [{j + 5 * i for i in range(5)} for j in range(5)] + \
+        [{0, 6, 12, 18, 24}]
+    triggered_lines = [line for line in LINES if all(index in triggered_rules_indice for index in line)]
+    triggered_indice = set()
+
+def update(puzzle_bingo_game_data, triggered_rules_indice):
+    known_rules = puzzle_bingo_game_data["known_rules"]
+
+    pass
+
+
+# rules
 def count(string: str, char: str) -> int:
     return string.count(char)
 
@@ -89,8 +86,8 @@ def is_alternating_vowel_consonant(word: str) -> bool:
     for i in range(len(word) - 1):
         current_char = word[i]
         next_char = word[i + 1]
-        is_current_vowel = current_char in vowels
-        is_next_vowel = next_char in vowels
+        is_current_vowel = current_char in VOWELS
+        is_next_vowel = next_char in VOWELS
         if is_current_vowel == is_next_vowel:
             return False
     return True
@@ -158,10 +155,10 @@ RULES_LIST: List[Tuple[int, str, Callable[[str], bool]]] = [
     (15, '元辅音相间', lambda word: is_alternating_vowel_consonant(word)),
     (16, '大写字母有2个封闭区域', lambda word: get_n_closed_region(word) == 2),
     (17, '含有N',      lambda word: bool('N' in word)),
-    (18, '辅音比元音多1个', lambda word: n_consonant - n_vowel == 1),  # assuming n_consonant and n_vowel are defined
+    (18, '辅音比元音多1个', lambda word: len([char for char in word if char not in VOWELS]) - len([char for char in word if char in VOWELS]) == 1),
     (19, '动物',       lambda word: bool(word in ANIMAL_SET)),
     (20, '含有T',      lambda word: bool('T' in word)),
-    (21, '3个元音',    lambda word: n_vowel == 3),  # assuming n_vowel is defined
+    (21, '3个元音',    lambda word: len([char for char in word if char in VOWELS]) == 3),
     (22, '长度7或8',   lambda word: bool(len(word) in (7, 8))),
     (23, '国家',       lambda word: is_country_name(word)),
     (24, '含有A和E',   lambda word: bool('A' in word and 'E' in word)),
@@ -173,7 +170,6 @@ RULES_LIST: List[Tuple[int, str, Callable[[str], bool]]] = [
 @require_POST
 def submit(request):
     "A crude example of an interactive puzzle handler."
-    # FIXME debug
     # 2. Persist it on the server. You can just add a puzzle-specific model
     # with a foreign key to Team. If you have strong performance needs and are
     # feeling adventurous, you might even add an in-memory store like Redis or
@@ -187,15 +183,50 @@ def submit(request):
     # keep the possibility of manually introspecting or fixing it as needed.
 
     try:
+        # get user data
+        puzzle_bingo_game_data = request.context.team.puzzle_bingo_game_data
+        if not puzzle_bingo_game_data:
+            puzzle_bingo_game_data = DEFAULT_PUZZLE_BINGO_GAME_DATA
+        else:
+            print(puzzle_bingo_game_data)
+        bingo_coin_num = puzzle_bingo_game_data["bingo_coin_num"]
+        bingo_spoiled = puzzle_bingo_game_data["bingo_spoiled"]
+
+        # switch case guess_a_word / do_spoil / buy_a_sample
         body = json.loads(request.body)
-        print(f"r2q8 body = {body}")
-        # FIXME
-        triggered_rules_indice = [0, 1, 23, 24]
-        return {
-            # 'error': 'success', 
-            'correct': True,
-            'triggered_rules': {idx: RULES_DICT[idx] for idx in triggered_rules_indice},
-        }
+        mode = body.get("mode")
+        print(f"[I] r2q8: mode={mode}, body={body}")
+        if mode == "guess_a_word":
+            # submittion & rules check
+            word = body.get("word", "")
+            word = clear_word(word)
+            triggered_rules_indice = [item[0] for item in RULES_LIST if item[2](word)]
+            # TODO update user data
+            request.context.team.puzzle_bingo_game_data = update(puzzle_bingo_game_data, triggered_rules_indice)
+            ret_dict = {
+                'error': '', 
+                'correct': True,
+                'triggered_rules': {idx: RULES_LIST[idx][1] for idx in triggered_rules_indice},
+                bingo_coin_num: "bingo_coin_num",
+                bingo_spoiled: "bingo_spoiled"
+            }
+        elif mode == "do_spoil":
+            pass  # TODO
+            ret_dict = {
+                'error': '', 
+                'correct': True,
+            }
+        elif mode == "buy_a_sample":
+            pass  # TODO
+            ret_dict = {}
+        else:
+            print(f"Warning: unknown mode in r2q8: {mode}")
+            ret_dict = {}
+
+        # when no error, ret_dict['error'] must be empty
+        ret_dict['error'] = ''
+        print(f"[I] r2q8: ret_dic={ret_dict}")
+        return ret_dict
     # except (KeyError, AttributeError):
     #     print(f"r2q8e1")
     #     # This error handling is pretty rough.
