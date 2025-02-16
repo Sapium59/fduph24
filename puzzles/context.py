@@ -82,7 +82,11 @@ class BaseContext:
         return timezone.localtime()
 
     def start_time(self):
-        return HUNT_START_TIME - self.team.start_offset if self.team else HUNT_START_TIME
+        try:
+            return HUNT_START_TIME - self.team.start_offset if self.team else HUNT_START_TIME
+        except:
+            print("[E] uncertain bug about start time")
+            return HUNT_START_TIME
 
     def time_since_start(self):
         return self.now - self.start_time
@@ -103,7 +107,7 @@ class BaseContext:
         return self.hunt_is_prereleased or self.now >= self.start_time
 
     def hunt_has_almost_started(self):
-        return self.start_time - self.now < datetime.timedelta(hours=1)
+        return self.start_time - self.now < datetime.timedelta(hours=4)
 
     def hunt_is_over(self):
         return self.now >= self.end_time

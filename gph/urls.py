@@ -66,6 +66,8 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(template_name='password_change_done.html'),
         name='password_reset_complete'),
 
+    path('claim_start', views.claim_start, name='claim_start'),
+
     path('teams', views.teams, name='teams'),
     path('team/<quotedstr:team_name>', views.team, name='team'),
     path('teams/unhidden', views.teams_unhidden, name='teams-unhidden'),

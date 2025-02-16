@@ -258,23 +258,23 @@ LOGOUT_REDIRECT_URL = 'index'
 # under different environments.
 
 HUNT_START_TIME = timezone.make_aware(datetime.datetime(
-    year=9001,
-    month=1,
-    day=1,
+    year=2025,
+    month=4,
+    day=19,
     hour=0,
     minute=0,
-), timezone=datetime.timezone(datetime.timedelta(hours=11)))
+), timezone=datetime.timezone(datetime.timedelta(hours=8)))
 HUNT_END_TIME = timezone.make_aware(datetime.datetime(
-    year=9002,
-    month=1,
-    day=1,
+    year=2025,
+    month=4,
+    day=28,
     hour=0,
     minute=0,
-), timezone=datetime.timezone(datetime.timedelta(hours=11)))
+), timezone=datetime.timezone(datetime.timedelta(hours=8)))
 HUNT_CLOSE_TIME = timezone.make_aware(datetime.datetime(
-    year=9003,
-    month=1,
-    day=1,
+    year=2025,
+    month=4,
+    day=28,
     hour=0,
     minute=0,
-), timezone=datetime.timezone(datetime.timedelta(hours=11)))
+), timezone=datetime.timezone(datetime.timedelta(hours=8)))

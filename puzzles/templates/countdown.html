@@ -4,6 +4,19 @@
 
 <h1 id="countdown" style="text-align: center"></h1>
 
+{% if team %}
+    <div>
+        <form method="post" action="{% url 'claim_start' %}">
+            {% csrf_token %}
+            <button class="btn btn-dark" type="submit" id="claim_start">点击开始</button>
+        </form>
+    </div>
+{% else %}
+    <div>
+        <p>login to unlock the start button</p>
+    </div>
+{% endif %}
+
 <script>
 var start = new Date('{{ start.isoformat }}');
 setInterval(function() {

@@ -1515,3 +1515,16 @@ def accept_ranges_middleware(get_response):
         response['Accept-Ranges'] = 'bytes'
         return response
     return process_request
+
+
+# custom modification
+@require_POST
+def claim_start(request):
+    try:
+        team = request.context.team
+        team.start_offset = HUNT_START_TIME - request.context.now
+        print(f"[D] HUNT_START_TIME {HUNT_START_TIME} | request.context.now={request.context.now}")
+        return render(request, 'puzzles.html', {'rounds': render_puzzles(request)})
+    except:
+        print("[E] claim_start request has no team!")
+        return render(request, 'countdown.html', {'start': request.context.start_time})
