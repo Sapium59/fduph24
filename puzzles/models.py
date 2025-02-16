@@ -220,6 +220,11 @@ class Team(models.Model):
         help_text=_('A dictionary to store flexible data related to puzzle bingo game (r2q8).')
     )
 
+    puzzle_genshin_game_data = JSONField(
+        default=dict, verbose_name=_('puzzle genshin game Data'),
+        help_text=_('A dictionary to store flexible data related to puzzle genshin game (r3q3).')
+    )
+
     class Meta:
         verbose_name = _('team')
         verbose_name_plural = _('teams')

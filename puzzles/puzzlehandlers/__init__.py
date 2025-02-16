@@ -8,7 +8,7 @@ from ratelimit.decorators import ratelimit
 from ratelimit.utils import get_usage_count
 
 # Example usage:
-from . import interactive_demo, r2q8
+from . import interactive_demo, r2q8, r3q3
 
 # django-ratelimit needs to see REMOTE_ADDR for user_or_ip to work for
 # logged-out people
@@ -89,6 +89,14 @@ interactive_demo_submit = error_ratelimit(
 r2q8_submit = error_ratelimit(
     r2q8.submit, 
     '60/m', 
+    {'error': 'Please limit your attempts to 60 per minute.'}, 
+    lambda response: response['correct'], 
+    json.dumps
+)
+
+r3q3_submit = error_ratelimit(
+    r3q3.submit, 
+    '30/m', 
     {'error': 'Please limit your attempts to 60 per minute.'}, 
     lambda response: response['correct'], 
     json.dumps
