@@ -24,22 +24,10 @@ DEFAULT_PUZZLE_BINGO_GAME_DATA = {
 }
 
 
-# key operations
+# utils
 def clear_word(word: str):
     cleared_word = "".join(re.findall("[A-Z]", word.upper()))
     return cleared_word
-
-def _get_triggered_indice(triggered_rules_indice: List[int]) -> List[int]:
-    LINES = [{i + 5 * j for i in range(5)} for j in range(5)] + \
-        [{j + 5 * i for i in range(5)} for j in range(5)] + \
-        [{0, 6, 12, 18, 24}]
-    triggered_lines = [line for line in LINES if all(index in triggered_rules_indice for index in line)]
-    triggered_indice = set()
-
-def update(puzzle_bingo_game_data, triggered_rules_indice):
-    known_rules = puzzle_bingo_game_data["known_rules"]
-
-    pass
 
 
 # rules
@@ -167,6 +155,23 @@ RULES_LIST: List[Tuple[int, str, Callable[[str], bool]]] = [
 ]
 
 
+# key operations
+def _get_newly_known_indice(triggered_rules_indice: List[int]) -> List[int]:
+    LINES = [{i + 5 * j for i in range(5)} for j in range(5)] + \
+        [{j + 5 * i for i in range(5)} for j in range(5)] + \
+        [{0, 6, 12, 18, 24}]
+    newly_known_lines = [line for line in LINES if all(index in triggered_rules_indice for index in line)]
+    newly_known_indice = set([idx for line in newly_known_lines for idx in line])
+    return sorted(list(newly_known_indice))
+
+def update(puzzle_bingo_game_data, triggered_rules_indice):
+    known_rules_indice: List[int] = puzzle_bingo_game_data["known_rules"]
+    newly_known_indice: List[int] = _get_newly_known_indice(triggered_rules_indice)
+    updated_known_rules_indice = sorted(list(set(known_rules_indice + newly_known_indice)))
+    puzzle_bingo_game_data["known_rules"] = updated_known_rules_indice
+    return puzzle_bingo_game_data
+
+
 @require_POST
 def submit(request):
     "A crude example of an interactive puzzle handler."
@@ -203,6 +208,7 @@ def submit(request):
             triggered_rules_indice = [item[0] for item in RULES_LIST if item[2](word)]
             # TODO update user data
             request.context.team.puzzle_bingo_game_data = update(puzzle_bingo_game_data, triggered_rules_indice)
+            request.context.team.save()
             ret_dict = {
                 'error': '', 
                 'correct': True,
@@ -225,7 +231,7 @@ def submit(request):
 
         # when no error, ret_dict['error'] must be empty
         ret_dict['error'] = ''
-        print(f"[I] r2q8: ret_dic={ret_dict}")
+        print(f"[I] r2q8: ret_dict={ret_dict}")
         return ret_dict
     # except (KeyError, AttributeError):
     #     print(f"r2q8e1")
