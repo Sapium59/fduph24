@@ -17,7 +17,6 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
-# from django.contrib.postgres.fields import JSONField  # Use this if you're using PostgreSQL
 from django.db.models import JSONField  # Use this if you're using Django 3.1 or later and a supported database
 
 from puzzles.context import context_cache
@@ -49,6 +48,8 @@ from puzzles.hunt_config import (
     INTRO_ROUND_SLUG,
     META_META_SLUG,
 )
+
+from puzzles.utils import get_default_puzzle_bingo_game_data, get_default_puzzle_genshin_game_data
 
 
 class Round(models.Model):
@@ -215,13 +216,14 @@ class Team(models.Model):
     # 2. 已破解规则的列表（当猜词满足条件连成一条线，视为破解该条线上的所有规则）
     # 3. 是否发动暗箱操作直接购买最终提取所用的词
     # {"bingo_coin_num": 10, "known_rules": [0, 1, 23, 24], "bingo_spoiled": False, word_history: ['apple', 'pear']}
+
     puzzle_bingo_game_data = JSONField(
-        default=dict, verbose_name=_('puzzle bingo game Data'),
+        default=get_default_puzzle_bingo_game_data, verbose_name=_('puzzle bingo game Data'),
         help_text=_('A dictionary to store flexible data related to puzzle bingo game (r2q8).')
     )
 
     puzzle_genshin_game_data = JSONField(
-        default=dict, verbose_name=_('puzzle genshin game Data'),
+        default=get_default_puzzle_genshin_game_data, verbose_name=_('puzzle genshin game Data'),
         help_text=_('A dictionary to store flexible data related to puzzle genshin game (r3q3).')
     )
 
@@ -939,7 +941,3 @@ def notify_on_hint_update(sender, instance, created, update_fields, **kwargs):
                 instance.recipients())
             show_hint_notification(instance)
 
-
-class PuzzleBingoGameInput(models.Model):
-    word = models.CharField(max_length=100)
-    timestamp = models.DateTimeField(auto_now_add=True)

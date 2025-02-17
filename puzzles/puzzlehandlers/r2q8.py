@@ -16,12 +16,6 @@ WORD_SET = set()
 ADJ_SET = set()
 ANIMAL_SET = set()
 COUNTRY_SET = set()
-DEFAULT_PUZZLE_BINGO_GAME_DATA = {
-    "bingo_coin_num": 10, 
-    "known_rules": [],  # List[int]
-    "bingo_spoiled": False,
-    "word_history": [],  # List[str]
-}
 
 
 # utils
@@ -191,7 +185,7 @@ def submit(request):
         # get user data
         puzzle_bingo_game_data = request.context.team.puzzle_bingo_game_data
         if not puzzle_bingo_game_data:
-            puzzle_bingo_game_data = DEFAULT_PUZZLE_BINGO_GAME_DATA
+            puzzle_bingo_game_data = team.get_default_puzzle_bingo_game_data()
         else:
             print(puzzle_bingo_game_data)
         bingo_coin_num = puzzle_bingo_game_data["bingo_coin_num"]
