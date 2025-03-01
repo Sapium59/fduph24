@@ -1,37 +1,4 @@
-from typing import Dict, List
-
-# constants
-with open("puzzles/puzzlehandlers/dictionary.txt") as fp:
-    WORD_SET = set(fp.readlines())
-with open("puzzles/puzzlehandlers/adjectives.txt") as fp:
-    ADJ_SET = set(fp.readlines())
-with open("puzzles/puzzlehandlers/animals.txt") as fp:
-    ANIMAL_SET = set(fp.readlines())
-
-COUNTRY_SET: List[str] = [
-        "AFGHANISTAN", "ALBANIA", "ALGERIA", "AMERICA", "ANDORRA", "ANGOLA", "ARGENTINA", "ARMENIA",
-        "AUSTRALIA", "AUSTRIA", "AZERBAIJAN", "BAHAMAS", "BAHRAIN", "BANGLADESH", "BARBADOS", "BELARUS",
-        "BELGIUM", "BELIZE", "BENIN", "BHUTAN", "BOLIVIA", "BOTSWANA", "BRAZIL", "BRITAIN", "BRUNEI",
-        "BULGARIA", "BURUNDI", "CAMBODIA", "CAMEROON", "CANADA", "CHAD", "CHILE", "CHINA", "COLOMBIA",
-        "COMOROS", "CONGO", "CROATIA", "CUBA", "CYPRUS", "CZECH", "DENMARK", "DJIBOUTI", "DOMINICA",
-        "DOMINICAN", "ECUADOR", "EGYPT", "ERITREA", "ESTONIA", "ESWATINI", "ETHIOPIA", "FIJI", "FINLAND",
-        "FRANCE", "GABON", "GAMBIA", "GEORGIA", "GERMANY", "GHANA", "GREECE", "GRENADA", "GUATEMALA",
-        "GUINEA", "GUYANA", "HAITI", "HONDURAS", "HUNGARY", "ICELAND", "INDIA", "INDONESIA", "IRAN",
-        "IRAQ", "IRELAND", "ISRAEL", "ITALY", "JAMAICA", "JAPAN", "JORDAN", "KOREA", "KAZAKHSTAN", "KENYA",
-        "KIRIBATI", "KOSOVO", "KUWAIT", "KYRGYZSTAN", "LAOS", "LATVIA", "LEBANON", "LESOTHO", "LIBERIA",
-        "LIBYA", "LIECHTENSTEIN", "LITHUANIA", "LUXEMBOURG", "MADAGASCAR", "MALAWI", "MALAYSIA", "MALDIVES",
-        "MALI", "MALTA", "MAURITANIA", "MAURITIUS", "MEXICO", "MICRONESIA", "MOLDOVA", "MONACO", "MONGOLIA",
-        "MONTENEGRO", "MOROCCO", "MOZAMBIQUE", "MYANMAR", "NAMIBIA", "NAURU", "NEPAL", "NETHERLANDS",
-        "NICARAGUA", "NIGER", "NIGERIA", "NORWAY", "OMAN", "PAKISTAN", "PALAU", "PALESTINE", "PANAMA",
-        "PARAGUAY", "PERU", "PHILIPPINES", "POLAND", "PORTUGAL", "QATAR", "ROMANIA", "RUSSIA", "RWANDA",
-        "SAMOA", "SENEGAL", "SERBIA", "SEYCHELLES", "SINGAPORE", "SLOVAKIA", "SLOVENIA", "SOMALIA", "SPAIN",
-        "SUDAN", "SURINAME", "SWEDEN", "SWITZERLAND", "SYRIA", "TAJIKISTAN", "TANZANIA", "THAILAND", "TOGO",
-        "TONGA", "TUNISIA", "TURKEY", "TURKMENISTAN", "TUVALU", "UGANDA", "UKRAINE", "URUGUAY", "UZBEKISTAN",
-        "VANUATU", "VATICAN", "VENEZUELA", "VIETNAM", "YEMEN", "ZAMBIA", "ZIMBABWE"
-    ]
-
-# 国际音标
-IPA_DICT: Dict[str, str] = {
+{
     "AARDVARK": "/ɑɹdvɑɹk/",
     "AARDVARKS": "/ɑɹdvɑɹks/",
     "AARGH": "/ɑɹɡ/",
@@ -63380,31 +63347,3 @@ IPA_DICT: Dict[str, str] = {
     "ZYDECOS": "/zaɪdʌkoʊz/",
     "ZYGOTE": "/zaɪɡoʊt/"
 }
-
-CHEMICAL_ELEMENTS: List[str] = [
-    "Hydrogen", "Helium", "Lithium", "Beryllium", "Boron", "Carbon", 
-    "Nitrogen", "Oxygen", "Fluorine", "Neon", "Sodium", "Magnesium", 
-    "Aluminum", "Silicon", "Phosphorus", "Sulfur", "Chlorine", "Argon", 
-    "Potassium", "Calcium", "Scandium", "Titanium", "Vanadium", 
-    "Chromium", "Manganese", "Iron", "Cobalt", "Nickel", "Copper", 
-    "Zinc", "Gallium", "Germanium", "Arsenic", "Selenium", "Bromine", 
-    "Krypton", "Rubidium", "Strontium", "Yttrium", "Zirconium", 
-    "Niobium", "Molybdenum", "Technetium", "Ruthenium", "Rhodium", 
-    "Palladium", "Silver", "Cadmium", "Indium", "Tin", "Antimony", 
-    "Tellurium", "Iodine", "Xenon", "Cesium", "Caesium", "Barium", "Lanthanum", 
-    "Cerium", "Praseodymium", "Neodymium", "Promethium", "Samarium", 
-    "Europium", "Gadolinium", "Terbium", "Dysprosium", "Holmium", 
-    "Erbium", "Thulium", "Ytterbium", "Lutetium", "Hafnium", "Tantalum", 
-    "Tungsten", "Rhenium", "Osmium", "Iridium", "Platinum", "Gold", 
-    "Mercury", "Thallium", "Lead", "Bismuth", "Polonium", "Astatine", 
-    "Radon", "Francium", "Radium", "Actinium", "Thorium", "Protactinium", 
-    "Uranium", "Neptunium", "Plutonium", "Americium", "Curium", 
-    "Berkelium", "Californium", "Einsteinium", "Fermium", "Mendelevium", 
-    "Nobelium", "Lawrencium", "Rutherfordium", "Dubnium", "Seaborgium", 
-    "Bohrium", "Hassium", "Meitnerium", "Darmstadtium", "Roentgenium", 
-    "Copernicium", "Nihonium", "Flerovium", "Moscovium", "Livermorium", 
-    "Tennessine", "Oganesson"
-]
-
-VOWELS: str = 'AEIOUaeiou'
-

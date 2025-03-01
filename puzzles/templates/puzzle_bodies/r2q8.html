@@ -82,7 +82,7 @@
 {% extends "puzzle.html" %}
 {% block puzzle-body-md %}
 
-
+达成BINGO领取奖金！如果同时满足额外条件更有超级大奖哦~
 {: .flavor}
 
 
@@ -99,20 +99,25 @@
 
 
 <div class="d-flex justify-content-center align-items-center flex-column">
-    <div class="mt-5 mb-4" style="text-align: center;">达成BINGO领取奖金！如果同时满足额外条件更有超级大奖哦~</div>
+    <!-- <div class="mt-5 mb-4" style="text-align: center;">达成BINGO领取奖金！如果同时满足额外条件更有超级大奖哦~</div> -->
     <div class="col-10 col-md-6 col-lg-4 mb-3">
         <form id="r2q8-form" autocomplete="off" action="javascript:void(0);">
             {% csrf_token %}
             <input type="text" name="wordInput" id="wordInput" placeholder="请输入">
             {% comment %} <button class="btn btn-dark" type="button" id="submitButton">提交</button> {% endcomment %}
             <input type="submit" value="提交">
-            <div id="output">...</div>
+            {% if team %}
+                {% for word in team.puzzle_bingo_game_data.word_history %}
+                    <p>{{word}}</p>
+                {% endfor %}
+            {% endif %}
         </form>
+        <div id="output">...</div>
     </div>
     <div>
         <form id="r2q8-do_spoil" autocomplete="off" action="javascript:void(0);">
             {% csrf_token %}
-            <input type="submit" value="do_spoil">
+            <input type="submit" value="暗箱操作（耗费50/{{team.puzzle_bingo_game_data.bingo_coin_num}}金币）">
 
         </form>
     </div>
@@ -209,7 +214,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function do_spoil() {
-        console.log('1234567')
         const outputDiv = document.getElementById('output');
 
         let csrftoken = getCookie('csrftoken');
@@ -230,51 +234,10 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 let res = await result.json();
 
-                if (res.error) {
-                    outputDiv.textContent = `Error: ${res.error}`;
+                if (res.err_msg) {
+                    outputDiv.textContent = `${res.err_msg}`;
                 } else {
-                    // if (res.triggered_rules) {
-                    //     // Create a container for the grid
-                    //     const gridContainer = document.createElement('div');
-                    //     gridContainer.style.display = 'grid';
-                    //     gridContainer.style.gridTemplateColumns = 'repeat(5, 50px)'; // 5 columns
-                    //     gridContainer.style.gridTemplateRows = 'repeat(5, 50px)'; // 5 rows
-                    //     gridContainer.style.gap = '5px'; // Gap between squares
-                    //     gridContainer.style.margin = '10px';
-                    
-                    //     // Create an array to keep track of triggered rules
-                    //     const triggeredRules = Object.entries(res.triggered_rules); // Convert to array of [key, value]
-                    
-                    //     // Fill the 5x5 grid
-                    //     for (let i = 0; i < 25; i++) {
-                    //         const square = document.createElement('div');
-                    //         square.style.width = '50px';
-                    //         square.style.height = '50px';
-                    //         square.style.backgroundColor = 'black';
-                    //         square.style.color = 'white';
-                    //         square.style.display = 'flex';
-                    //         square.style.alignItems = 'center';
-                    //         square.style.justifyContent = 'center';
-                    //         square.style.fontSize = '12px';
-                            
-                    //         // Check if the current index is one of the triggered rules
-                    //         const rule = triggeredRules.find(([key]) => parseInt(key) === i);
-                    //         if (rule) {
-                    //             square.textContent = `${rule[1]}`; // Rule string and index
-                    //         } else {
-                    //             square.textContent = ''; // Empty square
-                    //         }
-                            
-                    //         gridContainer.appendChild(square);
-                    //     }
-                    
-                    //     outputDiv.innerHTML = ''; // Clear previous content
-                    //     outputDiv.appendChild(gridContainer);
-                    // } else {
-                    //     outputDiv.textContent = "[W] no res.triggered_rules";
-                    // }
-                    outputDiv.textContent = "todo spoil"
-                    
+                    outputDiv.textContent = ``;
                 }
             }
         } catch (e) {

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>谜题扭蛋</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        /* 自定义勾号颜色 */
+        .form-check-input:checked {
+            background-color: white; /* 背景颜色 */
+            border-color: black;     /* 边框颜色 */
+        }
+    
+        .form-check-input:checked::before {
+            content: "✔";           /* 勾号符号 */
+            color: black;            /* 勾号颜色 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .fixed-width-btn {
+            min-width: 120px; /* 设置按钮的最小宽度，确保宽度不变 */
+            text-align: center; /* 确保文本居中对齐 */
+        }
+    </style>
+</head>
+
+<body class="bg-body-tertiary">
+    <div class="container mt-5">
+        <div class="fs-2 fw-bold mb-5">谜题扭蛋</div>
+        <!-- <div class="fs-2 fw-bold">谜题扭蛋</div> -->
+        <!-- <div class="text-secondary mb-5">本题有 5 个中间答案验证。</div> -->
+        <div class="mb-3">我们《谜神》已经开服5周年了，但有玩家反馈说，这次的周年池老版本到新版本都有角色抽不出来？</div>
+        <div class="mb-3">
+            <button class="btn btn-dark me-3" id="drawButton">抽取一次</button>
+            <button class="btn btn-dark me-3" id="drawTenButton">抽取十次</button>
+            <button class="btn btn-outline-dark" id="historyButton" data-bs-toggle="modal" data-bs-target="#historyModal">我的仓库</button>
+        </div>
+        <div class="mb-3 text-secondary" style="font-size: .5rem;">*注：新版本卡的抽取概率大于旧版本卡。</div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">我的仓库</h5>
+                <button type="button" class="btn-close focus-ring" data-bs-dismiss="modal" aria-label="Close" style="--bs-focus-ring-color: rgba(var(--bs-dark-rgb), .25)" id="historyCloseButton"></button>
+                </div>
+                <div class="modal-body" style="max-height: 300px; overflow-y: auto;">
+                    <div class="d-flex justify-content-center mb-2">
+                        <div class="form-check me-2">
+                            <input class="form-check-input focus-ring bg-light border-dark" type="checkbox" value="" id="charSampleCheck" style="--bs-focus-ring-color: rgba(var(--bs-dark-rgb), .25)" checked>
+                            <label class="form-check-label" for="charSampleCheck">
+                                错乱诗
+                            </label>
+                        </div>
+                        <div class="form-check me-2">
+                            <input class="form-check-input focus-ring bg-light border-dark text-dark" type="checkbox" value="" id="wordSampleCheck" style="--bs-focus-ring-color: rgba(var(--bs-dark-rgb), .25)" checked>
+                            <label class="form-check-label" for="wordSampleCheck">
+                                多频段
+                            </label>
+                        </div>
+                        <div class="form-check me-2">
+                            <input class="form-check-input focus-ring bg-light border-dark text-dark" type="checkbox" value="" id="numberSampleCheck" style="--bs-focus-ring-color: rgba(var(--bs-dark-rgb), .25)" checked>
+                            <label class="form-check-label" for="numberSampleCheck">
+                                概率数
+                            </label>
+                        </div>
+                        <div class="form-check me-2">
+                            <input class="form-check-input focus-ring bg-light border-dark text-dark" type="checkbox" value="" id="normalSampleCheck" style="--bs-focus-ring-color: rgba(var(--bs-dark-rgb), .25)" checked>
+                            <label class="form-check-label" for="normalSampleCheck">
+                                高斯钟
+                            </label>
+                        </div>
+                        <div class="form-check me-2">
+                            <input class="form-check-input focus-ring bg-light border-dark text-dark" type="checkbox" value="" id="letterSampleCheck" style="--bs-focus-ring-color: rgba(var(--bs-dark-rgb), .25)" checked>
+                            <label class="form-check-label" for="letterSampleCheck">
+                                观测窗
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 单列滚动列表 -->
+                    <ul class="list-group column" id="inputHistory">
+                        仓库里还是空的哟~
+                    </ul>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <div>当前显示<span id="nShowingHistory">0</span>/<span id="nHistory">0</div>
+                    <button type="button" class="btn btn-outline-dark fixed-width-btn" id="copyButton">复制到剪贴板</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="collapse col-10 col-md-8 col-lg-6 mb-3" id="resultCollapse">
+            <div class="card card-body">
+                <div class="d-flex justify-content-between">
+                    <span class="w-100 d-flex align-items-center flex-column" id="resultText">placeholder</span>
+                    <span><button type="button" class="btn-close focus-ring" id="closeResultButton" style="--bs-focus-ring-color: rgba(var(--bs-dark-rgb), .25)"></button></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center align-items-center flex-column">
+            <div class="col-10 col-md-6 col-lg-5 mb-3">
+                <div class="input-group">
+                    <input type="text" class="form-control focus-ring text-center border border-dark" placeholder="请输入答案" style="--bs-focus-ring-color: rgba(var(--bs-dark-rgb), .25);" id="wordInput">
+                    <button class="btn btn-dark" type="button" id="submitButton">提交</button>
+                </div>
+            </div>
+
+            <div class="collapse col-10 col-md-6 col-lg-5 mb-3" id="infoCollapse">
+                <div class="card card-body">
+                    <div class="d-flex justify-content-between">
+                        <span id="infoText">placeholder</span>
+                        <span><button type="button" class="btn-close focus-ring" id="closeInfoButton" style="--bs-focus-ring-color: rgba(var(--bs-dark-rgb), .25)"></button></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const drawButton = document.getElementById('drawButton');
+        const drawTenButton = document.getElementById('drawTenButton');
+        const historyButton = document.getElementById('historyButton');
+        const resultCollapse = document.getElementById('resultCollapse');
+        const infoCollapse = document.getElementById('infoCollapse');
+        const resultText = document.getElementById('resultText');
+        const historyContainer = document.getElementById('inputHistory');
+        const checkboxArray = [document.getElementById('letterSampleCheck'), document.getElementById('charSampleCheck'), document.getElementById('numberSampleCheck'), document.getElementById('normalSampleCheck'), document.getElementById('wordSampleCheck')];
+        const copyButton = document.getElementById('copyButton');
+        const submitButton = document.getElementById('submitButton');
+        const nHistoryText = document.getElementById('nHistory');
+        const nShowingHistoryText = document.getElementById('nShowingHistory');
+
+        const ansLetterSample = 'SAMPLING';
+        const ansNormalSample = 'JACKPOT';
+        const ansFinal = 'NINJA';
+        const ansCharSample = '踏破铁鞋无觅处，得来全不费工夫';
+        const milestoneArray = [ansCharSample.replace('，', ''), 'UNCOPYRIGHTABLE', 'FREQUENCY', ansNormalSample, ansLetterSample];
+        const subNameArray = ['错乱诗', '多频段', '概率数', '高斯钟', '观测窗'];
+        const ansCharStructureArray = ['lr', 'lr', 'lr', 'lr', 'singleton', 'ud', 'dl', 'punc', 'lr', 'singleton', 'ud', 'singleton', 'ud', 'singleton', 'singleton'];
+        const extractIdxLetterSample = 6;
+        const extractIdxNormalSample = 0;
+        const extractIdxCharSample = 13;   // 包括中间的逗号
+        const pixelArray = [[1, 1], [1, 2], [1, 3], [1, 5], [1, 7], [1, 8], [1, 9], [1, 16], [1, 19], [1, 21],
+                            [2, 1], [2, 3], [2, 5], [2, 7], [2, 9], [2, 15], [2, 17], [2, 19], [2, 21],
+                            [3, 1], [3, 2], [3, 3], [3, 5], [3, 7], [3, 9], [3, 15], [3, 17], [3, 19], [3, 20],
+                            [4, 3], [4, 5], [4, 7], [4, 9], [4, 15], [4, 17], [4, 19], [4, 21],
+                            [5, 1], [5, 2], [5, 3], [5, 5], [5, 7], [5, 8], [5, 9], [5, 16], [5, 17], [5, 19], [5, 21]
+                            ]
+        const nPixelSample = 5;
+
+        let structureDict;
+        let uncopyrightableWordArray;
+        let charSampleDict;
+        fetch('./char_structure.json')
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            structureDict = {lr: data.lr, singleton: data.singleton, ud: data.ud, dl: data.dl, punc: ['，']};
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+        
+        fetch('./char_sample.json')
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            charSampleDict = data;
+        })
+        .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+        });
+
+        fetch("./uncopyrightable_words.txt")
+        .then(response => {
+            if (!response.ok) {
+            throw new Error("读取失败");
+            }
+            return response.text();
+        })
+        .then(text => {
+            uncopyrightableWordArray = text.toUpperCase().split(/\r\n|\n/);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+
+        function ToggleCollapse(collapse, isShow) {
+            let bsCollapse = new bootstrap.Collapse(collapse, {
+            toggle: false
+            });
+            if (isShow) {
+                bsCollapse.show();
+            } else {
+                bsCollapse.hide();
+            }
+        }
+
+        function ShowResult(resultArray) {
+            ToggleCollapse(resultCollapse, false);
+            ToggleCollapse(resultCollapse, true);
+            let resultInnerHTML = '<hr class="w-100">';
+            for (let result of resultArray) {
+                resultInnerHTML += `<div>${result}</div><hr class="w-100">`;
+            }
+            resultText.innerHTML = resultInnerHTML;
+        }
+
+        function GetRandomElement(arr) {
+            const randomIndex = Math.floor(Math.random() * arr.length);
+            return arr[randomIndex];
+        }
+
+        function GetRandomInt(min, max) {
+            // 包含min, max
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function LetterSample() {
+            let indexArray = [...ansLetterSample].map((_, i) => i).filter(i => i != extractIdxLetterSample);
+            let randIdx = GetRandomElement(indexArray);
+            let sampleString = ''
+            for (let i = 0; i < ansLetterSample.length; i++) {
+                if (i === randIdx) {
+                    sampleString += ansLetterSample[i] + ' ';
+                } else {
+                    sampleString += '_ ';
+                }
+            }
+            return sampleString;
+        }
+
+        function PixelSample() {
+            let sampleString = ''
+            for (let i = 0; i < nPixelSample; i++) {
+                let pixelSample = GetRandomElement(pixelArray);
+                sampleString += '(' + pixelSample.toString() + ') ';
+            }
+            return sampleString;
+        }
+
+        function NumberSample() {
+            // FREQUENCY
+            let cumulativeProbArray = [0, .06, .24, .29, .46, .67, .72, .75, 1];
+            let resultArray = [1, 2, 3, 4, 5, 6, 8, 9];
+            // // NERVOUS
+            // let cumulativeProbArray = [0, .05, .23, .45, .60, .81, 1];
+            // let resultArray = [2, 3, 4, 5, 6, 7];
+
+            let randomValue = Math.random();
+            for (let i = 0; i < resultArray.length; i++) {
+                if (randomValue >= cumulativeProbArray[i] && randomValue <= cumulativeProbArray[i + 1]) {
+                    return resultArray[i];
+                }
+            }
+        }
+
+        function SampleNormalLetter(centerLetter, sigma, numSamples) {
+            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const letterToIndex = {};
+            const indexToLetter = {};
+
+            // 创建字母到索引和索引到字母的映射
+            for (let i = 0; i < alphabet.length; i++) {
+                letterToIndex[alphabet[i]] = i;
+                indexToLetter[i] = alphabet[i];
+            }
+
+            // 中心字母的索引
+            const mu = letterToIndex[centerLetter.toUpperCase()];
+
+            // 正态分布生成器 (Box-Muller transform)
+            function randomNormal(mu, sigma) {
+                let u1 = Math.random();
+                let u2 = Math.random();
+                let z = Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2.0 * Math.PI * u2);
+                return mu + z * sigma;
+            }
+
+            // 生成符合正态分布的采样
+            const samples = [];
+            for (let i = 0; i < numSamples; i++) {
+                const sample = randomNormal(mu, sigma);
+                const roundedIndex = Math.round(sample) % 26;  // 确保结果在 0-25 的范围内
+                samples.push(indexToLetter[(roundedIndex + 26) % 26]); // 防止负数索引
+            }
+
+            return samples;
+        }
+
+        function NormalSample() {
+            let normalSample = '';
+            [...ansNormalSample].forEach((letter, idx) => {
+                let sample = (idx !== extractIdxNormalSample) ? SampleNormalLetter(letter, 1.5, 1) : ['?'];
+                normalSample += sample[0];
+            })
+            return normalSample;
+        }
+
+        // // test
+        // let samples = ''
+        // for (let i = 0; i < 600; i++) {
+        //     samples += NumberSample() + '\n';
+        // }
+        // console.log(samples);
+
+        function CharSample() {
+            let sampleString = '';
+            
+            for (let idx = 0; idx < ansCharSample.length; idx++) {
+                // 如果是第7个字符，插入逗号
+                if (idx === 7) {
+                    sampleString += '，';
+                    continue;
+                }
+                
+                // 默认随机字符
+                let randomChar = (idx !== extractIdxCharSample) 
+                                ? GetRandomElement(charSampleDict[idx]) 
+                                : '?';
+
+                sampleString += randomChar;
+            }
+
+            // ansCharStructureArray.forEach((structure, idx) => {
+            //     // 如果是第7个字符，插入逗号
+            //     if (idx === 7) {
+            //         sampleString += '<span class="fw-bold">，</span>';
+            //         return;
+            //     }
+                
+            //     // 默认随机字符
+            //     let randomChar = (idx !== extractIdxCharSample) 
+            //                     ? GetRandomElement(structureDict[structure]) 
+            //                     : '口';
+
+            //     // 如果随机字符和目标字符相同，则加粗
+            //     if (randomChar === ansCharSample[idx]) {
+            //         sampleString += `<span class="fw-bold">${randomChar}</span>`;
+            //     } else {
+            //         sampleString += randomChar;
+            //     }
+            // });
+            return sampleString;
+        }
+
+        function WordSample() {
+            return GetRandomElement(uncopyrightableWordArray);
+        }
+
+        let hasHistoryResult = false;
+        function UpdateHistory(result, className) {
+            const history = document.createElement('li');
+            history.classList.add('list-group-item');
+            history.classList.add(className);
+            history.innerHTML = result;
+            if (!hasHistoryResult) {
+                historyContainer.innerHTML = '';
+                hasHistoryResult = true;
+            }
+            historyContainer.appendChild(history);
+
+            let idx = classArray.indexOf(className);
+            if (!checkboxArray[idx].checked) {
+                history.style.display = 'none';
+            } else {
+                history.style.display = 'block';
+            }
+        }
+
+        function UpdateHistoryStat() {
+            // 获取子元素总数
+            let nHistory = historyContainer.children.length;
+            nHistoryText.innerHTML = nHistory;
+
+            // 获取显示的子元素数目
+            let nShowingHistory = Array.from(historyContainer.children).filter(child => child.style.display === 'block').length;
+            nShowingHistoryText.innerHTML = nShowingHistory;
+        }
+
+        let sampleFuncArray = [LetterSample, CharSample, NumberSample, NormalSample, WordSample];
+        let cumulativeProbArray = [0, 20/300, 60/300, 120/300, 200/300, 1];
+        let classArray = ['letter-sample', 'char-sample', 'number-sample', 'normal-sample', 'word-sample'];
+        // console.log(cumulativeProbArray);
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+            }).catch(function(error) {
+                console.error('复制失败: ', error);
+            });
+        }
+
+        copyButton.addEventListener('click', () => {
+            copyToClipboard(historyContainer.innerText);
+            copyButton.textContent = '复制成功'; // 点击后更改按钮文本
+        });
+        copyButton.addEventListener('mouseleave', () => {
+            copyButton.textContent = '复制到剪贴板'; // 鼠标移开后恢复按钮文本
+        });
+
+        checkboxArray.forEach((checkbox, i) => {
+            checkbox.addEventListener('change', () => {
+                let resultArray = document.querySelectorAll('.' + classArray[i]);
+                resultArray.forEach(result => {
+                    // 切换显示状态
+                    if (checkbox.checked) {
+                        result.style.display = 'block'; // 显示元素
+                    } else {
+                        result.style.display = 'none';  // 隐藏元素
+                    }
+                });
+                UpdateHistoryStat();
+            })
+        });
+
+        historyButton.addEventListener('click', () => {
+            UpdateHistoryStat();
+        })
+        
+        drawButton.addEventListener('click', () => {
+            let randomValue = Math.random();
+            for (let i = 0; i < 5; i++) {
+                if (cumulativeProbArray[i] <= randomValue && randomValue <= cumulativeProbArray[i + 1]) {
+                    let result = sampleFuncArray[i]();
+                    ShowResult([result]);
+                    UpdateHistory(result, classArray[i]);
+                    break;
+                }
+            }
+        })
+
+        drawTenButton.addEventListener('click', () => {
+            let resultArray = [];
+            for (let i = 0; i < 10; i++) {
+                let randomValue = Math.random();
+                for (let i = 0; i < 5; i++) {
+                    if (cumulativeProbArray[i] <= randomValue && randomValue <= cumulativeProbArray[i + 1]) {
+                        let result = sampleFuncArray[i]();
+                        resultArray.push(result);
+                        UpdateHistory(result, classArray[i]);
+                        break;
+                    }
+                }
+            }
+            ShowResult(resultArray);
+        })
+
+        document.getElementById("closeResultButton").addEventListener("click", () => {
+            ToggleCollapse(resultCollapse, false);
+        });
+
+        // 回车提交
+        document.getElementById("wordInput").addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // 防止默认的回车行为
+                submitButton.click(); // 模拟点击提交按钮
+            }
+        });
+
+        function GetProcessedInput() {
+            let input = wordInput.value;
+            input = input.replace(/[^a-zA-Z\u4e00-\u9fa5]/g, '');
+            // input = input.replace(/[^a-zA-Z]/g, '');
+            input = input.toUpperCase();
+            return input;
+        }
+
+        function ShowInfo(info) {
+            ToggleCollapse(infoCollapse, false);
+            ToggleCollapse(infoCollapse, true);
+            document.getElementById("infoText").innerHTML = info;
+        }
+
+        submitButton.addEventListener('click', () => {
+            let input = GetProcessedInput();
+            if (input === ansFinal) {
+                ShowInfo('答案正确！');
+            } else {
+                let info = '答案错误……';
+                milestoneArray.forEach ((milestone, index) => {
+                    if (input === milestone) {
+                        info = `你窥见了${subNameArray[index]}的全貌`;
+                    }
+                })
+                ShowInfo(info);
+            }
+        })
+
+        document.getElementById("closeInfoButton").addEventListener("click", () => {
+            ToggleCollapse(infoCollapse, false);
+        });
+    </script>
+</body>
+</html>

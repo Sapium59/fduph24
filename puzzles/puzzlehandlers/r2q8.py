@@ -8,15 +8,9 @@ from django.views.decorators.http import require_POST
 
 from puzzles.messaging import log_puzzle_info
 from ..models import Team
-from .r2q8_data import IPA_DICT, CHEMICAL_ELEMENTS, VOWELS
+from .r2q8_data import IPA_DICT, CHEMICAL_ELEMENTS, VOWELS, WORD_SET, ADJ_SET, ANIMAL_SET, COUNTRY_SET
 
-
-# constants
-WORD_SET = set()
-ADJ_SET = set()
-ANIMAL_SET = set()
-COUNTRY_SET = set()
-
+SPOIL_COST = 50
 
 # utils
 def clear_word(word: str):
@@ -158,29 +152,19 @@ def _get_newly_known_indice(triggered_rules_indice: List[int]) -> List[int]:
     newly_known_indice = set([idx for line in newly_known_lines for idx in line])
     return sorted(list(newly_known_indice))
 
-def update(puzzle_bingo_game_data, triggered_rules_indice):
+def update(puzzle_bingo_game_data, triggered_rules_indice, guessed_word: str, max_word_history: int = 100):
     known_rules_indice: List[int] = puzzle_bingo_game_data["known_rules"]
     newly_known_indice: List[int] = _get_newly_known_indice(triggered_rules_indice)
     updated_known_rules_indice = sorted(list(set(known_rules_indice + newly_known_indice)))
     puzzle_bingo_game_data["known_rules"] = updated_known_rules_indice
+    puzzle_bingo_game_data["word_history"].append(guessed_word)
+    if len(puzzle_bingo_game_data["word_history"]) > max_word_history:
+        puzzle_bingo_game_data["word_history"] = puzzle_bingo_game_data["word_history"][-max_word_history:]
     return puzzle_bingo_game_data
 
 
 @require_POST
 def submit(request):
-    "A crude example of an interactive puzzle handler."
-    # 2. Persist it on the server. You can just add a puzzle-specific model
-    # with a foreign key to Team. If you have strong performance needs and are
-    # feeling adventurous, you might even add an in-memory store like Redis or
-    # something.
-    #
-    # Advantages of 2: Easy to share state between team members. Don't need
-    # additional complexity to prevent client-side tampering with state. Easier
-    # to collect statistics about solving after the fact. If you don't get
-    # client-side state right the first time, fixing it after some solvers have
-    # made partial progress can be a pain; server-side state lets you at least
-    # keep the possibility of manually introspecting or fixing it as needed.
-
     try:
         # get user data
         puzzle_bingo_game_data = request.context.team.puzzle_bingo_game_data
@@ -201,21 +185,49 @@ def submit(request):
             word = clear_word(word)
             triggered_rules_indice = [item[0] for item in RULES_LIST if item[2](word)]
             # TODO update user data
-            request.context.team.puzzle_bingo_game_data = update(puzzle_bingo_game_data, triggered_rules_indice)
+            puzzle_bingo_game_data = update(puzzle_bingo_game_data, triggered_rules_indice, guessed_word=word)
             request.context.team.save()
             ret_dict = {
                 'error': '', 
                 'correct': True,
-                'triggered_rules': {idx: RULES_LIST[idx][1] for idx in triggered_rules_indice},
-                bingo_coin_num: "bingo_coin_num",
-                bingo_spoiled: "bingo_spoiled"
+                # 'triggered_rules': {idx: RULES_LIST[idx][1] for idx in triggered_rules_indice},
+                'triggered_rules': {idx: word for idx in triggered_rules_indice},  # trigger时不给rule内容，五个连成一线变成known才给
+                'bingo_coin_num': bingo_coin_num,
+                'bingo_spoiled': bingo_spoiled
             }
         elif mode == "do_spoil":
             pass  # TODO
-            ret_dict = {
-                'error': '', 
-                'correct': True,
-            }
+            if bingo_coin_num >= SPOIL_COST and not bingo_spoiled:
+                pass
+                ret_dict = {
+                    'error': '', 
+                    'correct': True,
+                    'triggered_rules': {},
+                    'bingo_coin_num': bingo_coin_num,
+                    'bingo_spoiled': bingo_spoiled
+                }
+            elif bingo_spoiled:
+                err_msg = f'你已经暗箱操作过了！'
+                print(err_msg)
+                ret_dict = {
+                    'error': err_msg,
+                    'err_msg': err_msg,
+                    'correct': True,
+                    'triggered_rules': {},
+                    'bingo_coin_num': bingo_coin_num,
+                    'bingo_spoiled': bingo_spoiled
+                }
+            else:
+                err_msg = f'你没有足够的奖金来暗箱操作（需要{SPOIL_COST}）'
+                print(err_msg)
+                ret_dict = {
+                    'error': err_msg,
+                    'err_msg': err_msg,
+                    'correct': True,
+                    'triggered_rules': {},
+                    'bingo_coin_num': bingo_coin_num,
+                    'bingo_spoiled': bingo_spoiled
+                }
         elif mode == "buy_a_sample":
             pass  # TODO
             ret_dict = {}
@@ -227,19 +239,6 @@ def submit(request):
         ret_dict['error'] = ''
         print(f"[I] r2q8: ret_dict={ret_dict}")
         return ret_dict
-    # except (KeyError, AttributeError):
-    #     print(f"r2q8e1")
-    #     # This error handling is pretty rough.
-    #     return {
-    #         'error': 'Please submit a well-formed response.',
-    #         'correct': False,
-    #     }
-    # except (ValueError, IndexError):
-    #     print(f"r2q8e2")
-    #     return {
-    #         'error': 'Please submit an integer between 1 and 11 for the index.',
-    #         'correct': False,
-    #     }
     except:
         traceback.print_exc()
 
