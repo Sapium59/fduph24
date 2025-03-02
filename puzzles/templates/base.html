@@ -358,12 +358,10 @@
     {% block content_nowrap %}
 
 
-    <div class="top-more-actions">
-        {% block top-left-actions %}{% endblock %}
-    </div>
-
-
     <div class="content">
+        <div class="top-more-actions">
+            {% block top-left-actions %}{% endblock %}
+        </div>
         {% block content %}{% endblock %}
     </div>
     {% endblock %}
