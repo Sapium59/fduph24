@@ -173,6 +173,14 @@ def about(request):
 def archive(request):
     return render(request, 'archive.html')
 
+@require_GET
+def faq(request):
+    return render(request, 'faq.html')
+
+@require_GET
+def tools(request):
+    return render(request, 'tools.html')
+
 recaptcha_logger = logging.getLogger('puzzles.recaptcha')
 
 @require_before_hunt_closed_or_admin
@@ -1136,20 +1144,23 @@ def story(request):
     if not STORY_PAGE_VISIBLE and not request.context.is_superuser:
         raise Http404
     story_points = OrderedDict((
-        ('pre_hunt', not request.context.hunt_has_almost_started),
-        ('round1_open', request.context.hunt_has_almost_started), ('meta1_done', False),
-        ('round2_open', False), ('meta2_done', False),
+        ('round1_open', request.context.hunt_has_almost_started), 
+        ('round2_open', False), 
+        ('round3_open', False), 
+        ('fm_open', any([puzzle.slug == META_META_SLUG for puzzle in request.context.unlocks])),
+        ('victory', request.context.has_finished_hunt)
     ))
     if request.context.hunt_has_started:
         for puzzle in request.context.unlocks:
             story_points['round%d_open' % puzzle.round.order] = True
-        if request.context.team:
-            for puzzle in request.context.team.solves.values():
-                if puzzle.is_meta:
-                    story_points['meta%d_done' % puzzle.round.order] = True
+        # if request.context.team:
+        #     for puzzle in request.context.team.solves.values():
+        #         if puzzle.is_meta:
+        #             story_points['meta%d_done' % puzzle.round.order] = True
+
     story_points = [key for (key, visible) in story_points.items() if visible]
-    if request.context.team:
-        story_points.reverse()
+    # if request.context.team:
+    #     story_points.reverse()  # 不必反序
     return render(request, 'story.html', {'story_points': story_points})
 
 @require_GET

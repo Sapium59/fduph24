@@ -70,72 +70,11 @@
 
     <style type="text/css"></style>
 
-    <style>
-        .left-header {
-            box-sizing: border-box;
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            width: 54px;
-            z-index: 100;
-            background-color: var(--ic-brand-global-nav-bgd);
-        }
 
-        .canvas_navbar {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            width: 200px; /* Width of the navbar */
-            background-color: #f1f1f1;
-            height: 100vh; /* Full height */
-            position: fixed;
-            display: flex; /* Enable Flexbox */
-            flex-direction: column; /* Arrange items vertically */
-            align-items: center; /* Center items horizontally */
-        }
-    
-        .canvas_navbar li {
-            width: 100%; /* Make list items take full width */
-            display: flex; /* Enable Flexbox for list items */
-            flex-direction: column; /* Arrange items vertically */
-            justify-content: center; /* Center items horizontally */
-            align-items: center; /* Center items vertically */
-            height: 100px; /* Fixed height for each item */
-            padding: 0 10px; /* Add some horizontal padding */
-        }
-    
-        .canvas_navbar li a {
-            display: flex; /* Enable Flexbox for anchor */
-            flex-direction: column; /* Arrange items vertically */
-            justify-content: center; /* Center content horizontally */
-            align-items: center; /* Center items vertically */
-            width: 100%; /* Make the anchor fill the list item */
-            text-decoration: none; /* Remove underline from links */
-            color: #555; /* Text color */
-        }
-        
-    
-        .canvas_navbar li a:hover {
-            background-color: #555; /* Background on hover */
-            color: white; /* Text color on hover */
-        }
-    
-
-    </style>
-    
     
     {{ ga_code|safe }}
 </head>
 <body>
-    <!-- idk what is this for, skip! -->
-    <!-- <a class="skip-to-main">Press enter to skip to main content.</a> -->
-<!--     
-    <div class="left-header">
-        <ul class="canvas_navbar">
-     -->
      <div class="sidebar">
         <a href="{% url 'index' %}">
             <div style="background-color: #f9f8f5;">
@@ -145,7 +84,7 @@
         <ul>
             {% if request.user.is_authenticated %}
                 <a href="{% url 'logout' %}"> 
-                    <div>{% translate "Logout" %}</div> 
+                    <div>登出</div> 
                 </a>
 
                 {% comment %} TODO: need review and test {% endcomment %}
@@ -279,7 +218,7 @@
                             </svg>
                         </div>
                         <div>
-                            {% translate "Login" %}
+                            登陆
                         </div>
                     </a>
                 </li>
@@ -289,13 +228,40 @@
                 <a href="{% url 'about' %}">
                     <div>
                         <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" version="1.1" x="0" y="0" viewBox="0 0 200 200" enable-background="new 0 0 200 200" xml:space="preserve">
+                            <path d="M100,10A90,90,0,1,0,100,190A90,90,0,1,0,100,10L100,20A80,80,0,1,1,100,180A80,80,0,1,1,100,20 M100,48 A12,12,0,1,0,100,72A12,12,0,1,0,100,48 M90,90L110,90L110,150L90,150L90,90"
+                            transform="translate(-5.2 -5.2)"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        活动介绍
+                    </div>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'faq' %}">
+                    <div>
+                        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" version="1.1" x="0" y="0" viewBox="0 0 200 200" enable-background="new 0 0 200 200" xml:space="preserve">
                             <path
                             d="M100,127.88A11.15,11.15,0,1,0,111.16,139,11.16,11.16,0,0,0,100,127.88Zm8.82-88.08a33.19,33.19,0,0,1,23.5,23.5,33.54,33.54,0,0,1-24,41.23,3.4,3.4,0,0,0-2.74,3.15v9.06H94.42v-9.06a14.57,14.57,0,0,1,11.13-14,22.43,22.43,0,0,0,13.66-10.27,22.73,22.73,0,0,0,2.31-17.37A21.92,21.92,0,0,0,106,50.59a22.67,22.67,0,0,0-19.68,3.88,22.18,22.18,0,0,0-8.65,17.64H66.54a33.25,33.25,0,0,1,13-26.47A33.72,33.72,0,0,1,108.82,39.8ZM100,5.2A94.8,94.8,0,1,0,194.8,100,94.91,94.91,0,0,0,100,5.2m0,178.45A83.65,83.65,0,1,1,183.65,100,83.73,83.73,0,0,1,100,183.65"
                             transform="translate(-5.2 -5.2)"></path>
                         </svg>
                     </div>
                     <div>
-                        {% translate "About" %}
+                        {% translate "FAQ" %}
+                    </div>
+                </a>
+            </li>
+
+            <li>
+                <a href="{% url 'tools' %}">
+                    <div>
+                        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="80" height="80" transform="scale(-1, 1)">
+                            <path d="M30.651,23.538l25.24,24.346l-6.577,6.577l-23.969,-25.617l5.306,-5.306Zm-7.208,3.403l5.306,-5.305c0,0 -2.695,-2.056 -2.447,-3.34c0.248,-1.285 0.809,-3.1 4.711,-4.711c3.903,-1.611 7.543,-1.757 7.543,-1.757l0.131,-1.758c0,0 -8.969,-1.356 -13.707,0.327c-4.738,1.684 -10.097,8.02 -10.097,8.02c0,0 0.935,3.064 -0.667,4.666c-1.601,1.601 -3.754,-0.245 -3.754,-0.245l-2.456,3.118l6.197,6.197l3.112,-2.461c0,0 -1.472,-2.207 -0.017,-3.528c3.132,-2.842 6.145,0.777 6.145,0.777Z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        常用工具
                     </div>
                 </a>
             </li>
@@ -311,7 +277,7 @@
                     </svg>
                     </div>
                     <div>
-                        {% translate "Story" %}
+                        剧情
                     </div>
                     </a>
                 </li>
@@ -326,7 +292,7 @@
                         </svg>
                     </div>
                     <div>
-                        {% translate "Puzzles" %}
+                        谜题列表
                     </div>
                 </a>
             </li>
@@ -336,13 +302,11 @@
                 <a href="{% url 'teams' %}">
                     <div>
                         <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" version="1.1" x="0"y="0" viewBox="0 0 280 280" enable-background="new 0 0 280 280" xml:space="preserve">
-                        <path
-                        d="M197.07,213.38h16.31V197.07H197.07Zm-16.31,16.31V180.76h48.92v48.92Zm-48.92-16.31h16.31V197.07H131.85Zm-16.31,16.31V180.76h48.92v48.92ZM66.62,213.38H82.93V197.07H66.62ZM50.32,229.68V180.76H99.24v48.92Zm146.75-81.53h16.31V131.85H197.07Zm-16.31,16.31V115.54h48.92v48.92Zm-48.92-16.31h16.31V131.85H131.85Zm-16.31,16.31V115.54h48.92v48.92ZM66.62,148.15H82.93V131.85H66.62ZM50.32,164.46V115.54H99.24v48.92ZM34,262.29H246V82.93H34ZM246,66.62V42.16A8.17,8.17,0,0,0,237.84,34H213.38v8.15a8.15,8.15,0,1,1-16.31,0V34H82.93v8.15a8.15,8.15,0,0,1-16.31,0V34H42.16A8.17,8.17,0,0,0,34,42.16V66.62Zm-8.15-48.92a24.49,24.49,0,0,1,24.46,24.46V278.6H17.71V42.16A24.49,24.49,0,0,1,42.16,17.71H66.62V9.55a8.15,8.15,0,0,1,16.31,0v8.15H197.07V9.55a8.15,8.15,0,1,1,16.31,0v8.15Z">
-                        </path>
+                            <path d="M91.72,120.75h96.56V104.65H91.72Zm0,48.28h80.47V152.94H91.72Zm0-96.56h80.47V56.37H91.72Zm160.94,34.88H228.52V10.78h-177v96.56H27.34A24.17,24.17,0,0,0,3.2,131.48V244.14a24.17,24.17,0,0,0,24.14,24.14H252.66a24.17,24.17,0,0,0,24.14-24.14V131.48A24.17,24.17,0,0,0,252.66,107.34Zm0,16.09a8.06,8.06,0,0,1,8,8v51.77l-32.19,19.31V123.44ZM67.58,203.91v-177H212.42v177ZM27.34,123.44H51.48v79.13L19.29,183.26V131.48A8.06,8.06,0,0,1,27.34,123.44ZM252.66,252.19H27.34a8.06,8.06,0,0,1-8-8V202l30,18H230.75l30-18v42.12A8.06,8.06,0,0,1,252.66,252.19Z">
                     </svg>
                     </div>
                     <div>
-                        {% translate "Teams" %}
+                        团队列表
                     </div>
                 </a>
             </li>
@@ -351,13 +315,15 @@
                 <li>
                     <a href="{% url 'errata' %}">
                         <div>
-                            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" version="1.1" x="0" y="0" viewBox="0 0 280 280" enable-background="new 0 0 280 280" xml:space="preserve">
-                                <path d="M91.72,120.75h96.56V104.65H91.72Zm0,48.28h80.47V152.94H91.72Zm0-96.56h80.47V56.37H91.72Zm160.94,34.88H228.52V10.78h-177v96.56H27.34A24.17,24.17,0,0,0,3.2,131.48V244.14a24.17,24.17,0,0,0,24.14,24.14H252.66a24.17,24.17,0,0,0,24.14-24.14V131.48A24.17,24.17,0,0,0,252.66,107.34Zm0,16.09a8.06,8.06,0,0,1,8,8v51.77l-32.19,19.31V123.44ZM67.58,203.91v-177H212.42v177ZM27.34,123.44H51.48v79.13L19.29,183.26V131.48A8.06,8.06,0,0,1,27.34,123.44ZM252.66,252.19H27.34a8.06,8.06,0,0,1-8-8V202l30,18H230.75l30-18v42.12A8.06,8.06,0,0,1,252.66,252.19Z">
+                            <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" version="1.1" x="0" y="0" viewBox="0 0 200 200" enable-background="new 0 0 200 200" xml:space="preserve">
+                                <path d="M120,30 L50,30 A20,20,0,0,0,30,50 L30,150 A20,20,0,0,0,50,170 L150,170 A20,20,0,0,0,170,150 L170,80 
+                                         L160,80 L160,150 A10,10,0,0,1,150,160 L50,160 A10,10,0,0,1,40,150 L40,50 A10,10,0,0,1,50,40 L120,40
+                                         M160,15 A25,25,0,1,0,160,65 A25,25,0,1,0,160,15 L160,25 A15,15,0,1,1,160,55 A15,15,0,1,1,160,25">
                                 </path>
                             </svg>
                         </div>
                         <div>
-                            {% translate "Updates" %}
+                            更新公告
                         </div>
                     </a>
                 </li>

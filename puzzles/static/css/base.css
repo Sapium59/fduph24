@@ -996,11 +996,15 @@ footer {
 
 /* overwrite sidebar */
 .sidebar {
-    max-width: 100px;
+    position: fixed;
+    left: 0; /* Align to the left */
+    top: 0; /* Align to the top */
+    width: 84px; /* Set width */
+    height: 100%; /* Full height */
+    overflow: auto;
     /* use color to hide <li> ::mark */
     background-color: var(--sidebar-bg-color);
     color: var(--sidebar-bg-color);
-    height: 100vh;
     box-sizing: border-box;
 }
 .sidebar img {
@@ -1023,15 +1027,14 @@ footer {
     color: var(--white-color);
 }
 .sidebar svg {
-    /* stroke: var(--white-color); */
     fill: var(--white-color);
 }
 
 .nav-icon {
     color: var(--white-color);
     text-align: center;
-    width: 80%; /* Icon width */
-    height: 80%; /* Icon height */
+    width: 40px; /* Icon width */
+    height: 40px; /* Icon height */
 }
 
 
@@ -1040,5 +1043,8 @@ footer {
 .content {
     color: var(--body-text-color);
     flex-grow: 1;
-    margin: 0 5% auto;
+    margin-left: 148px;
+    margin-right: 48px;
+    margin-top: 36px;
+    margin-bottom: 36px;
 }

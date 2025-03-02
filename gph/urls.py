@@ -45,7 +45,9 @@ urlpatterns = [
 
     path('about', views.about, name='about'),
     path('archive', views.archive, name='archive'),
+    path('faq', views.faq, name='faq'),
     path('register', views.register, name='register'),
+    path('tools', views.tools, name='tools'),
 
     path('login',
         auth_views.LoginView.as_view(template_name='login.html'),

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load puzzle_tags %}
+
+{% block content %}
+
+<h1>FAQ</h1>
+
+<main>
+    <h4>什么是puzzle hunt？</h4>
+    <div class="no-break">
+        <p>puzzle hunt是一种高度综合性的解谜活动，通常包含形式各异的不同谜题，它们可能是填字游戏、字谜、灯谜等文字类谜题，又或者是数独、数织、数回等纸笔谜题，也有可能是音频、视频、黑箱等别样的形式，不过最多的还是各种各样需要自己探索的新型谜题！</p>
+        <p>在结构上，puzzle hunt通常会具有比一般的解谜活动更加紧凑的设计。在一般的谜题之外，有一些被称为“元谜题（meta）”的特殊谜题，这些谜题通常需要部分小题的答案作为已知信息来进行破解。在“元谜题”之上通常还会有一道“最终元谜题（final meta）”，其往往是对整个活动的更全面的回顾与挖掘。元谜题的存在使得谜题以一种更加结构化、体系化的形式呈现出整体的美感。</p>
+        <p>您可以通过以下链接了解更多有关puzzle hunt的信息：</p>
+        <ul>
+            <li>
+                <a href="https://www.bilibili.com/video/BV1ho4y1P7P6">Puzzle Hunt入门就是这么简单！（上）【上海交大推理协会】</a>
+            </li>
+            <li>
+                <a href="https://www.bilibili.com/video/BV1Yz4y1H775">Puzzle Hunt入门就是这么简单！（下）【上海交大推理协会】</a>
+            </li>
+            <li>
+                <a href="https://www.bilibili.com/read/readlist/rl352918">Puzzlehunt是什么？</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="no-break">
+        <h4>第一次参加这样的活动，有什么需要注意的吗？</h4>
+        <ul>
+            <li><span style="color: red;">仔细阅读并严格遵守活动规则。</span>我们不希望因为任何谜题之外的要素影响到活动体验！</li>
+            <li><span style="color: red;">无需进行特别的准备。</span>我们的谜题不会涉及过分专业或需要花费大量精力才能掌握的知识与技能。</li>
+            <li><span style="color: red;">强烈建议组队参加。</span>不同玩家的知识、能力往往可以形成很好的互补。</li>
+            <li><span style="color: red;">合理利用共享表格。</span>共享表格是与队友进行合作，实时记录进度和分享思路的好工具，通常对解题有很大帮助。</li>
+            <li><span style="color: red;">保持轻松与积极的心态。</span>我们希望每一位玩家都能充分享受解谜带来的快乐！</li>
+        </ul>
+    </div>
+
+    <div class="no-break">
+        <h4>本次活动的体量/难度如何？</h4>
+        <p>本次活动的题量在30题左右，整体难度中等，有经验的队伍应当能在12-24小时内通关。</p>
+    </div>
+
+    <div class="no-break">
+        <h4>本次活动会在复旦大学实地举办吗？需要队伍中有复旦大学的学生吗？</h4>
+        <p>本次活动为纯线上活动，无需线下前往复旦大学校园，也不强制要求队伍中有复旦大学的学生。</p>
+        <p>不过，本次活动中可能会有一些与复旦大学相关的谜题，但是解谜所需要的信息都是可以通过互联网公开平台搜索得到的。</p>
+    </div>
+
+    <div class="no-break">
+        <h4>本次活动的剧情会对解谜有帮助吗？</h4>
+        <p>绝大多数时候，题目内部的信息已经足够让你解决谜题。在部分特殊谜题中，也许剧情会有一定的提示作用。</p>
+    </div>
+
+    <div class="no-break">
+        <h4>本次活动需要收取费用吗？</h4>
+        <p>本次活动不收取任何费用。</p>
+    </div>
+
+    <div class="no-break">
+        <h4>我卡题了，怎么办？</h4>
+        <p>如果队伍有提示点，可以合理利用提示点请求人工提示。以下是一些可以让提示请求更加有效的建议：</p>
+        <ul>
+            <li><span style="color: red;">全面地描述已经取得的进展。</span>如：已经解开了大部分的clue/识别出了绝大多数图片/已经解完了纸笔得到了盘面/……</li>
+            <li><span style="color: red;">准确地表达诉求。</span>如：不知道下一步该做什么/不知道如何提取/不确定解出的clue是否正确请求check/……</li>
+            <li><span style="color: red;">简洁地概括猜想和在此基础上的尝试与努力。</span>如：我们已经尝试过XXXXX，但是没有得到合理的结果/我们怀疑与XXXXX有关，但是没有找到联系/……</li>
+            <li><span style="color: red;">适当分点或分段，可以使用①②③等编号描述不同的内容。</span></li>
+            <li><span style="color: red;">非常鼓励直接将做题的共享文档的链接提供给我们，如果需要分享文档，记得提前打开查看权限。</span></li>
+        </ul>
+        <p>如果暂时没有提示点，我们建议：</p>
+        <ul>
+            <li>彻底地检查已经完成的工作，以避免细节上的错误带来的解谜障碍。</li>
+            <li>休息一下，把思绪从谜题移开，从而以充沛的状态再回顾眼前的谜题。</li>
+            <li>考虑现在已有的全部信息，并着重关注还没有使用的内容。</li>
+            <li>把已经得到的内容放在搜索引擎内加以搜索，来试着找到其中的联系。</li>
+            <li>尝试检查是否有遗漏的常见思路，你可以参考这个链接：<a href="https://docs.qq.com/doc/DZWZCQ2VoSnNXUmFN?nlc=1&nlc=1">你尝试过了吗？</a></li>
+        </ul>
+    </div>
+
+    <div class="no-break">
+        <h4>还有别的类似的活动吗？我还想了解更多。</h4>
+        <p>以下是一些可以帮助你了解更多的链接！</p>
+        <ul>
+            <li><a href="https://docs.qq.com/sheet/DTnNQb2ZOa0RsdGpI">Puzzle Hunt新人导航</a>：包含关于puzzle hunt的入门介绍，常见名词解释，相关中文活动链接等相关信息。</li>
+            <li><a href="https://docs.qq.com/sheet/DUmx4UE5kRXhNTXdZ">Puzzle Hunter's Calendar</a>：及时更新国内外即将到来的puzzle hunt。</li>
+        </ul>
+    </div>
+</main>
+
+{% endblock %}

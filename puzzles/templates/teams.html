@@ -3,7 +3,7 @@
 {% load puzzle_tags %}
 {% block content %}
 
-<h1>{% translate "Team Scoreboard" %}</h1>
+<h1>团队列表</h1>
 
 <main>
     <table class="list-table">
@@ -36,8 +36,10 @@
                     {% endif %}
                 </td>
                 {% if hunt_has_started %}
-                    <td>{{ team.total_solves }}</td>
-                    <td>{% format_time team.metameta_solve_time %}</td>
+                    <!-- <td>{{ team.total_solves }}</td>
+                    <td>{% format_time team.metameta_solve_time %}</td> -->
+                    <td>隐藏</td>
+                    <td>隐藏</td>
                 {% endif %}
             </tr>
             {% endfor %}

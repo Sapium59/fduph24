@@ -4,55 +4,55 @@
 
 {% block content %}
 
-<h1>{% translate "About" %}</h1>
+<h1>活动介绍</h1>
 
 <main>
     <div class="no-break">
-        <h4 id="Format">{% translate "What are the rules?" %}</h4>
+        <p>FDU Puzzle Hunt是复旦大学推理协会谜题分部策划的puzzle hunt解谜活动，面向校内同学与社会公众。</p>
+    </div>
+    <div class="no-break">
+        <h4>流程安排</h4>
         <ul>
-            {% format_time start_time "WEEKDATE_AT_TIME" as hunt_start %}
-            {% format_time end_time "WEEKDATE_AT_TIME" as hunt_end %}
-            <li>{% blocktranslate %}The puzzlehunt starts on <strong>{{ hunt_start }}</strong> and ends on <strong>{{ hunt_end }}</strong>, at which point puzzle solutions will be available. {% endblocktranslate %}
-            {% comment %}
-            {% format_time close_time "WEEKDATE_AT_TIME" as hunt_close %}
-            {% blocktranslate %}However, we will leave the website running until <strong>{{ hunt_close }}</strong> so teams can still submit answers and go through the hunt at their own pace.{% endblocktranslate %}
-            {% endcomment %}
+            <p><span style="color: red;">活动报名</span>：2025年4月18日15:00前，可以自行组队并注册队伍，同一支队伍的所有成员共用一个账号进行登录网站和解答谜题。每一位玩家只能在一支队伍中进行游玩。每支队伍最少1人，最多5人。</p>
+            <p><span style="color: red;">活动进行</span>：2025年4月18日15:00为活动开放时间，每支队伍可以在该时刻后任意时刻选择开始游玩。在此期间，网站的注册依然开放。</p>
+            <li>如果您的队伍在2025年4月18日20:00之前选择开始，则您的体验时间为点击开始时刻之后的216小时，开始时间为您点击开始的时刻。</li>
+            <li>如果您的队伍在2025年4月18日20:00之后选择开始，则您的体验时间将结束于2025年4月27日20:00，开始时间视为2025年4月18日20:00。</li>
+            <p><span style="color: red;">在活动进行期间，玩家无法查看其他队伍的做题与用时情况。</span></p>
+            <p><span style="color: red;">我们强烈建议各支队伍根据自身情况适当选择开始时间，以免短时间内的大量访问请求导致网站崩溃，影响游玩体验。</span></p>
+            <p><span style="color: red;">活动结束</span>：2025年4月27日20:00之后，玩家将不能再提交答案，此时网站将自动转为静态存档，玩家可以查看所有谜题的解析。</p>
+            <p>在活动结束后，将根据每支队伍用时情况由短到长公布用时最短的10支队伍。</p>
+        </ul>
+    </div>
+    <div class="no-break">
+        <h4>活动须知</h4>
+        <ul>
+            <li>活动进行期间，<span style="color: red;">严禁</span>不同队伍的队员之间交流题目、答案、提示及剧情等活动相关内容。</li>
+            <li>
+                <p>活动进行期间，<span style="color: red;">严禁</span>在<span style="color: red;">任何公开场合</span>讨论<span style="color: red;">任何</span>活动相关内容。</p>
+                <p><span style="color: red;">特别提醒：在玩家相对集中的解谜社群中描述解题相关进度，或使用类似“【数据删除】”或者“【F5】”等格式提及具体题目的行为同样属于违规。请尊重其他队伍的游玩体验。</span></p>
             </li>
-            <li>{% blocktranslate with max_members=max_members_per_team contact=contact_email %}Teams have a maximum size of {{ max_members }}.{% endblocktranslate %}</li>
-            <li>{% blocktranslate %}We reserve the right to disqualify any team for unsportsmanlike conduct.{% endblocktranslate %}</li>
-            <li>{% blocktranslate with contact=contact_email %}If you have any questions about the hunt, or if you want to contact us for any reason, email <a href="mailto:{{ contact }}">{{ contact }}</a>. We will get back to you as soon as we can.{% endblocktranslate %}</li>
+            <li>活动进行期间，<span style="color: red;">严禁</span>玩家同时在多个队伍中参加活动或是注册多个小号参与活动。</li>
+            <li><span style="color: red;">严禁</span>玩家攻击比赛服务器或尝试寻找并使用服务器漏洞（包括但不限于自行构建请求 API 请求访问服务器）</li>
         </ul>
+        <p>若发现玩家有违规行为，我们将视情节轻重给予不同程度的处罚，包括但不限于限制提示资源、封禁玩家、封禁队伍等。</p>
+        <p>我们保留对一切非正常活动行为的解释权。</p>
     </div>
     <div class="no-break">
-        <h4>{% translate "What is a puzzlehunt?" %}</h4>
-        <p>{% blocktranslate %}In a puzzlehunt, each puzzle has an underlying pattern or insight, which you need to figure out (somewhat like the <a href="https://en.wikipedia.org/wiki/Crossword#Themes">theme</a> of a crossword puzzle). Puzzles can come in many different forms; the only real commonality is that you usually receive no direct instructions, so it&rsquo;s up to you to figure out how to make sense of the information you&rsquo;re given. You can read a longer introduction to puzzlehunts <a href="https://blog.vero.site/post/puzzlehunts" target="_blank">here</a>.{% endblocktranslate %}</p>
-        <p>{% blocktranslate %}If you are new to puzzles and are interested in seeing some examples, or if you&rsquo;re looking for some practice, we recommend looking at puzzles from other online hunts such as <a target="_blank" href="https://galacticpuzzlehunt.com/">Galactic Puzzle Hunt</a>, <a target="_blank" href ="https://teammatehunt.com/">Teammate Hunt</a>, <a target="_blank" href="https://puzzlepotluck.com/">Puzzle Potluck</a>, or <a target="_blank" href="https://reddothunt.sg/2018">REDDOThunt</a>.{% endblocktranslate %}</p>
-    </div>
-    <div class="no-break">
-        <h4 id="Format">{% translate "What is and isn’t allowed?" %}</h4>
+        <h4>谜题说明</h4>
         <ul>
-            <li>You may use any external sources for help, including other people, as long as they aren’t helping other teams and aren’t actively participating in the hunt.</li>
-            <li>You may not stream or post spoilers for the hunt in a place where other teams might see them.</li>
-            <li>You may not create multiple accounts or be on multiple teams.</li>
+            <li>每道谜题的答案都是一串有意义的英文字符串，在输入答题框时，所有小写字母都会自动转为大写字母，同时自动忽略空格或其他特殊符号。</li>
+            <li>部分谜题包含中间答案验证。</li>
+            <li>每道谜题共有<span style="color: red;">20</span>次提交答案的机会，每次提交错误的答案将自动消耗一次提交次数。提交正确的中间答案不会消耗提交次数。</li>
+            <li>如果你用完了所有的提交次数，请联系我们说明情况，我们会酌情为你们增加一定数量的提交次数。</li>
         </ul>
     </div>
     <div class="no-break">
-        <h4 id="Format">{% translate "What is the format of this hunt?" %}</h4>
-        <p>{% blocktranslate %}A few puzzles will be available at the start, and the primary way to unlock new puzzles is by solving puzzles and progressing through the hunt, although puzzles may also be unlocked over time.{% endblocktranslate %}</p>
-        <p>{% blocktranslate %}Each answer is a string of letters A&ndash;Z. Lowercase letters will be changed into uppercase, and any other characters will be stripped before checking for correctness.{% endblocktranslate %}</p>
-        <p>{% blocktranslate with max_guesses=max_guesses_per_puzzle %}You have <strong>{{ max_guesses }} total guesses</strong> for each puzzle. If you legitimately run out of guesses and need more, feel free to contact us, though we won&rsquo;t grant your request if we see that you were, for example, guessing random thematic answers, or brute-forcing all 10-letter words.{% endblocktranslate %}</p>
-    </div>
-    <div class="no-break">
-        <h4 id="Format">{% translate "How will hints work?" %}</h4>
-        {% format_time hint_time "WEEKDATE_AT_TIME" as hint_start %}
-        <p>{% blocktranslate %}Starting on <strong>{{hint_start}}</strong>, teams will receive one hint every <strong>FIXME</strong> until the end of the hunt.{% endblocktranslate %}</p>
-        {% if intro_hints %}
-        <p>{% blocktranslate count hints=intro_hints %}The first <strong>{{ hints }} hint</strong> your team receives may only be used on the first set of puzzles in the hunt.{% plural %}The first <strong>{{ hints }} hints</strong> your team receives may only be used on the first set of puzzles in the hunt.{% endblocktranslate %}</p>
-        {% endif %}
-        <p>{% blocktranslate %}You can use a hint to get help on a puzzle. This can be something like a nudge in the right direction (i.e. you give us your progress on the puzzle and we&rsquo;ll try to get you unstuck) or an answer to a question (e.g. &ldquo;Which answers to these crossword clues are wrong?&rdquo;).{% endblocktranslate %}</p>
-        {% if one_hint_at_a_time %}
-        <p>{% blocktranslate %}You can request only one hint at a time.{% endblocktranslate %}</p>
-        {% endif %}
+        <h4>提示说明</h4>
+        <ul>
+            <li>本次活动<span style="color: red;">没有预设提示</span>，如果你需要提示，可以消耗提示点请求人工提示。</li>
+            <li>每支队伍在活动开始时都拥有1提示点，每经过12小时，提示点会增加1点。<span style="color: red;">每个提示点只能用于询问1道题的内容1次</span>，在某道谜题询问非当前谜题的提示的请求将不会得到回复，请注意合理利用。</li>
+            <li>玩家可以在活动期间的任意时刻提交人工提示的请求，但是在<span style="color: red;">每日00:00-8:00</span>发送的提示请求在该时段内不会回复。</li>
+        </ul>
     </div>
 </main>
 
