@@ -1,0 +1,24 @@
+{% extends "puzzle.html" %}
+{% block puzzle-body-md %}
+
+<div align="center">
+  <img src="/static/puzzle_resources/r3q7-01.png" style="height:40vw">
+  <hr>
+  <img src="/static/puzzle_resources/r3q7-02.png" style="height:40vw">
+  <hr>
+  <img src="/static/puzzle_resources/r3q7-03.png" style="height:40vw">
+</div>
+
+<div>
+  {% for puzzle in request.context.team.solves.values %}
+      {% if puzzle.slug == "r3q7" %}
+          <hr>
+          <h2>导师评语</h2>
+          <p>从小玩到老</p>
+      {% endif %}
+  {% endfor %}
+</div>
+
+<button class="btn clipboard-button"></button>
+
+{% endblock %}

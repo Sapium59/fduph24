@@ -165,22 +165,6 @@
 -----------------------------------------------------------------------------------------------------------------
 **(?)**
 
-<!-- <ul>
-    Victims of these <span class="blanks">
-        <short class></short>
-        <short class></short>
-        <short class></short>
-        <short class></short>
-        <short class></short>
-    </span> were all found in <span class="blanks">
-        <short class></short>
-        <short class></short>
-        <short class></short>
-        <short class></short>
-        <short class></short>
-    </span> cans.(?)[4][6]
-</ul> -->
-
 <p>Victims of these _ _ _ _ _ were all found in _ _ _ _ _ cans.(?)[4][6]</p>
 
 <p>At _ _ _ _ _ he didn't want to _ _ _ _ _ _ this company.(?)[2][3]</p>
@@ -383,6 +367,17 @@ These numbers... make a difference!
 (?)(2)(8)
 
 (?)
+
+
+<div>
+{% for puzzle in request.context.team.solves.values %}
+    {% if puzzle.slug == "r3q2" %}
+        <hr>
+        <h2>导师评语</h2>
+        <p>这么多数让人感到一阵凉意</p>
+    {% endif %}
+{% endfor %}
+</div>
 
 <button class="btn clipboard-button"></button>
 

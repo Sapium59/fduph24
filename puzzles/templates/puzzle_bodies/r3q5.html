@@ -1,0 +1,215 @@
+{% extends "puzzle.html" %}
+{% block puzzle-body-md %}
+
+<div align="center">
+    <img src="/static/puzzle_resources/r3q5-01.png" style="width: 100px; height: 100px;">
+    <img src="/static/puzzle_resources/r3q5-02.png" style="width: 100px; height: 100px;">
+    <img src="/static/puzzle_resources/r3q5-03.png" style="width: 100px; height: 100px;">
+    <img src="/static/puzzle_resources/r3q5-04.png" style="width: 100px; height: 100px;">
+    <img src="/static/puzzle_resources/r3q5-05.png" style="width: 100px; height: 100px;">
+</div>
+
+
+<table align="center">
+    <tr>
+      <td>B</td>
+      <td>A</td>
+      <td>A</td>
+      <td>C</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <td>G</td>
+      <td>H</td>
+      <td>M</td>
+      <td>E</td>
+      <td>E</td>
+    </tr>
+    <tr>
+      <td>G</td>
+      <td>H</td>
+      <td>O</td>
+      <td>M</td>
+      <td>E</td>
+    </tr>
+    <tr>
+      <td>T</td>
+      <td>L</td>
+      <td>O</td>
+      <td>S</td>
+      <td>K</td>
+    </tr>
+    <tr>
+      <td>T</td>
+      <td>R</td>
+      <td>R</td>
+      <td>S</td>
+      <td>T</td>
+    </tr>
+</table>
+
+<table align="center">
+    <tr>
+      <td>B</td>
+      <td>A</td>
+      <td>E</td>
+      <td>A</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <td>B</td>
+      <td>E</td>
+      <td>I</td>
+      <td>E</td>
+      <td>C</td>
+    </tr>
+    <tr>
+      <td>F</td>
+      <td>I</td>
+      <td>L</td>
+      <td>R</td>
+      <td>N</td>
+    </tr>
+    <tr>
+      <td>L</td>
+      <td>R</td>
+      <td>O</td>
+      <td>T</td>
+      <td>N</td>
+    </tr>
+    <tr>
+      <td>S</td>
+      <td>R</td>
+      <td>V</td>
+      <td>W</td>
+      <td>Y</td>
+    </tr>
+</table>
+
+<table align="center">
+    <tr>
+      <td>F</td>
+      <td>H</td>
+      <td>A</td>
+      <td>E</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <td>O</td>
+      <td>L</td>
+      <td>E</td>
+      <td>I</td>
+      <td>E</td>
+    </tr>
+    <tr>
+      <td>S</td>
+      <td>O</td>
+      <td>E</td>
+      <td>T</td>
+      <td>L</td>
+    </tr>
+    <tr>
+      <td>T</td>
+      <td>T</td>
+      <td>I</td>
+      <td>U</td>
+      <td>P</td>
+    </tr>
+    <tr>
+      <td>T</td>
+      <td>U</td>
+      <td>L</td>
+      <td>V</td>
+      <td>R</td>
+    </tr>
+</table>
+
+<table align="center">
+    <tr>
+      <td>A</td>
+      <td>A</td>
+      <td>G</td>
+      <td>D</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <td>B</td>
+      <td>A</td>
+      <td>I</td>
+      <td>E</td>
+      <td>E</td>
+    </tr>
+    <tr>
+      <td>D</td>
+      <td>I</td>
+      <td>P</td>
+      <td>H</td>
+      <td>R</td>
+    </tr>
+    <tr>
+      <td>E</td>
+      <td>L</td>
+      <td>T</td>
+      <td>H</td>
+      <td>T</td>
+    </tr>
+    <tr>
+      <td>W</td>
+      <td>L</td>
+      <td>U</td>
+      <td>S</td>
+      <td>Y</td>
+    </tr>
+</table>
+
+<table align="center">
+    <tr>
+      <td>F</td>
+      <td>I</td>
+      <td>C</td>
+      <td>E</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <td>G</td>
+      <td>O</td>
+      <td>E</td>
+      <td>K</td>
+      <td>E</td>
+    </tr>
+    <tr>
+      <td>L</td>
+      <td>O</td>
+      <td>G</td>
+      <td>M</td>
+      <td>N</td>
+    </tr>
+    <tr>
+      <td>R</td>
+      <td>O</td>
+      <td>R</td>
+      <td>T</td>
+      <td>S</td>
+    </tr>
+    <tr>
+      <td>S</td>
+      <td>R</td>
+      <td>T</td>
+      <td>U</td>
+      <td>Y</td>
+    </tr>
+</table>
+
+<div>
+  {% for puzzle in request.context.team.solves.values %}
+      {% if puzzle.slug == "r3q5" %}
+          <hr>
+          <h2>导师评语</h2>
+          <p>学习英语要用功</p>
+      {% endif %}
+  {% endfor %}
+</div>
+
+<button class="btn clipboard-button"></button>
+
+{% endblock %}

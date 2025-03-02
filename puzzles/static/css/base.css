@@ -1,18 +1,23 @@
 html {
     --white-color: #f9f8f5;
     --neutral-color: #bbbcc3;
-
-    --page-bg-rgb: rgba(var(--white-color));
+    
+    --fdu-rgb: 36, 90, 165;
+    --sidebar-bg-rgb: 45, 59, 69;
+    --page-bg-rgb: var(--white-color);
     --accent-bg-rgb: 40, 26, 33;
     --dark-accent-rgb: 13, 4, 26;
     --accent-rgb: var(--dark-accent-rgb);
     --body-rgb: 34, 34, 40;
-    /* --dark-flair-rgb: 67, 38, 117; */
+    --dark-flair-rgb: 67, 38, 117;
     /* --flair-rgb: 159, 122, 234; */
     --flair-rgb: var(--white-color);
-    --dark-flair-rgb: var(--white-color);
+    /* --dark-flair-rgb: var(--white-color); */
     --light-flair-rgb: 192, 168, 240;
     
+    --sidebar-bg-color: rgb(var(--sidebar-bg-rgb));
+    --sidebar-hover-bg-color: #4b4f55;
+
     --dark-text-color: rgba(var(--dark-accent-rgb), 0.9);
     --subtle-text-color: rgba(var(--dark-accent-rgb), 0.5);
     --body-text-color: rgba(var(--body-rgb), 0.9);
@@ -33,23 +38,26 @@ html {
     --link-text-color: var(--accent-color);
     --link-hover-color: #b794f4;
 
-    --btn-text-color: var(--accent-color);
-    --btn-bg-color: rgba(var(--dark-flair-rgb), 0.8);
-    --btn-bg-2-color: rgba(var(--accent-bg-rgb), 0.8);
+    /* --btn-text-color: var(--accent-color); */
+    --btn-text-color: var(--white-color);
+    /* --btn-bg-color: rgba(var(--dark-flair-rgb), 0.8); */
+    /* --btn-bg-color: rgba(var(--sidebar-bg-rgb), 0.8); */
+    --btn-bg-color: rgba(var(--fdu-rgb),1);
+    /* --btn-bg-2-color: rgba(var(--accent-bg-rgb), 0.8); */
+    --btn-bg-2-color: rgba(var(199, 205, 209), 0.8);
     --btn-hover-color: rgba(var(--flair-rgb), 0.7);
 
     --tray-text-color: var(--accent-color);
     --tray-bg-color: rgba(var(--accent-bg-rgb), 0.65);
     --info-bg-color: rgba(var(--page-bg-rgb), 0.8);
-    --dropdown-bg-color: rgba(var(--accent-bg-rgb), 0.9);
+    --dropdown-bg-color: rgba(var(--accent-bg-rgb), 0.4);
 
     --text-font: sans-serif;
     --btn-font: sans-serif;
     --input-font: monospace;
     --answer-font: monospace;
 
-    --sidebar-bg-color: rgb(45, 59, 69);
-    --sidebar-hover-bg-color: #4b4f55;
+
 }
 
 body {
@@ -276,7 +284,8 @@ a.main-content-anchor {
         transition: background-color 0.3s;
 
         color: var(--btn-text-color);
-        background-image: linear-gradient(1deg, var(--btn-bg-color), var(--btn-bg-2-color));
+        /* background-image: linear-gradient(1deg, var(--btn-bg-color), var(--btn-bg-2-color)); */
+        background-color: var(--btn-bg-color);
 
 
     }
@@ -380,10 +389,8 @@ a.main-content-anchor {
 
     .shortcuts {
         background-color: var(--dropdown-bg-color);
-        position: absolute;
+        position: relative;
         padding: 1rem 1rem 0;
-        left: 100px;
-        top: 48px;
         z-index: 800;
         display: none;
         color: var(--text-color);
@@ -526,8 +533,9 @@ a.main-content-anchor {
     }
 
     .flavor {
-        margin-left: calc(100vw - 800px);
-        margin-right: calc(100vw - 800px);
+        /* margin-left: calc(100vw - 800px);
+        margin-right: calc(100vw - 800px); */
+        text-align: left;
     }
 
     a.main-content-anchor {
@@ -568,8 +576,9 @@ a.main-content-anchor {
     }
 
     .flavor {
-        margin-left: 0;
-        margin-right: 0;
+        /* margin-left: 0;
+        margin-right: 0; */
+        text-align: left;
     }
 }
 
@@ -691,10 +700,12 @@ a.main-content-anchor {
 }
 
 .flavor {
-    margin-left: 22.5%;
-    margin-right: 22.5%;
-    text-align: center;
+    /* margin-left: 10%; */
+    /* margin-right: 22.5%; */
+    /* text-align: center; */
+    text-align: left;
     font-style: italic;
+    background-color: var(--accent-bg-color);
 }
 
 .errorlist {
@@ -994,8 +1005,31 @@ footer {
     content: "\00a0"; /* Non-breaking space */
 }
 
+.blanks > whitelong {
+    display: inline-block;
+    position: relative;
+    height: 1em; /* Adjust the height to match the text */
+    width: 1.2em;
+    /* border-bottom: 1px solid currentColor; */
+    text-align: center;
+    line-height: 1em; /* Set the line height to match the height */
+}
+
+/* Adjust the position of the underline for different scenarios */
+.blanks > whitelong:empty {
+    height: 1em;
+}
+
+.blanks > whitelong:empty::before {
+    display: inline-block;
+    vertical-align: bottom;
+    height: 0;
+    content: "\00a0"; /* Non-breaking space */
+}
+
 /* overwrite sidebar */
 .sidebar {
+    font-size: 80%;
     position: fixed;
     left: 0; /* Align to the left */
     top: 0; /* Align to the top */
@@ -1047,4 +1081,29 @@ footer {
     margin-right: 48px;
     margin-top: 36px;
     margin-bottom: 36px;
+}
+
+
+
+/* Tables
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+th,
+td {
+    padding: 12px 15px;
+    text-align: left;
+    /* border-bottom: 1px solid #E1E1E1;  */
+    border: 1px solid rgb(var(--dark-accent-rgb));
+}
+/* th:first-child,
+td:first-child {
+  padding-left: 0; }
+th:last-child,
+td:last-child {
+  padding-right: 0; } */
+
+
+/* only used by r3q4 for now */
+.grid-cell {
+    padding: 8px;
+    font-size: 1.2em;
 }

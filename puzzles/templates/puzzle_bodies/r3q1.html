@@ -34,6 +34,15 @@ Three times the number of answers that are not greater than five is ___.
 
 Seven times the number of answers equal to five is ___.
 
+<div>
+    {% for puzzle in request.context.team.solves.values %}
+        {% if puzzle.slug == "r3q1" %}
+            <hr>
+            <h2>导师评语</h2>
+            <p>别疏忽大意</p>
+        {% endif %}
+    {% endfor %}
+</div>
 
 <button class="btn clipboard-button"></button>
 
