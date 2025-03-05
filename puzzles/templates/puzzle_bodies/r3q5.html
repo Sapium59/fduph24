@@ -2,13 +2,13 @@
 {% block puzzle-body-md %}
 
 <div align="center">
-    <img src="/static/puzzle_resources/r3q5-01.png" style="width: 100px; height: 100px;">
-    <img src="/static/puzzle_resources/r3q5-02.png" style="width: 100px; height: 100px;">
-    <img src="/static/puzzle_resources/r3q5-03.png" style="width: 100px; height: 100px;">
-    <img src="/static/puzzle_resources/r3q5-04.png" style="width: 100px; height: 100px;">
-    <img src="/static/puzzle_resources/r3q5-05.png" style="width: 100px; height: 100px;">
+    <img src="/static/puzzle_resources/r3q5-01.png" style="width: 50px; height: 50px;">
+    <img src="/static/puzzle_resources/r3q5-02.png" style="width: 50px; height: 50px;">
+    <img src="/static/puzzle_resources/r3q5-03.png" style="width: 50px; height: 50px;">
+    <img src="/static/puzzle_resources/r3q5-04.png" style="width: 50px; height: 50px;">
+    <img src="/static/puzzle_resources/r3q5-05.png" style="width: 50px; height: 50px;">
 </div>
-
+<p></p>
 
 <table align="center">
     <tr>
@@ -199,16 +199,6 @@
       <td>Y</td>
     </tr>
 </table>
-
-<div>
-  {% for puzzle in request.context.team.solves.values %}
-      {% if puzzle.slug == "r3q5" %}
-          <hr>
-          <h2>导师评语</h2>
-          <p>学习英语要用功</p>
-      {% endif %}
-  {% endfor %}
-</div>
 
 <button class="btn clipboard-button"></button>
 

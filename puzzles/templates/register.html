@@ -8,10 +8,10 @@
 }
 </style>
 
-<h2>{% translate "Register a new team" %}</h2>
+<h2>注册</h2>
 
 {% if team %}
-<h4>{% blocktranslate with team_name=team.team_name %}You&rsquo;re already logged in as {{team_name}}!{% endblocktranslate %}</h4>
+<h4>你已经以{{team_name}}的身份登陆了。</h4>
 {% endif %}
 
 <form id="register" method="post">
@@ -35,10 +35,9 @@
     </div>
 
     <div class="form-section">
-    <h4>{% translate "Team members" %}</h4>
+    <h4>队伍成员</h4>
 
-    <p>{% translate "You will also be able to add and remove team members at any later time on your team&rsquo;s profile page." %}<br>
-        {% translate "You’ll need to provide an email address for at least one of your team members." %}</p>
+    <p>你也可以稍后修改成员信息，但现在需要提供至少一名成员的邮箱。</p>
 
     {{ team_members_formset.management_form }}
     {{ team_members_formset.non_form_errors }}
@@ -70,9 +69,9 @@
         <button class="btn g-recaptcha"
                 data-sitekey="{{ recaptcha_sitekey }}"
                 data-callback="recaptchaSubmit"
-                data-action="register">{% translate "Submit" %}</button>
+                data-action="register">注册</button>
     {% else %}
-        <button class="btn" type="submit">{% translate "Submit" %}</button>
+        <button class="btn" type="submit">注册</button>
     {% endif %}
     </div>
 </form>
@@ -80,7 +79,7 @@
 <script>
 $('.team-members-formset').formset({
     prefix: '{{ team_members_formset.prefix }}',
-    addText: '{% translate "Add another team member" %}',
+    addText: '添加一名成员',
     deleteText: '\u2716',
     addCssClass: 'formset-add-link',
 });

@@ -12,20 +12,17 @@
 <a href="{% url 'round' round.slug %}" class="btn">{{ round.name }}</a>
 {% endif %}
 {% if team and not hunt_is_closed %}
-<a href="{% url 'solve' puzzle.slug %}" class="btn">{% translate "Submit an answer" %}</a>
-{% if not puzzle.is_meta and num_free_answers_remaining > 0 and puzzle_answer is None %}
-<a href="{% url 'free-answer' puzzle.slug %}" class="btn">{% translate "Use free answer" %}</a>
-{% endif %}
+<a href="{% url 'solve' puzzle.slug %}" class="btn">提交答案</a>
 {% endif %}
 {% if can_view_hints %}
-<a href="{% url 'hints' puzzle.slug %}" class="btn">{% if can_ask_for_hints %}{% translate "Ask for a hint" %}{% else %}{% translate "View hints" %}{% endif %}</a>
+<a href="{% url 'hints' puzzle.slug %}" class="btn">{% if can_ask_for_hints %}索要提示{% else %}查看提示{% endif %}</a>
 {% endif %}
 {% if hunt_is_closed or not team and hunt_is_over %}
-<a href="{% url 'post-hunt-solve' puzzle.slug %}" class="btn">{% translate "Check your answer spoiler-free" %}</a>
+<a href="{% url 'post-hunt-solve' puzzle.slug %}" class="btn">核对答案</a>
 {% endif %}
 {% if hunt_is_over or is_superuser %}
-<a href="{% url 'solution' puzzle.slug %}" class="btn">{% translate "View solution" %}</a>
-<a href="{% url 'stats' puzzle.slug %}" class="btn">{% translate "Stats" %}</a>
+<a href="{% url 'solution' puzzle.slug %}" class="btn">查看解答</a>
+<a href="{% url 'stats' puzzle.slug %}" class="btn">查看统计</a>
 {% endif %}
 {% endblock %}
 
@@ -34,16 +31,27 @@
 <h1>
     {{ puzzle.name }}
     {% if puzzle_answer %}
-    <div class="solved-title-marker">{% translate "Solved!" %} <span class="solved-title-answer">{{ puzzle_answer }}</span></div>
+        <div class="solved-title-marker">正确答案：<span class="solved-title-answer">{{ puzzle_answer }}</span></div>
     {% endif %}
+    
 </h1>
+
+
+{% for puzzle in request.context.team.solves.values %}
+    {% if puzzle == request.context.puzzle and puzzle.hidden_info %}    
+        <div class="notice_info">
+            你收到了一条导师评语：{{ puzzle.hidden_info }}
+        </div>
+    {% endif %}
+{% endfor %}
+
 
 <main class="puzzle-main clipboard-container">
     {% for erratum in visible_errata %}
     {% if erratum.puzzle == puzzle and erratum.puzzle_text %}
     <div class="puzzle-erratum">
         {% if not erratum.published %}
-        <strong>[<a href="{% url 'admin:puzzles_erratum_change' erratum.id %}">{% translate "UNPUBLISHED" %}</a>]</strong>
+        <strong>[<a href="{% url 'admin:puzzles_erratum_change' erratum.id %}">未发布的更新公告</a>]</strong>
         {% endif %}
         {% format_time erratum.timestamp "DATE_AT_TIME" as hint_time %}
         {% blocktranslate %}On {{ hint_time }}{% endblocktranslate %},
@@ -53,11 +61,12 @@
     {% endfor %}
 
     {% puzzleblock puzzle-body %}
-    {% if puzzle_body %}{{ puzzle_body }}{% elif template_name %}
-    {% blocktranslate %}This puzzle doesn&rsquo;t seem to exist yet.
-    Searched for a puzzle template named <code>{{ template_name }}</code>{% endblocktranslate %}
+    {% if puzzle_body %}
+        {{ puzzle_body }}
+    {% elif template_name %}
+        查无此题……请联系主办方！
     {% else %}
-    {% translate "This puzzle template exists, but it doesn&rsquo;t seem to define a puzzle content block. Check the post production guide?" %}
+        查无此题……请联系主办方！
     {% endif %}
 </main>
 

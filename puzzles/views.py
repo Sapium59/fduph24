@@ -97,8 +97,7 @@ def validate_puzzle(require_team=False):
             elif require_team:
                 messages.error(
                     request,
-                    _('You must be signed in and have a registered team to '
-                    'access this page.')
+                    '本页面仅限已注册的队伍浏览。'
                 )
                 return redirect('puzzle', slug)
             return f(request)
@@ -144,19 +143,19 @@ def require_admin_or_impersonating(request):
 @access_restrictor
 def require_after_hunt_end_or_admin(request):
     if not request.context.hunt_is_over:
-        messages.error(request, _('Sorry, not available until the hunt ends.'))
+        messages.error(request, '本页面将在活动结束后开放。')
         return redirect('index')
 
 @access_restrictor
 def require_after_hunt_end_or_finished(request):
     if not request.context.hunt_is_over and not request.context.has_finished_hunt:
-        messages.error(request, _('Sorry, not available until the hunt ends.'))
+        messages.error(request, '本页面将在活动结束后开放。')
         return redirect('index')
 
 @access_restrictor
 def require_before_hunt_closed_or_admin(request):
     if request.context.hunt_is_closed:
-        messages.error(request, _('Sorry, the hunt is over.'))
+        messages.error(request, '活动已结束，不再支持本功能。')
         return redirect('index')
 
 # These are basically static pages:
@@ -319,14 +318,14 @@ def team(request, team_name):
         team_query = team_query.exclude(is_hidden=True)
     team = team_query.first()
     if not team:
-        messages.error(request, _('Team “{}” not found.').format(team_name))
+        messages.error(request, '没有队伍使用这个用户名：{}'.format(team_name))
         return redirect('teams')
 
     # This Team.leaderboard_teams() call is expensive, but is
     # the only way right now to calculate rank accurately.
     # Hopefully it is not an issue in practice (especially
     # after all this database optimization --beta)
-    leaderboard_ids = Team.leaderboard_teams(user_team).values_list('id', flat=True)
+    leaderboard_ids = Team.leaderboard_teams(user_team)#.values_list('id', flat=True)
     rank = None
     for i, leaderboard_id in enumerate(leaderboard_ids):
         if team.id == leaderboard_id:
@@ -410,7 +409,7 @@ def teams_unhidden(request):
 def edit_team(request):
     team = request.context.team
     if team is None:
-        messages.error(request, _('You’re not logged in.'))
+        messages.error(request, '请先登陆以使用此功能。')
         return redirect('login')
     team_members_formset = modelformset_factory(
         TeamMember,
@@ -450,7 +449,7 @@ def edit_team(request):
             for team_member in team_member_instances:
                 team_member.team = team
                 team_member.save()
-            messages.success(request, _('Team updated!'))
+            messages.success(request, '队伍信息已更新。')
             return redirect('edit-team')
 
         if len(formset) == 0: # Another hack, to avoid showing an empty form
@@ -612,10 +611,10 @@ def solve(request):
 
     if request.method == 'POST' and 'answer' in request.POST:
         if request.context.puzzle_answer:
-            messages.error(request, _('You’ve already solved this puzzle!'))
+            messages.error(request, '你已经正确回答了本题，不能重复回答。')
             return redirect('solve', puzzle.slug)
         if request.context.guesses_remaining <= 0:
-            messages.error(request, _('You have no more guesses for this puzzle!'))
+            messages.error(request, '你在本题的回答次数已用尽。若需要补充更多回答次数，请联系管理员。')
             return redirect('solve', puzzle.slug)
 
         semicleaned_guess = PuzzleMessage.semiclean_guess(request.POST.get('answer'))
@@ -635,11 +634,9 @@ def solve(request):
             for message in puzzle_messages:
                 form.add_error(None, mark_safe(message.response))
         elif not normalized_answer:
-            form.add_error(None, _('All puzzle answers will have '
-                'at least one letter A through Z (case does not matter).'))
+            form.add_error(None, '此答案不合法。')
         elif tried_before:
-            form.add_error(None, _('You’ve already tried calling in the '
-                'answer “%s” for this puzzle.') % normalized_answer)
+            form.add_error(None, '你已经在本题中尝试过回答 %s 了。' % normalized_answer)
         elif form.is_valid():
             AnswerSubmission(
                 team=team,
@@ -653,15 +650,15 @@ def solve(request):
                 if not request.context.hunt_is_over:
                     team.last_solve_time = request.context.now
                     team.save()
-                messages.success(request, _('%s is correct!') % puzzle.answer)
+                messages.success(request, '回答正确！答案： %s ' % puzzle.answer)
                 if puzzle.slug == META_META_SLUG:
                     dispatch_victory_alert(
-                        _('Team %s has finished the hunt!') % team +
+                        '恭喜 %s 率先解出最终谜题！' % team +
                         _('\n**Emails:** <%s>') % request.build_absolute_uri(reverse('finishers')))
                     show_victory_notification(request.context)
                     return redirect('victory')
             else:
-                messages.error(request, _('%s is incorrect.') % normalized_answer)
+                messages.error(request, '%s 并非正确答案。' % normalized_answer)
             return redirect('solve', puzzle.slug)
 
     elif request.method == 'POST':
@@ -678,7 +675,7 @@ def solve(request):
             for k, v in survey.cleaned_data.items():
                 setattr(survey_obj, k, v)
             survey_obj.save()
-            messages.success(request, _('Thanks!'))
+            messages.success(request, '感谢你的反馈！')
             return redirect('solve', puzzle.slug)
 
     if survey is None and SURVEYS_AVAILABLE:
@@ -810,7 +807,7 @@ def hint_list(request):
             .select_related()
             .order_by('-submitted_datetime')
         )
-        query_description = _('Hints')
+        query_description = '提示'
         if 'team' in request.GET:
             team = Team.objects.get(id=request.GET['team'])
             hints = hints.filter(team=team)
@@ -868,15 +865,14 @@ def hints(request):
 
     error = None
     if request.context.hunt_is_over:
-        error = _('Sorry, hints are closed.')
+        error = '活动已结束，我们不再提供提示服务。'
         can_followup = False
     elif team.num_hints_remaining <= 0 and team.num_free_answers_remaining <= 0:
-        error = _('You have no hints available!')
+        error = '提示次数已用尽。你可以等待一段时间以获得新的提示次数。'
     elif relevant_hints_remaining <= 0 and team.num_free_answers_remaining <= 0:
-        error = _('You have no hints that can be used on this puzzle.')
+        error = '你在本题的提示次数已用尽。你可以等待一段时间以获得新的提示次数。'
     elif open_hints:
-        error = (_('You already have a hint open (on %s)! '
-            'You can have one hint open at a time.') % open_hints[0].puzzle)
+        error = '我们只允许一支队伍同时在一道题目上请求提示。你在 %s 已经请求了提示，请等待其收到回复后再请求本题。 ' % open_hints[0].puzzle
         can_followup = False
 
     if request.method == 'POST':
@@ -897,10 +893,9 @@ def hints(request):
                 notify_emails=form.cleaned_data['notify_emails'],
                 is_followup=is_followup,
             ).save()
-            messages.success(request, _(
-                'Your request for a hint has been submitted and the puzzle '
-                'hunt staff has been notified—we will respond to it soon!'
-            ))
+            messages.success(request, 
+                '我们已收到你的提示请求，将尽快予以回复。'
+            )
             return redirect('hints', puzzle.slug)
     else:
         form = RequestHintForm(team)
@@ -929,20 +924,21 @@ def hint(request, id):
             hint.claimed_datetime = None
             hint.claimer = ''
             hint.save()
-            messages.warning(request, _('Unclaimed.'))
+            messages.warning(request, '取消申领。')
         return redirect('hint-list')
     elif request.method == 'POST':
         form = AnswerHintForm(request.POST)
         if hint.status != request.POST.get('initial_status'):
-            form.add_error(None, _('Oh no! The status of this hint changed. '
-                'Likely either someone else answered it, or the team solved '
-                'the puzzle. You may wish to copy your text and reload.'))
+            form.add_error(None, 
+                '在你编辑期间，提示状态已更新。可能是此队伍接触了题目，或者有其他staff回复了提示。'
+                '你需要自行保存你的编辑内容（例如复制到剪贴板），然后刷新页面。'
+            )
         elif form.is_valid():
             hint.answered_datetime = request.context.now
             hint.status = form.cleaned_data['status']
             hint.response = form.cleaned_data['response']
             hint.save(update_fields=('answered_datetime', 'status', 'response'))
-            messages.success(request, _('Hint saved.'))
+            messages.success(request, '提示已保存。')
             return redirect('hint-list')
 
     claimer = request.COOKIES.get('claimer')
@@ -950,24 +946,23 @@ def hint(request, id):
         claimer = re.sub(r'#\d+$', '', unquote(claimer))
     if hint.status != Hint.NO_RESPONSE:
         if hint.claimer:
-            form.add_error(None, _('This hint has been answered by {}!').format(hint.claimer))
+            form.add_error(None, '这条提示请求已由 {} 回复。'.format(hint.claimer))
         else:
-            form.add_error(None, _('This hint has been answered!'))
+            form.add_error(None, '这条提示请求已由某位staff回复。')
     elif hint.claimed_datetime:
         if hint.claimer != claimer:
             if hint.claimer:
-                form.add_error(None, _('This hint is currently claimed by {}!').format(hint.claimer))
+                form.add_error(None, '这条提示请求已由 {} 申领。'.format(hint.claimer))
             else:
-                form.add_error(None, _('This hint is currently claimed!'))
+                form.add_error(None, '这条提示请求已由某位staff申领。')
     elif request.GET.get('claim'):
         if claimer:
             hint.claimed_datetime = request.context.now
             hint.claimer = claimer
             hint.save()
-            messages.success(request, _('You have claimed this hint!'))
+            messages.success(request, '你已申领一条提示请求，请尽快回复。')
         else:
-            messages.error(request, _('Please set your name before claiming hints! '
-                '(If you just set your name, you can refresh or click Claim.)'))
+            messages.error(request, '强烈建议你先声明自己是谁，然后再申领提示请求，便于管理追踪。')
 
     limit = request.META.get('QUERY_STRING', '')
     limit = int(limit) if limit.isdigit() else 20
@@ -1152,7 +1147,7 @@ def story(request):
     ))
     if request.context.hunt_has_started:
         for puzzle in request.context.unlocks:
-            story_points['round%d_open' % puzzle.round.order] = True
+            story_points['round%d_open' % (puzzle.round.order + 1)] = True
         # if request.context.team:
         #     for puzzle in request.context.team.solves.values():
         #         if puzzle.is_meta:

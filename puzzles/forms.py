@@ -21,27 +21,26 @@ def looks_spammy(s):
 
 class RegisterForm(forms.Form):
     team_id = forms.CharField(
-        label=_('Team Username'),
+        label='队伍用户名',
         max_length=100,
         help_text=(
-            _('This is the private username your team will use when logging in. '
-            'It should be short and not contain special characters.')
+            '登录时所用的用户名，应简短且不含特殊字符。'
         ),
     )
     team_name = forms.CharField(
-        label=_('Team Name'),
+        label='队伍展示名',
         max_length=200,
         help_text=(
-            _('This is how your team name will appear on the public leaderboard.')
+            '在团队列表展示的队伍名，您可以在此略整小活。'
         ),
     )
     password = forms.CharField(
-        label=_('Team Password'),
+        label='队伍密码',
         widget=forms.PasswordInput,
-        help_text=_('You’ll probably share this with your team.'),
+        help_text='登录时所用的密码，在整个队伍内共享。',
     )
     password2 = forms.CharField(
-        label=_('Retype Password'),
+        label='再次输入队伍密码',
         widget=forms.PasswordInput,
     )
 
@@ -54,24 +53,22 @@ class RegisterForm(forms.Form):
 
         if not team_name or looks_spammy(team_name):
             raise forms.ValidationError(
-                _('That public team name isn’t allowed.')
+                '不合法的用户名，请重选。'
             )
 
         if password != password2:
             raise forms.ValidationError(
-                _('Passwords don’t match.')
+                '两次输入密码不匹配，请检查。'
             )
 
         if User.objects.filter(username=team_id).exists():
             raise forms.ValidationError(
-                _('That login username has already been taken by a different '
-                'team.')
+                '用户名已被占用，请重选。'
             )
 
         if Team.objects.filter(team_name=team_name).exists():
             raise forms.ValidationError(
-                _('That public team name has already been taken by a different '
-                'team.')
+                '展示名已被占用，请重选。'
             )
 
         return cleaned_data
@@ -80,14 +77,13 @@ class RegisterForm(forms.Form):
 def validate_team_member_email_unique(email):
     if TeamMember.objects.filter(email=email).exists():
         raise forms.ValidationError(
-            _('Someone with that email is already registered as a member on a '
-            'different team.')
+            '此邮箱已被使用，请检查。'
         )
 
 class TeamMemberForm(forms.Form):
-    name = forms.CharField(label=_('Name (required)'), max_length=200)
+    name = forms.CharField(label='成员名（必填）', max_length=200)
     email = forms.EmailField(
-        label=_('Email (optional)'),
+        label='邮箱（选填）',
         max_length=200,
         required=False,
         validators=[validate_email, validate_team_member_email_unique],
@@ -99,16 +95,16 @@ def validate_team_emails(formset):
     for form in formset.forms:
         name = form.cleaned_data.get('name')
         if not name:
-            raise forms.ValidationError(_('All team members must have names.'))
+            raise forms.ValidationError('所有成员都需要有成员名。')
         if looks_spammy(name):
-            raise forms.ValidationError(_('That team member name isn’t allowed.'))
+            raise forms.ValidationError('不合法的成员名，请重选。')
         email = form.cleaned_data.get('email')
         if email:
             emails.append(email)
     if not emails:
-        raise forms.ValidationError(_('You must list at least one email address.'))
+        raise forms.ValidationError('注册时需要提供至少一名成员的邮箱。')
     if len(emails) != len(set(emails)):
-        raise forms.ValidationError(_('All team members must have unique emails.'))
+        raise forms.ValidationError('成员的邮箱不得重复。')
     return emails
 
 class TeamMemberFormset(forms.BaseFormSet):
@@ -129,13 +125,13 @@ class TeamMemberModelFormset(forms.models.BaseModelFormSet):
             .exists()
         ):
             raise forms.ValidationError(
-                _('One of the emails you listed is already on a different team.')
+                '此邮箱已被使用，请检查。'
             )
 
 
 class SubmitAnswerForm(forms.Form):
     answer = forms.CharField(
-        label=_('Enter your guess:'),
+        label='提交答案',
         max_length=500,
         widget=forms.TextInput(attrs={'autofocus': True}),
     )
@@ -144,20 +140,17 @@ class SubmitAnswerForm(forms.Form):
 class RequestHintForm(forms.Form):
     hint_question = forms.CharField(
         label=(
-            _('Describe everything you’ve tried on this puzzle. We will '
-            'provide a hint to help you move forward. The more detail you '
-            'provide, the less likely it is that we’ll tell you '
-            'something you already know.')
+            '尽可能详细地描述你的当前进展和需要的提示'
         ),
         widget=forms.Textarea,
     )
 
     def __init__(self, team, *args, **kwargs):
         super(RequestHintForm, self).__init__(*args, **kwargs)
-        notif_choices = [('all', _('Everyone')), ('none', _('No one'))]
+        notif_choices = [('all', '所有成员'), ('none', '不发送')]
         notif_choices.extend(team.get_emails(with_names=True))
         self.fields['notify_emails'] = forms.ChoiceField(
-            label=_('When the hint is answered, send an email to:'),
+            label='提示收到回复时，发送邮件至',
             choices=notif_choices
         )
 
@@ -171,11 +164,11 @@ class HintStatusWidget(forms.Select):
             elif option == Hint.ANSWERED:
                 if value == Hint.OBSOLETE: continue
                 if self.is_followup:
-                    desc += _(' (as followup)')
+                    desc += '（追问）'
             elif option == Hint.REFUNDED:
                 if value == Hint.OBSOLETE: continue
                 if self.is_followup:
-                    desc += _(' (thread closed)')
+                    desc += '（关闭）'
             elif option == Hint.OBSOLETE:
                 if value != Hint.OBSOLETE: continue
             self.choices.append((option, desc))
@@ -199,13 +192,13 @@ class SurveyForm(forms.ModelForm):
 
 # This form is a customization of forms.PasswordResetForm
 class PasswordResetForm(forms.Form):
-    team_id = forms.CharField(label=_('Team Username'), max_length=100)
+    team_id = forms.CharField(label='队伍用户名', max_length=100)
 
     def clean(self):
         cleaned_data = super(PasswordResetForm, self).clean()
         team_id = cleaned_data.get('team_id')
         team = Team.objects.filter(user__username=team_id).first()
         if team is None:
-            raise forms.ValidationError(_('That username doesn’t exist.'))
+            raise forms.ValidationError('没有队伍使用这个用户名。')
         cleaned_data['team'] = team
         return cleaned_data

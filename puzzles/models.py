@@ -53,16 +53,16 @@ from puzzles.utils import get_default_puzzle_bingo_game_data, get_default_puzzle
 
 
 class Round(models.Model):
-    name = models.CharField(max_length=255, verbose_name=_('Name'))
-    slug = models.SlugField(max_length=255, unique=True, verbose_name=_('Slug'))
+    name = models.CharField(max_length=255, verbose_name='轮次名')
+    slug = models.SlugField(max_length=255, unique=True, verbose_name='Slug（唯一标识）')
     meta = models.ForeignKey(
         'Puzzle', limit_choices_to={'is_meta': True}, related_name='+',
         null=True, blank=True, on_delete=models.SET_NULL, verbose_name=_('meta'))
     order = models.IntegerField(default=0, verbose_name=_('Order'))
 
     class Meta:
-        verbose_name = _('round')
-        verbose_name_plural = _('rounds')
+        verbose_name = '轮次'
+        verbose_name_plural = '轮次'
 
     def __str__(self):
         return self.name
@@ -71,7 +71,7 @@ class Round(models.Model):
 class Puzzle(models.Model):
     '''A single puzzle in the puzzlehunt.'''
 
-    name = models.CharField(max_length=255, verbose_name=_('Name'))
+    name = models.CharField(max_length=255, verbose_name='题目名称')
 
     # I considered making this default to django.utils.text.slugify(name) via
     # cleaning, but that's a bit more invasive because you need blank=True for
@@ -80,7 +80,7 @@ class Puzzle(models.Model):
     # can't be URL-reversed). Note that not all routes a model could enter the
     # database will call clean().
     slug = models.SlugField(
-        max_length=255, unique=True, verbose_name=_('Slug'),
+        max_length=255, unique=True, verbose_name='Slug（唯一标识）',
         help_text=_('Slug used in URLs to identify this puzzle (must be unique)'),
     )
 
@@ -88,7 +88,7 @@ class Puzzle(models.Model):
     # default in clean(), a blank body template could sneak in anyway, but it
     # seems less likely to be harmful here.
     body_template = models.CharField(
-        max_length=255, blank=True, verbose_name=_('Body template'),
+        max_length=255, blank=True, verbose_name='html',
         help_text=_('''File name of a Django template (including .html) under
         puzzle_bodies and solution_bodies containing the puzzle and
         solution content, respectively. Defaults to slug + ".html" if not
@@ -96,31 +96,38 @@ class Puzzle(models.Model):
     )
 
     answer = models.CharField(
-        max_length=255, verbose_name=_('Answer'),
+        max_length=255, verbose_name='答案',
         help_text=_('Answer (fine if unnormalized)'),
     )
 
-    round = models.ForeignKey(Round, on_delete=models.CASCADE, verbose_name=_('round'))
-    order = models.IntegerField(default=0, verbose_name=_('Order'))
-    is_meta = models.BooleanField(default=False, verbose_name=_('Is meta'))
+    round = models.ForeignKey(Round, on_delete=models.CASCADE, verbose_name='所在轮次')
+    order = models.IntegerField(default=0, verbose_name='轮内编号')
+    is_meta = models.BooleanField(default=False, verbose_name='Is meta')
 
     # For unlocking purposes, a "main round solve" is a solve that is not a
     # meta or in the intro round.
-    unlock_hours = models.IntegerField(default=-1, verbose_name=_('Unlock hours'),
-        help_text=_('If nonnegative, puzzle unlocks N hours after the hunt starts.'))
-    unlock_global = models.IntegerField(default=-1, verbose_name=_('Unlock global'),
-        help_text=_('If nonnegative, puzzle unlocks after N main round solves in any round.'))
-    unlock_local = models.IntegerField(default=-1, verbose_name=_('Unlock local'),
-        help_text=_('If nonnegative, puzzle unlocks after N main round solves in this round.'))
+    unlock_hours = models.IntegerField(default=-1, verbose_name='时间锁',
+        help_text='经过一定时间后，自动解锁本题。负数表示不能通过此法解锁本题。fduph24全部设为-1.')
+    unlock_global = models.IntegerField(default=-1, verbose_name='全局锁',
+        help_text='总计答对一定数量后，解锁本题。负数表示不能通过此法解锁本题。fduph24全部设为-1.')
+    unlock_local = models.IntegerField(default=-1, verbose_name='轮次锁',
+        help_text='在本轮次内答对一定数量后，解锁本题。负数表示不能通过此法解锁本题。')
 
     emoji = models.CharField(
         max_length=32, default=':question:', verbose_name=_('Emoji'),
         help_text=_('Emoji to use in Discord integrations involving this puzzle')
     )
+    
+    hidden_info = models.CharField(
+        max_length=255, verbose_name='导师评语',
+        help_text='info to show after the puzzle is solved',
+        default='',
+        blank=True,
+    )
 
     class Meta:
-        verbose_name = _('puzzle')
-        verbose_name_plural = _('puzzles')
+        verbose_name = '题目'
+        verbose_name_plural = '题目'
 
     def clean(self):
         if not self.body_template:
@@ -153,7 +160,7 @@ class Puzzle(models.Model):
     def normalize_answer(s):
         if s is None: return s
         nfkd_form = unicodedata.normalize('NFKD', s)
-        return ''.join([c.upper() for c in nfkd_form if c.isalpha()])
+        return ''.join([c.upper() for c in nfkd_form if c.isalnum()])
 
 
 @context_cache
@@ -172,15 +179,15 @@ class Team(models.Model):
     # Public team name for scoreboards and comms -- not necessarily the same as
     # the user's name from the User object
     team_name = models.CharField(
-        max_length=255, unique=True, verbose_name=_('Team name'),
+        max_length=255, unique=True, verbose_name='队伍展示名',
         help_text=_('Public team name for scoreboards and communications'),
     )
 
     # Time of creation of team
-    creation_time = models.DateTimeField(auto_now_add=True, verbose_name=_('Creation time'))
+    creation_time = models.DateTimeField(auto_now_add=True, verbose_name='注册时间')
 
     start_offset = models.DurationField(
-        default=datetime.timedelta, verbose_name=_('Start offset'),
+        default=datetime.timedelta, verbose_name='提前开始时间',
         help_text=_('''How much earlier this team should start, for early-testing
         teams; be careful with this!'''),
     )
@@ -202,12 +209,12 @@ class Team(models.Model):
     )
     last_solve_time = models.DateTimeField(null=True, blank=True, verbose_name=_('Last solve time'))
     is_prerelease_testsolver = models.BooleanField(
-        default=False, verbose_name=_('Is prerelease testsolver'),
+        default=False, verbose_name='是否内测',
         help_text=_('''Whether this team is a prerelease testsolver. If true, the
         team will have access to puzzles before the hunt starts'''),
     )
     is_hidden = models.BooleanField(
-        default=False, verbose_name=_('Is hidden'),
+        default=False, verbose_name='是否隐藏',
         help_text=_('If a team is hidden, it will not be visible to the public')
     )
 
@@ -228,8 +235,8 @@ class Team(models.Model):
     )
 
     class Meta:
-        verbose_name = _('team')
-        verbose_name_plural = _('teams')
+        verbose_name = '队伍'
+        verbose_name_plural = '队伍'
 
     def __str__(self):
         return self.team_name
@@ -268,40 +275,15 @@ class Team(models.Model):
     @staticmethod
     def leaderboard(current_team, hide_hidden=True):
         '''
-        Returns a list of dictionaries with data of teams in the order they
-        should appear on the leaderboard. Dictionaries have the following keys:
-          - 'id'
-          - 'user_id'
-          - 'team_name'
-          - 'total_solves': number of solves (before hunt end)
-          - 'last_solve_or_creation_time': last non-free solve (before hunt
-            end), or if none, team creation time
-          - 'metameta_solve_time': time of finishing the hunt (if before hunt
-            end)
-
+        Returns a list of dictionaries with data of teams.
         This depends on the viewing team for hidden teams.
         '''
-
-        return Team.leaderboard_teams(current_team, hide_hidden).values(
-            'id',
-            'user_id',
-            'team_name',
-            'total_solves',
-            'last_solve_or_creation_time',
-            'metameta_solve_time',
-        )
+        return Team.leaderboard_teams(current_team, hide_hidden)
 
     @staticmethod
     def leaderboard_teams(current_team, hide_hidden=True):
         '''
-        Returns a (lazy, not-yet-evaluated) QuerySet of teams, in the order
-        they should appear on the leaderboard, with the following annotations:
-          - 'total_solves': number of solves (before hunt end)
-          - 'last_solve_or_creation_time': last non-free solve (before hunt
-            end), or if none, team creation time
-          - 'metameta_solve_time': time of finishing the hunt (if before hunt
-            end)
-
+        Returns a list of teams.
         This depends on the viewing team for hidden teams.
         '''
 
@@ -318,72 +300,31 @@ class Team(models.Model):
 
         all_teams = Team.objects.filter(q, creation_time__lt=HUNT_END_TIME)
 
-        # https://docs.djangoproject.com/en/3.1/ref/models/querysets/#filteredrelation-objects
-        # FilteredRelation does a LEFT OUTER JOIN with additional conditions in
-        # the ON clause, so every team survives; the other stuff aggregates it
-        all_teams = all_teams.annotate(
-            scoring_submissions=FilteredRelation(
-                'answersubmission',
-                condition=Q(
-                    answersubmission__used_free_answer=False,
-                    answersubmission__is_correct=True,
-                    answersubmission__submitted_datetime__lt=HUNT_END_TIME,
-                )
-            ),
-            total_solves=Count('scoring_submissions'),
-            metameta_solve_time=Min(Case(
-                When(
-                    scoring_submissions__puzzle__slug=META_META_SLUG,
-                    then='scoring_submissions__submitted_datetime',
-                )
-                # else, null by default
-            )),
-            # Coalesce(things) = the first of things that isn't null
-            last_solve_or_creation_time=Coalesce('last_solve_time', 'creation_time'),
-        ).order_by(
-            F('metameta_solve_time').asc(nulls_last=True),
-            F('total_solves').desc(),
-            F('last_solve_or_creation_time'),
+        total_solves = collections.defaultdict(int)
+        meta_times = {}
+        for team_id, slug, time in AnswerSubmission.objects.filter(
+            used_free_answer=False, is_correct=True, submitted_datetime__lt=HUNT_END_TIME
+        ).values_list('team__id', 'puzzle__slug', 'submitted_datetime'):
+            total_solves[team_id] += 1
+            if slug == META_META_SLUG:
+                meta_times[team_id] = time
+
+        unsorted_teams = [{
+                'team_name': team.team_name,
+                'is_current': team == current_team,
+                'total_solves': total_solves[team.id],
+                'last_solve_time': team.last_solve_time or team.creation_time,
+                'metameta_solve_time': meta_times.get(team.id),
+                'team': team,
+                'team_member_joint_string': ', '.join([it.name for it in team.teammember_set.all()]),
+                'creation_time': team.creation_time.strftime('%m/%d %H:%M:%S'),
+            } for team in all_teams]
+        return sorted(
+            unsorted_teams,
+            key=lambda d: (
+                d['creation_time']
+            )
         )
-
-        return all_teams
-
-        # Old joined-in-python implementation, with a different output format,
-        # follows. I couldn't convince myself that pushing all the annotations
-        # and sort into the database necessarily improved performance, but I
-        # don't think it got significantly worse either, and the above version
-        # feels like it enables future optimizations more effectively; for
-        # example, I think the fact that computing the ranking on the team page
-        # only needs values_list('id', flat=True) is pretty good. (On the
-        # other hand, there are hunt formats where completing the sort in the
-        # database is very difficult or even impossible due to a more
-        # complicated scoring/ranking algorithm or one that uses information
-        # not available in the database, like GPH 2018...)
-
-        # total_solves = collections.defaultdict(int)
-        # meta_times = {}
-        # for team_id, slug, time in AnswerSubmission.objects.filter(
-        #     used_free_answer=False, is_correct=True, submitted_datetime__lt=HUNT_END_TIME
-        # ).values_list('team__id', 'puzzle__slug', 'submitted_datetime'):
-        #     total_solves[team_id] += 1
-        #     if slug == META_META_SLUG:
-        #         meta_times[team_id] = time
-
-        # return sorted(
-        #     [{
-        #         'team_name': team.team_name,
-        #         'is_current': team == current_team,
-        #         'total_solves': total_solves[team.id],
-        #         'last_solve_time': team.last_solve_time or team.creation_time,
-        #         'metameta_solve_time': meta_times.get(team.id),
-        #         'team': team,
-        #     } for team in all_teams],
-        #     key=lambda d: (
-        #         d['metameta_solve_time'] or HUNT_END_TIME,
-        #         -d['total_solves'],
-        #         d['last_solve_time'],
-        #     )
-        # )
 
     def team(self):
         return self
@@ -495,7 +436,10 @@ class Team(models.Model):
                 (global_solves, local_solves) = context.team.main_round_solves
                 if 0 <= puzzle.unlock_global <= global_solves and (global_solves or any(metas_solved)):
                     unlocked_at = context.now
-                if 0 <= puzzle.unlock_local <= local_solves[puzzle.round.slug]:
+                # fduph implements a Chinese-style unlock-by-round mechanism, though need local_unlock configure as well
+                _is_round_unlocked = puzzle.round.order == 0 or puzzle.round.order <= sum(metas_solved)
+                _is_puzzled_unlocked_by_round =( 0 <= puzzle.unlock_local <= local_solves[puzzle.round.slug])
+                if _is_round_unlocked and _is_puzzled_unlocked_by_round:
                     unlocked_at = context.now
                 if puzzle.slug == META_META_SLUG and all(metas_solved):
                     unlocked_at = context.now
@@ -505,6 +449,7 @@ class Team(models.Model):
                     unlocked_at = context.team.db_unlocks[puzzle.id].unlock_datetime
                 elif unlocked_at:
                     unlocks.append(Team.unlock_puzzle(context, puzzle, unlocked_at))
+                # print(puzzle, global_solves, local_solves, unlocked_at, context.team)
             if unlocked_at:
                 puzzles_unlocked[puzzle] = unlocked_at
         if unlocks:
@@ -532,14 +477,14 @@ def notify_on_team_creation(sender, instance, created, **kwargs):
 class TeamMember(models.Model):
     '''A person on a team.'''
 
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, verbose_name=_('team'))
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, verbose_name='队伍')
 
-    name = models.CharField(max_length=255, verbose_name=_('Name'))
-    email = models.EmailField(blank=True, verbose_name=_('Email (optional)'))
+    name = models.CharField(max_length=255, verbose_name='成员名')
+    email = models.EmailField(blank=True, verbose_name='邮箱')
 
     class Meta:
-        verbose_name = _('team member')
-        verbose_name_plural = _('team members')
+        verbose_name = '队伍成员'
+        verbose_name_plural = '队伍成员'
 
     def __str__(self):
         return '%s (%s)' % (self.name, self.email) if self.email else self.name
@@ -555,10 +500,10 @@ def notify_on_team_member_creation(sender, instance, created, **kwargs):
 class PuzzleUnlock(models.Model):
     '''Represents a team having access to a puzzle (and when that occurred).'''
 
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, verbose_name=_('team'))
-    puzzle = models.ForeignKey(Puzzle, on_delete=models.CASCADE, verbose_name=_('puzzle'))
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, verbose_name='队伍')
+    puzzle = models.ForeignKey(Puzzle, on_delete=models.CASCADE, verbose_name='题目')
 
-    unlock_datetime = models.DateTimeField(verbose_name=_('Unlock datetime'))
+    unlock_datetime = models.DateTimeField(verbose_name='解锁时刻')
     view_datetime = models.DateTimeField(null=True, blank=True, verbose_name=_('View datetime'))
 
     def __str__(self):
@@ -568,19 +513,19 @@ class PuzzleUnlock(models.Model):
 
     class Meta:
         unique_together = ('team', 'puzzle')
-        verbose_name = _('puzzle unlock')
-        verbose_name_plural = _('puzzle unlocks')
+        verbose_name = '解锁'
+        verbose_name_plural = '解锁'
 
 
 class AnswerSubmission(models.Model):
     '''Represents a team making a solve attempt on a puzzle (right or wrong).'''
 
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, verbose_name=_('team'))
-    puzzle = models.ForeignKey(Puzzle, on_delete=models.CASCADE, verbose_name=_('puzzle'))
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, verbose_name='队伍')
+    puzzle = models.ForeignKey(Puzzle, on_delete=models.CASCADE, verbose_name='题目')
 
-    submitted_answer = models.CharField(max_length=255, verbose_name=_('Submitted answer'))
-    is_correct = models.BooleanField(verbose_name=_('Is correct'))
-    submitted_datetime = models.DateTimeField(auto_now_add=True, verbose_name=_('Submitted datetime'))
+    submitted_answer = models.CharField(max_length=255, verbose_name='提交答案')
+    is_correct = models.BooleanField(verbose_name='回答正确')
+    submitted_datetime = models.DateTimeField(auto_now_add=True, verbose_name='提交时刻')
     used_free_answer = models.BooleanField(verbose_name=_('Used free answer'))
 
     def __str__(self):
@@ -591,8 +536,8 @@ class AnswerSubmission(models.Model):
 
     class Meta:
         unique_together = ('team', 'puzzle', 'submitted_answer')
-        verbose_name = _('answer submission')
-        verbose_name_plural = _('answer submissions')
+        verbose_name = '提交答案'
+        verbose_name_plural = '提交答案'
 
 
 
@@ -669,10 +614,10 @@ def notify_on_answer_submission(sender, instance, created, **kwargs):
 class ExtraGuessGrant(models.Model):
     '''Extra guesses granted to a particular team.'''
 
-    team = models.ForeignKey(Team, on_delete=models.CASCADE, verbose_name=_('team'))
-    puzzle = models.ForeignKey(Puzzle, on_delete=models.CASCADE, verbose_name=_('puzzle'))
+    team = models.ForeignKey(Team, on_delete=models.CASCADE, verbose_name='队伍')
+    puzzle = models.ForeignKey(Puzzle, on_delete=models.CASCADE, verbose_name='题目')
 
-    extra_guesses = models.IntegerField(verbose_name=_('Extra guesses'))
+    extra_guesses = models.IntegerField(verbose_name='额外回答次数')
 
     def __str__(self):
         return _('%s has %d extra guesses for puzzle %s') % (
@@ -681,17 +626,17 @@ class ExtraGuessGrant(models.Model):
 
     class Meta:
         unique_together = ('team', 'puzzle')
-        verbose_name = _('extra guess grant')
-        verbose_name_plural = _('extra guess grants')
+        verbose_name = '额外回答次数'
+        verbose_name_plural ='额外回答次数'
 
 
 
 class PuzzleMessage(models.Model):
     '''A "keep going" message shown on submitting a specific wrong answer.'''
 
-    puzzle = models.ForeignKey(Puzzle, on_delete=models.CASCADE, verbose_name=_('puzzle'))
+    puzzle = models.ForeignKey(Puzzle, on_delete=models.CASCADE, verbose_name='题目')
 
-    guess = models.CharField(max_length=255, verbose_name=_('Guess'))
+    guess = models.CharField(max_length=255, verbose_name='回答')
     response = models.TextField(verbose_name=_('Response'))
 
     class Meta:

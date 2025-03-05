@@ -2,16 +2,6 @@
 {% block puzzle-body-md %}
 
 
-<div>
-    {% for puzzle in request.context.team.solves.values %}
-        {% if puzzle.slug == "r3q3" %}
-            <hr>
-            <h2>导师评语</h2>
-            <p>汗流浃背的某神</p>
-        {% endif %}
-    {% endfor %}
-</div>
-
 <button class="btn clipboard-button"></button>
 
 {% endblock %}

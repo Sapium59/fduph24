@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block content %}
 
-<h2>{% translate "Login" %}</h2>
+<h2>登陆</h2>
 
 <form id="login" method="post">
     {% csrf_token %}
@@ -12,19 +12,25 @@
         {% for field in form %}
         <div class="form-row">
             <div class="form-desc">
-                {{ field.label_tag }}
+                {% if 'Username:' in field.label_tag %}
+                    <strong>队伍用户名：</strong>
+                {% elif 'Password:' in field.label_tag %}
+                    <strong>队伍密码：</strong>
+                {% else %}
+                    {{field.label_tag}}
+                {% endif %}
             </div>
             {{ field }}
             {{ field.errors }}
             <div class="form-desc">
                 {% if not hunt_is_closed %}
-                {% url 'register' as register_url %}
-                {% url 'password_reset' as password_url %}
-                {% if field.name == 'username' %}
-                {% blocktranslate %}If you haven&rsquo;t created a team yet, <a href="{{ register_url }}" tabindex="1">register a new team here</a>.{% endblocktranslate %}
-                {% else %}
-                {% blocktranslate %}Forgot your password? <a href="{{ password_url }}" tabindex="1">Click here to reset password</a>.{% endblocktranslate %}
-                {% endif %}
+                    {% url 'register' as register_url %}
+                    {% url 'password_reset' as password_url %}
+                    {% if field.name == 'username' %}
+                        还没有队伍？<a href="{{ register_url }}" tabindex="1">在此注册</a>。
+                    {% else %}
+                        忘记密码？<a href="{{ password_url }}" tabindex="1">在此找回</a>。
+                    {% endif %}
                 {% endif %}
             </div>
         </div>
@@ -32,7 +38,7 @@
     </div>
 
     <div class="form-section">
-        <button class="btn" type="submit">{% translate "Submit" %}</button>
+        <button class="btn" type="submit">登陆</button>
     </div>
 </form>
 

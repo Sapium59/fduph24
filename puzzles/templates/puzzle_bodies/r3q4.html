@@ -9,15 +9,6 @@
     <img src="/static/puzzle_resources/r3q4.png" style="height: 60vh;">
 </div>
 
-<div>
-    {% for puzzle in request.context.team.solves.values %}
-        {% if puzzle.slug == "r3q4" %}
-            <hr>
-            <h2>导师评语</h2>
-            <p>道具位置非常重要</p>
-        {% endif %}
-    {% endfor %}
-</div>
 
 <button class="btn clipboard-button"></button>
 

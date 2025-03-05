@@ -44,7 +44,7 @@
 </style>
 
 <h1>{{ hunt_title }}</h1>
-
+<!-- 
 {% if hunt_is_over %}
 <div class="feedback">
 {% if hunt_is_closed %}
@@ -64,7 +64,8 @@
 {% endwith %}
 </div>
 {% endif %}
-
+-->
+<!-- 
 <div class="info-row">
     <div>
         <h4>{% translate "What" %}</h4>
@@ -104,6 +105,10 @@
             {% endcomment %}
         </div>
     </div>
+</div> -->
+
+<div align="center">
+    <img src="/static/images/poster.png" style="height: 100vh; object-fit: cover;">
 </div>
 
 {% if not hunt_is_closed and not request.user.is_authenticated %}

@@ -33,15 +33,6 @@
     <img src="/static/puzzle_resources/r3q10-03.png" style="height:40vw" alt="Wave5阳光菇(7),Wave1双子向日葵(2),Wave1花盆(4),Wave2窝瓜(6),Wave2双子向日葵(1),Wave3大嘴花(1),Wave4大嘴花(3),Wave3阳光菇(1),Wave3双子向日葵(4),Wave4花盆(7),Wave5窝瓜(4),Wave2模仿者(1),Wave1模仿者(3),Wave1毁灭菇(3),Wave2花盆(6),Wave3毁灭菇(1),Wave5花盆(1),">
 </div>
 
-<div>
-    {% for puzzle in request.context.team.solves.values %}
-        {% if puzzle.slug == "r3q10" %}
-            <hr>
-            <h2>导师评语</h2>
-            <p>能否做出植物选择页面呢</p>
-        {% endif %}
-    {% endfor %}
-</div>
 
 <button class="btn clipboard-button"></button>
 

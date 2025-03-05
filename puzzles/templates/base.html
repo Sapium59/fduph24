@@ -106,23 +106,16 @@
                     {% endif %}
 
                     {% if request.user.is_impersonate %}
-                        <span class="current-stat" title="{% translate 'Currently impersonating' %}">
+                        <span class="current-stat" title="顶号中（慎用！）">
                             ({{ request.impersonator }}
                             <a style="padding: 0" href="{% url 'impersonate-stop' %}">&#x1F6D1;</a>)
                         </span>
                     {% endif %}
 
                     {% if team and num_hints_remaining > 0 %}
-                        <span class="current-stat" title="{% translate 'Available hints:' %} {{ num_hints_remaining }}">
+                        <span class="current-stat" title="可用提示余量： {{ num_hints_remaining }}">
                             {% include 'icon-hint.svg' %}
                             <span class="current-stat-label">{{ num_hints_remaining }}</span>
-                        </span>
-                    {% endif %}
-
-                    {% if team and num_free_answers_remaining > 0 %}
-                        <span class="current-stat" title="{% translate 'Free answers:' %} {{ num_free_answers_remaining }}">
-                            {% include 'icon-answer.svg' %}
-                            <span class="current-stat-label">{{ num_free_answers_remaining }}</span>
                         </span>
                     {% endif %}
 
@@ -173,7 +166,7 @@
                         </svg>
                     </div>
                     <div>
-                        {% translate "FAQ" %}
+                        FAQ
                     </div>
                 </a>
             </li>
@@ -286,12 +279,12 @@
     <div class="content">
         {% if request.user.is_authenticated %}
             {% if is_superuser %}
-                <button id="toggle-shortcuts" aria-expanded="false" aria-controls="shortcuts" title="{% translate 'Admin toolbox' %}">
+                <button id="toggle-shortcuts" aria-expanded="false" aria-controls="shortcuts" title="管理工具">
                     {% if not hunt_is_prereleased %}&#x26A0;&#xFE0F;{% endif %}
                     管理&#x25BC;
                 </button>
                 {% if unclaimed_hints %}
-                    <a class="current-stat" title="{% translate 'Hints that need answering:' %} {{ unclaimed_hints }}" href="{% url 'hint-list' %}" style="color: red">
+                    <a class="current-stat" title="积压提示： {{ unclaimed_hints }}" href="{% url 'hint-list' %}" style="color: red">
                         {% include 'icon-hint.svg' %}
                         <span class="current-stat-label">{{ unclaimed_hints }}</span>
                     </a>
@@ -312,26 +305,27 @@
                         {% endif %}
                         {% endfor %}
                         {% if puzzle %}
-                        <div>{% translate "This puzzle&rsquo;s answer:" %}</div>
+                        <div>本题答案</div>
                         <div class="spoiler">{{ puzzle.answer }}</div>
                         <div>{{ puzzle.round.name }} #{{ puzzle.order }}</div>
-                        <a href="/admin/puzzles/puzzle/{{ puzzle.id }}/change/" class="btn">{% translate "Django admin" %}</a>
-                        <a href="{% url 'survey' puzzle.slug %}" class="btn">{% translate "Surveys" %}</a>
+                        <a href="/admin/puzzles/puzzle/{{ puzzle.id }}/change/" class="btn">进入后台修改本题</a>
+                        <a href="{% url 'survey' puzzle.slug %}" class="btn">调查统计</a>
                         <input name="puzzle" value="{{ puzzle.slug }}" type="hidden">
                         {% endif %}
+
                         {% if view_team %}
-                        <div>{% translate "This team" %}</div>
+                        <div>本队伍</div>
                         <div style="font-size: 70%">
                         testsolver: {{view_team.is_prerelease_testsolver}} | time from start: {{view_team.time_since_start}}
                         </div>
-                        <a href="/admin/puzzles/team/{{ view_team.id }}/change/" class="btn">{% translate "Django admin" %}</a>
-                        <a href="{% url 'impersonate-start' view_team.user_id %}" class="btn danger">{% translate "Impersonate" %}</a>
+                        <a href="/admin/puzzles/team/{{ view_team.id }}/change/" class="btn">进入后台修改本题</a>
+                        <a href="{% url 'impersonate-start' view_team.user_id %}" class="btn danger">顶号（慎用！）</a>
                         <div></div>
-                        <a href="/admin/puzzles/answersubmission/?team__id__exact={{ view_team.id }}" class="btn">{% translate "All guesses" %}</a>
-                        <a href="{% url 'hint-list' %}?team={{ view_team.id }}" class="btn">{% translate "All hints" %}</a>
+                        <a href="/admin/puzzles/answersubmission/?team__id__exact={{ view_team.id }}" class="btn">提交历史</a>
+                        <a href="{% url 'hint-list' %}?team={{ view_team.id }}" class="btn">全部提示</a>
                         {% endif %}
                         <div>{% translate "Download logs" %}</div>
-                        <a class="btn" href="{% url 'guess-csv' %}">{% translate "Guess" %}</a>
+                        <a class="btn" href="{% url 'guess-csv' %}">全部提交</a>
                         <a class="btn" href="{% url 'hint-csv' %}">{% translate "Hint" %}</a>
                         <a class="btn" href="{% url 'puzzle-log' %}">{% translate "Puzzle" %}</a>
                         <iframe src="about:blank" name="dummy" style="display: none"></iframe>

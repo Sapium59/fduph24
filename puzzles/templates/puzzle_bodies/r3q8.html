@@ -31,16 +31,6 @@
   <p>(3 4'1 5)→(7)</p>
 </div>
 
-<div>
-  {% for puzzle in request.context.team.solves.values %}
-      {% if puzzle.slug == "r3q8" %}
-          <hr>
-          <h2>导师评语</h2>
-          <p>这咋样加入新的百合</p>
-      {% endif %}
-  {% endfor %}
-</div>
-
 <button class="btn clipboard-button"></button>
 
 {% endblock %}

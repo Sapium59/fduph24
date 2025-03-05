@@ -3,27 +3,36 @@
 {% load puzzle_tags %}
 
 {% block page-title %}
-<title>{% blocktranslate with puzzle_name=puzzle.name %}Solve: {{ puzzle_name }}{% endblocktranslate %}</title>
+<title>回答：{{ puzzle.name }}</title>
 {% endblock %}
 
 {% block top-left-actions %}
-<a href="{% url 'puzzle' puzzle.slug %}" class="btn">{% translate "Back to the puzzle" %}</a>
+<a href="{% url 'puzzle' puzzle.slug %}" class="btn">返回题目页</a>
 {% endblock %}
 
 {% block content %}
 
 <h1>
-    {% blocktranslate with puzzle_name=puzzle.name %}Solve: {{ puzzle_name }}{% endblocktranslate %}
+    {{ puzzle.name }} - 回答
     {% if puzzle_answer %}
-    <div class="solved-title-marker">{% translate "Solved!" %} <span class="solved-title-answer">{{ puzzle_answer }}</span></div>
+        <div class="solved-title-marker">
+            正确答案：<span class="solved-title-answer">{{ puzzle_answer }}</span>
+        </div>
     {% endif %}
 </h1>
+
+{% if puzzle_answer and puzzle.hidden_info %}    
+    <div class="notice_info">
+        你收到了一条导师评语：{{ puzzle.hidden_info }}
+    </div>
+{% endif %}
+
 
 <main>
 {% if puzzle_answer != None %}
     {% if survey %}
-    <h4>{% translate "Optional survey" %}</h4>
-    <div class="note">{% translate "You can come back to this page at any time to edit your response." %}</div>
+    <h4>反馈</h4>
+    <div class="note">你可以随时返回本页面以修改你的反馈意见。</div>
 
     <form method="post" id="survey_form">
         {% csrf_token %}
@@ -110,8 +119,8 @@
             {% for field in survey_fields %}
             <th>{{ field.adjective|title }}</th>
             {% endfor %}
-            <th>{% translate "Comments" %}</th>
-            <th>{% translate "Submitted" %}</th>
+            <th>评论</th>
+            <th>提交</th>
             <th></th>
         </tr>
         {% for past_survey in past_surveys %}
@@ -121,7 +130,7 @@
             {% endfor %}
             <td><pre class="submitted-text">{{ past_survey.comments }}</pre></td>
             <td>{% format_time past_survey.submitted_datetime %}</td>
-            <td><a href="javascript:editSurvey({{ past_survey.id }})">{% translate "Edit" %}</a></td>
+            <td><a href="javascript:editSurvey({{ past_survey.id }})">编辑</a></td>
         {% endfor %}
     </table>
     {{ past_surveys|json_script:"past_surveys" }}
@@ -145,7 +154,7 @@
     {% endif %}
 {% else %}
     {% if guesses_remaining == 0 %}
-    <p>{% translate "You have no more guesses remaining for this puzzle!" %}</p>
+    <p>你在本题的回答次数已用尽。若需要补充更多回答次数，请联系管理员。</p>
     {% else %}
     <form method="post">
         {% csrf_token %}
@@ -160,7 +169,7 @@
             {{ field }}
             {{ field.errors }}
             <div class="form-desc">
-                {% blocktranslate count guesses=guesses_remaining %}You have {{ guesses }} guess remaining for this puzzle.{% plural %}You have {{ guesses }} guesses remaining for this puzzle.{% endblocktranslate %}
+                你在本题还剩余 {{ guesses_remaining }} 次回答次数。
             </div>
             <a class="delete-row" href="#">&#x2794;</a>
         </div>
@@ -168,16 +177,10 @@
     </form>
     {% endif %}
 
-    {% if not puzzle.is_meta and num_free_answers_remaining > 0 %}
-    {% url 'free-answer' puzzle.slug as slug %}
-    <p>{% blocktranslate count answers=num_free_answers_remaining %}You have <b><a href="{{ slug }}">{{ answers }} free answer</a></b>{% plural %}You have <b><a href="{{ slug }}">{{ answers }} free answers</a></b>{% endblocktranslate %}
-        {% include 'icon-answer.svg' %}
-    {% translate " that you may use to instantly solve any non-meta puzzle." %}</p>
-    {% endif %}
 {% endif %}
 
 {% if puzzle_submissions %}
-    <h4>{% translate "Previous guesses" %}</h4>
+    <h4>历史回答</h4>
     <ul>
         {% for submission in puzzle_submissions %}
         <li>{{ submission.submitted_answer }}</li>
