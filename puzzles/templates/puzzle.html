@@ -45,6 +45,11 @@
     {% endif %}
 {% endfor %}
 
+{% if puzzle_answer and puzzle.is_meta %}    
+    <div class="notice_info">
+        你推动了<a href="/story">剧情</a>发展……
+    </div>
+{% endif %}
 
 <main class="puzzle-main clipboard-container">
     {% for erratum in visible_errata %}
