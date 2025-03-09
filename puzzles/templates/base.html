@@ -78,7 +78,7 @@
      <div class="sidebar">
         <a href="{% url 'index' %}">
             <div style="background-color: #f9f8f5;">
-                <img src="/static/images/logo.png">
+                <img src="/static/images/logo.webp">
             </div>
         </a>
         <ul>
@@ -325,9 +325,9 @@
                         <a href="{% url 'hint-list' %}?team={{ view_team.id }}" class="btn">全部提示</a>
                         {% endif %}
                         <div>{% translate "Download logs" %}</div>
-                        <a class="btn" href="{% url 'guess-csv' %}">全部提交</a>
-                        <a class="btn" href="{% url 'hint-csv' %}">{% translate "Hint" %}</a>
-                        <a class="btn" href="{% url 'puzzle-log' %}">{% translate "Puzzle" %}</a>
+                        <a class="btn" href="{% url 'guess-csv' %}">所有提交</a>
+                        <a class="btn" href="{% url 'hint-csv' %}">所有提示</a>
+                        <a class="btn" href="{% url 'puzzle-log' %}">所有本题日志</a>
                         <iframe src="about:blank" name="dummy" style="display: none"></iframe>
                     </form>
                 </div>
