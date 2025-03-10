@@ -77,19 +77,11 @@ def error_ratelimit(handler, rate, error, check_response=None, encode_response=N
 # See https://django-ratelimit.readthedocs.io/en/stable/rates.html for the rate
 # limit string.
 
-# Example usage:
-interactive_demo_submit = error_ratelimit(
-    interactive_demo.submit, 
-    '2/m', 
-    {'error': 'Please limit your attempts to two per minute.'}, 
-    lambda response: response['correct'], 
-    json.dumps
-)
-
+# FIXME check why this is not working
 r2q8_submit = error_ratelimit(
     r2q8.submit, 
-    '60/m', 
-    {'error': 'Please limit your attempts to 60 per minute.'}, 
+    '1/m', 
+    {'error': '我们当前限制本题的提交频率为每分钟60次。如果你认为频率限制过于严格，请联系管理员。'}, 
     lambda response: response['correct'], 
     json.dumps
 )
@@ -97,7 +89,7 @@ r2q8_submit = error_ratelimit(
 r3q3_submit = error_ratelimit(
     r3q3.submit, 
     '30/m', 
-    {'error': 'Please limit your attempts to 60 per minute.'}, 
+    {'error': '我们当前限制本题的提交频率为每分钟30次。如果你认为频率限制过于严格，请联系管理员。'}, 
     lambda response: response['correct'], 
     json.dumps
 )

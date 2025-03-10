@@ -91,9 +91,9 @@ urlpatterns = [
     path('solution/<slug:slug>', views.solution, name='solution'),
     path('solution/<path:path>', views.solution_static, name='solution-static'),
 
-    path('puzzle/interactive-demo/submit',
-        puzzlehandlers.interactive_demo_submit,
-        name='interactive_demo_submit'),
+    # path('puzzle/interactive-demo/submit',
+    #     puzzlehandlers.interactive_demo_submit,
+    #     name='interactive_demo_submit'),
     path('puzzle/r2q8/submit', puzzlehandlers.r2q8_submit, name='r2q8'),
     path('puzzle/r3q3/submit', puzzlehandlers.r3q3_submit, name='r3q3'),
 
