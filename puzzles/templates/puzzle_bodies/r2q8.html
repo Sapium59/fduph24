@@ -2,6 +2,10 @@
 {% block puzzle-body-md %}
 
 <div class="notice_info">
+    你可能需要的参考资料：<a href="/static/puzzle_resources/r2q8/dictionary.txt">字典</a>
+</div>
+
+<div class="notice_info">
     本题有中间答案验证。
 </div>
 
@@ -9,41 +13,47 @@
 {: .flavor}
 
 
-{% comment %} <div style="height: 90vh;">
-    <iframe src="https://2c13-2409-891f-76a7-2d92-21c8-b7fc-b2fb-b061.ngrok-free.app/bingo/" 
-            width="80%" 
-            height="100%" 
-            style="min-height: 600px;">
-    </iframe>
-</div> {% endcomment %}
 
 
 
+<div style="display: flex">
+    <div style="width:65%; margin-right: 24px">
+        <!-- 提交按钮 -->
+        <div align="center">
+            <form id="r2q8-form" autocomplete="off" action="javascript:void(0);">
+                {% csrf_token %}
+                <input type="text" name="wordInput" id="wordInput" placeholder="请输入" style="width: 70%;">
+                <input type="submit" value="提交">
+            </form>
+        </div>
+        
+        <!-- 提示信息 -->
+        <div id="output" align="center"></div>
 
+        <!-- 格子 -->
+        <div id="grids" align="center"></div>
+        
 
-<div class="d-flex justify-content-center align-items-center flex-column">
-    <!-- <div class="mt-5 mb-4" style="text-align: center;">达成BINGO领取奖金！如果同时满足额外条件更有超级大奖哦~</div> -->
-    <div class="col-10 col-md-6 col-lg-4 mb-3">
-        <form id="r2q8-form" autocomplete="off" action="javascript:void(0);">
-            {% csrf_token %}
-            <input type="text" name="wordInput" id="wordInput" placeholder="请输入">
-            {% comment %} <button class="btn btn-dark" type="button" id="submitButton">提交</button> {% endcomment %}
-            <input type="submit" value="提交">
-            {% if team %}
-                {% for word in team.puzzle_bingo_game_data.word_history %}
-                    <p>{{word}}</p>
-                {% endfor %}
-            {% endif %}
-        </form>
-        <div id="output">...</div>
+        <!-- 暗箱操作 -->
+        <div align="center" id="spoiler_div" style="margin: 0 10%;">
+            <form id="r2q8-do_spoil" autocomplete="off" action="javascript:void(0);">
+                {% csrf_token %}
+                <input type="submit" value="暗箱操作（耗费50/{{team.puzzle_bingo_game_data.bingo_coin_num}}金币）">
+            </form>
+        </div>
     </div>
-    <div>
-        <form id="r2q8-do_spoil" autocomplete="off" action="javascript:void(0);">
-            {% csrf_token %}
-            <input type="submit" value="暗箱操作（耗费50/{{team.puzzle_bingo_game_data.bingo_coin_num}}金币）">
 
-        </form>
+    <!-- 历史记录 -->
+    {% if team %}
+    <div style="width: 35%; margin-left: 24px;">
+        <h5 class="modal-title" id="modalLabel">历史记录（最近100条）</h5>
+        <ol>
+            {% for word in team.puzzle_bingo_game_data.word_history %}
+                <li>{{ word }}</li>
+            {% endfor %}
+        </ol>
     </div>
+    {% endif %}
 </div>
 
 
@@ -51,11 +61,94 @@
 
 
 <script type="text/javascript">
+    function create_base_block(id) {
+        const square = document.createElement('div');
+        square.id = id;
+        square.style.width = '50px';
+        square.style.height = '50px';
+        square.style.backgroundColor = 'black';
+        square.style.color = 'white';
+        square.style.display = 'flex';
+        square.style.alignItems = 'center';
+        square.style.justifyContent = 'center';
+        square.style.fontSize = '12px';
+        square.style.border = '2px solid black';
+        return square;
+    }
+
+    function create_base_page() {
+        const known_rules = Object.entries({{ team.puzzle_bingo_game_data.known_rules|safe }});
+        // Create 2 containers for the grid
+        const grid_container_5_5 = document.createElement('div');
+        const grid_container_1_2 = document.createElement('div');
+        for (const container of [grid_container_5_5, grid_container_1_2]) {
+            container.style.display = 'grid';
+            container.style.gap = '10px';
+            container.style.margin = '24px auto';
+            container.style.width = 'fit-content';
+            container.style.fontSize = '100%';
+            container.style.lineHeight = '80%';
+        }
+        grid_container_5_5.style.gridTemplateRows = 'repeat(5, 50px)'; // 5 rows
+        grid_container_5_5.style.gridTemplateColumns = 'repeat(5, 50px)'; // 5 columns
+        grid_container_1_2.style.gridTemplateRows = 'repeat(1, 50px)'; // 1 rows
+        grid_container_1_2.style.gridTemplateColumns = 'repeat(2, 50px)'; // 2 columns
+    
+        // Fill the grids
+        for (let i = 0; i < 27; i++) {
+            const square = create_base_block(i);
+            // For known rules, tick it and hover to show rule content
+            const is_known = known_rules.find(([key]) => parseInt(key) === i);
+            if (is_known) {
+                const ruleContent = known_rules.find(([key]) => parseInt(key) === i)[1]
+                square.textContent = '\u2714';  // unicode tick symbol
+                square.addEventListener('mouseover', () => {
+                    square.textContent = ruleContent;
+                });
+
+                square.addEventListener('mouseout', () => {
+                    square.textContent = '\u2714';
+                });
+            // For unknown rules, allow buy_a_sample
+            } else {
+                square.addEventListener('mouseover', () => {
+                    square.textContent = '';
+                });
+                square.addEventListener('click', () => {
+                    buy_a_sample(i);  // FIXME
+                });
+                square.addEventListener('mouseout', () => {
+                    square.textContent = '';
+                });
+            }
+            // Put into corresponidng container box
+            if (i < 25) {
+                grid_container_5_5.appendChild(square);
+            } else {
+                grid_container_1_2.appendChild(square);
+            }
+        }
+        // Put into div
+        const gridsDiv = document.getElementById('grids');
+        gridsDiv.innerHTML = ''; // Clear previous content
+        gridsDiv.appendChild(grid_container_5_5);
+        gridsDiv.appendChild(grid_container_1_2);
+
+        // a little hack: json boolean false -> string 'False'
+        const spoil_text = `{{ team.puzzle_bingo_game_data.bingo_spoiled|safe }}`;
+        if (spoil_text != 'False') {
+            $(`#spoiler_div`).html(`
+                <p>${spoil_text}</p>
+            `);
+        }
+    }
+
 // This demo code uses jQuery and modern JavaScript features flagrantly.
 // You should evaluate your own needs.
 document.addEventListener('DOMContentLoaded', () => {
+    create_base_page();
+    
     async function guess_a_word() {
-        console.log('1234567')
         const wordInput = document.getElementById('wordInput');
         const outputDiv = document.getElementById('output');
 
@@ -64,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let csrftoken = getCookie('csrftoken');
         try {
-            let result = await fetch("/puzzle/r2q8/submit", {  // 替换为你的 URL
+            let result = await fetch("/puzzle/r2q8/submit", {
                 method: 'POST',
                 body: JSON.stringify({
                     mode: "guess_a_word",
@@ -76,60 +169,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
             });
 
+            create_base_page();
+            
             if (!result.ok) {
                 outputDiv.textContent = `Error: ${result.status} ${result.statusText}`;
             } else {
                 let res = await result.json();
-
                 if (res.error) {
-                    outputDiv.textContent = `Error: ${res.error}`;
+                    outputDiv.textContent = `${res.error}`;
                 } else {
                     if (res.triggered_rules) {
-                        // Create a container for the grid
-                        const gridContainer = document.createElement('div');
-                        gridContainer.style.display = 'grid';
-                        gridContainer.style.gridTemplateColumns = 'repeat(5, 50px)'; // 5 columns
-                        gridContainer.style.gridTemplateRows = 'repeat(5, 50px)'; // 5 rows
-                        gridContainer.style.gap = '5px'; // Gap between squares
-                        gridContainer.style.margin = '10px';
-                    
-                        // Create an array to keep track of triggered rules
-                        const triggeredRules = Object.entries(res.triggered_rules); // Convert to array of [key, value]
-                    
-                        // Fill the 5x5 grid
-                        for (let i = 0; i < 25; i++) {
-                            const square = document.createElement('div');
-                            square.style.width = '50px';
-                            square.style.height = '50px';
-                            square.style.backgroundColor = 'black';
-                            square.style.color = 'white';
-                            square.style.display = 'flex';
-                            square.style.alignItems = 'center';
-                            square.style.justifyContent = 'center';
-                            square.style.fontSize = '12px';
-                            
-                            // Check if the current index is one of the triggered rules
-                            const rule = triggeredRules.find(([key]) => parseInt(key) === i);
-                            if (rule) {
-                                square.textContent = `${rule[1]}`; // Rule string and index
-                            } else {
-                                square.textContent = ''; // Empty square
+                        outputDiv.textContent = '';
+                        for (let i = 0; i < 27; i++) {
+                            // For triggered rules, reverse it color and bg-color
+                            const is_triggered = Object.entries(res.triggered_rules).find(([key]) => parseInt(key) === i);
+                            if (is_triggered) {
+                                $(`#${i}`).css({
+                                    backgroundColor: 'white',
+                                    color: 'black'
+                                });
                             }
-                            
-                            gridContainer.appendChild(square);
                         }
-                    
-                        outputDiv.innerHTML = ''; // Clear previous content
-                        outputDiv.appendChild(gridContainer);
                     } else {
-                        outputDiv.textContent = "[W] no res.triggered_rules";
+                        outputDiv.textContent = '发生未知错误，请联系管理员。';
                     }
-                    
-                    
                 }
             }
         } catch (e) {
-            outputDiv.textContent = `Error: ${e}`;
+            outputDiv.textContent = '发生未知错误，请联系管理员。'
         }
 
         // 启用输入框和按钮
@@ -141,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let csrftoken = getCookie('csrftoken');
         try {
-            let result = await fetch("/puzzle/r2q8/submit", {  // 替换为你的 URL
+            let result = await fetch("/puzzle/r2q8/submit", {
                 method: 'POST',
                 body: JSON.stringify({
                     mode: "do_spoil",
@@ -151,26 +218,73 @@ document.addEventListener('DOMContentLoaded', () => {
                     "X-CSRFToken": csrftoken,
                 },
             });
+            
+            create_base_page();
 
             if (!result.ok) {
+                // 大概率是网络问题 ｜ outputDiv.textContent = '发生未知错误，请联系管理员。'
                 outputDiv.textContent = `Error: ${result.status} ${result.statusText}`;
             } else {
                 let res = await result.json();
-
-                if (res.err_msg) {
-                    outputDiv.textContent = `${res.err_msg}`;
+                if (res.error) {
+                    outputDiv.textContent = `${res.error}`;
                 } else {
                     outputDiv.textContent = ``;
                 }
             }
         } catch (e) {
-            outputDiv.textContent = `Error: ${e}`;
+            outputDiv.textContent = '发生未知错误，请联系管理员。'
         }
 
         // 启用输入框和按钮
         wordInput.disabled = false;
     }
 
+    async function buy_a_sample(i) {
+        let csrftoken = getCookie('csrftoken');
+        try {
+            let result = await fetch("/puzzle/r2q8/submit", {
+                method: 'POST',
+                body: JSON.stringify({
+                    mode: "buy_a_sample",
+                    rule_index: i
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrftoken,
+                },
+            });
+
+            create_base_page();
+
+            if (!result.ok) {
+                outputDiv.textContent = `Error: ${result.status} ${result.statusText}`;
+            } else {
+                let res = await result.json();
+                if (res.error) {
+                    outputDiv.textContent = `${res.error}`;
+                } else {
+                    if (res.triggered_rules) {
+                        outputDiv.textContent = '';
+                        for (let i = 0; i < 27; i++) {
+                            // For triggered rules, reverse it color and bg-color
+                            const is_triggered = Object.entries(res.triggered_rules).find(([key]) => parseInt(key) === i);
+                            if (is_triggered) {
+                                $(`#${i}`).css({
+                                    backgroundColor: 'white',
+                                    color: 'black'
+                                });
+                            }
+                        }
+                    } else {
+                        outputDiv.textContent = '发生未知错误，请联系管理员。';
+                    }
+                }
+            }
+        } catch (e) {
+            outputDiv.textContent = '发生未知错误，请联系管理员。'
+        }
+    }
 
     function getCookie(name) {
         let cookieValue = null;
@@ -187,6 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return cookieValue;
     }
 
+    
     $('#r2q8-form').on('submit', guess_a_word);
     $('#r2q8-do_spoil').on('submit', do_spoil);
     // TODO other submit function (buy_a_sample, do_spoil)

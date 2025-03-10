@@ -1,6 +1,8 @@
 from typing import Dict, List
 
 # constants
+SPOIL_TEXT = "BADGER BLAMEWORTHY CLIMBED DOUBTING ICELAND METABOLIC PLATINUM POINTY RAVEN SILVER TOYED VIETNAM"
+
 with open("puzzles/puzzlehandlers/dictionary.txt") as fp:
     WORD_SET = set(fp.readlines())
 with open("puzzles/puzzlehandlers/adjectives.txt") as fp:

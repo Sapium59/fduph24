@@ -59,7 +59,9 @@ html {
     --input-font: monospace;
     --answer-font: monospace;
 
-
+    
+    /* TODO decide the right margin */
+    --rightbar-width: 20vw;
 }
 
 body {

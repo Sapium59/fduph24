@@ -8,9 +8,10 @@ from django.views.decorators.http import require_POST
 
 from puzzles.messaging import log_puzzle_info
 from ..models import Team
-from .r2q8_data import IPA_DICT, CHEMICAL_ELEMENTS, VOWELS, WORD_SET, ADJ_SET, ANIMAL_SET, COUNTRY_SET
+from .r2q8_data import SPOIL_TEXT, IPA_DICT, CHEMICAL_ELEMENTS, VOWELS, WORD_SET, ADJ_SET, ANIMAL_SET, COUNTRY_SET
 
 SPOIL_COST = 50
+COIN_REWARD = 5
 
 # utils
 def clear_word(word: str):
@@ -147,17 +148,29 @@ RULES_LIST: List[Tuple[int, str, Callable[[str], bool]]] = [
 def _get_newly_known_indice(triggered_rules_indice: List[int]) -> List[int]:
     LINES = [{i + 5 * j for i in range(5)} for j in range(5)] + \
         [{j + 5 * i for i in range(5)} for j in range(5)] + \
-        [{0, 6, 12, 18, 24}]
+        [{0, 6, 12, 18, 24}, {5, 9, 13, 17, 21}]
     newly_known_lines = [line for line in LINES if all(index in triggered_rules_indice for index in line)]
     newly_known_indice = set([idx for line in newly_known_lines for idx in line])
     return sorted(list(newly_known_indice))
 
 def update(puzzle_bingo_game_data, triggered_rules_indice, guessed_word: str, max_word_history: int = 100):
-    known_rules_indice: List[int] = puzzle_bingo_game_data["known_rules"]
+    known_rules_indice: List[int] = sorted(list((puzzle_bingo_game_data["known_rules"].keys())))
     newly_known_indice: List[int] = _get_newly_known_indice(triggered_rules_indice)
+    
+    # update known rules
     updated_known_rules_indice = sorted(list(set(known_rules_indice + newly_known_indice)))
-    puzzle_bingo_game_data["known_rules"] = updated_known_rules_indice
-    puzzle_bingo_game_data["word_history"].append(guessed_word)
+    puzzle_bingo_game_data["known_rules"] = {idx: RULES_LIST[idx][1] for idx in updated_known_rules_indice}
+    
+    # update coin num
+    total_coin_reward = COIN_REWARD * len(set(newly_known_indice) - set(known_rules_indice))
+    puzzle_bingo_game_data["bingo_coin_num"] += total_coin_reward
+
+    # update history, format: "ICELAND 4,7,9,17,18,19,22,23,24,25,26,27"
+    new_history_str = f"{guessed_word} {','.join([str(1+i) for i in triggered_rules_indice])}"
+    if new_history_str in puzzle_bingo_game_data["word_history"]:
+        puzzle_bingo_game_data["word_history"].remove(new_history_str)
+    puzzle_bingo_game_data["word_history"].append(new_history_str)
+    # truncate to len <= 100
     if len(puzzle_bingo_game_data["word_history"]) > max_word_history:
         puzzle_bingo_game_data["word_history"] = puzzle_bingo_game_data["word_history"][-max_word_history:]
     return puzzle_bingo_game_data
@@ -172,6 +185,17 @@ def submit(request):
             puzzle_bingo_game_data = team.get_default_puzzle_bingo_game_data()
         else:
             print(puzzle_bingo_game_data)
+            # 数据结构改动，暂时兼容性
+            # if isinstance(puzzle_bingo_game_data["known_rules"], list):
+            if True:
+                puzzle_bingo_game_data["known_rules"] = {int(idx): RULES_LIST[int(idx)][1] for idx in puzzle_bingo_game_data["known_rules"]}
+                print('puzzle_bingo_game_data["known_rules"]', puzzle_bingo_game_data["known_rules"])
+                request.context.team.save()
+            if puzzle_bingo_game_data["bingo_spoiled"] == True:
+                puzzle_bingo_game_data["bingo_spoiled"] = SPOIL_TEXT
+            # elif puzzle_bingo_game_data["bingo_spoiled"] == False:
+            #     puzzle_bingo_game_data["bingo_spoiled"] = ''
+
         bingo_coin_num = puzzle_bingo_game_data["bingo_coin_num"]
         bingo_spoiled = puzzle_bingo_game_data["bingo_spoiled"]
 
@@ -183,6 +207,15 @@ def submit(request):
             # submittion & rules check
             word = body.get("word", "")
             word = clear_word(word)
+            if word not in WORD_SET:
+                ret_dict = {
+                    'error': '请参照我们提供的字典来选择单词。', 
+                    'correct': True,
+                    'triggered_rules': {},
+                    'bingo_coin_num': bingo_coin_num,
+                    'bingo_spoiled': bingo_spoiled
+                }
+
             triggered_rules_indice = [item[0] for item in RULES_LIST if item[2](word)]
             # TODO update user data
             puzzle_bingo_game_data = update(puzzle_bingo_game_data, triggered_rules_indice, guessed_word=word)
@@ -190,17 +223,19 @@ def submit(request):
             ret_dict = {
                 'error': '', 
                 'correct': True,
-                # 'triggered_rules': {idx: RULES_LIST[idx][1] for idx in triggered_rules_indice},
+                # 'known_rules': puzzle_bingo_game_data["known_rules"],
                 'triggered_rules': {idx: word for idx in triggered_rules_indice},  # trigger时不给rule内容，五个连成一线变成known才给
                 'bingo_coin_num': bingo_coin_num,
                 'bingo_spoiled': bingo_spoiled
             }
         elif mode == "do_spoil":
-            pass  # TODO
             if bingo_coin_num >= SPOIL_COST and not bingo_spoiled:
-                pass
+                puzzle_bingo_game_data["bingo_spoiled"] = SPOIL_TEXT
+                puzzle_bingo_game_data["bingo_coin_num"] -= SPOIL_COST
+                request.context.team.save()
                 ret_dict = {
                     'error': '', 
+                    'spoil_text': SPOIL_TEXT,
                     'correct': True,
                     'triggered_rules': {},
                     'bingo_coin_num': bingo_coin_num,
@@ -208,10 +243,8 @@ def submit(request):
                 }
             elif bingo_spoiled:
                 err_msg = f'你已经暗箱操作过了！'
-                print(err_msg)
                 ret_dict = {
                     'error': err_msg,
-                    'err_msg': err_msg,
                     'correct': True,
                     'triggered_rules': {},
                     'bingo_coin_num': bingo_coin_num,
@@ -219,10 +252,8 @@ def submit(request):
                 }
             else:
                 err_msg = f'你没有足够的奖金来暗箱操作（需要{SPOIL_COST}）'
-                print(err_msg)
                 ret_dict = {
                     'error': err_msg,
-                    'err_msg': err_msg,
                     'correct': True,
                     'triggered_rules': {},
                     'bingo_coin_num': bingo_coin_num,
@@ -230,19 +261,28 @@ def submit(request):
                 }
         elif mode == "buy_a_sample":
             pass  # TODO
-            ret_dict = {}
+            ret_dict = {
+                'error': '',
+                'correct': True,
+                'triggered_rules': {},
+                'bingo_coin_num': bingo_coin_num,
+                'bingo_spoiled': bingo_spoiled
+            }
         else:
             print(f"Warning: unknown mode in r2q8: {mode}")
-            ret_dict = {}
+            ret_dict = {'error': '发生未知错误，请联系管理员。',}
 
         # when no error, ret_dict['error'] must be empty
-        ret_dict['error'] = ''
+        # ret_dict['error'] = ''
         print(f"[I] r2q8: ret_dict={ret_dict}")
         return ret_dict
     except:
-        traceback.print_exc()
-
-        # You may wish to provide more details or a call to action. Do you want
-        # the solvers to retry, or email you?
-        return {'error': 'An error occurred! Please contact the administrator.', 'correct': False}
+        print(traceback.print_exc())
+        return {
+            'error': '发生未知错误，请联系管理员。',
+            'correct': True,
+            'triggered_rules': {},
+            'bingo_coin_num': bingo_coin_num,
+            'bingo_spoiled': bingo_spoiled
+        }
 
