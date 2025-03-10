@@ -4,11 +4,11 @@ from typing import Dict, List
 SPOIL_TEXT = "BADGER BLAMEWORTHY CLIMBED DOUBTING ICELAND METABOLIC PLATINUM POINTY RAVEN SILVER TOYED VIETNAM"
 
 with open("puzzles/puzzlehandlers/dictionary.txt") as fp:
-    WORD_SET = set(fp.readlines())
+    WORD_SET = set(fp.read().split("\n"))
 with open("puzzles/puzzlehandlers/adjectives.txt") as fp:
-    ADJ_SET = set(fp.readlines())
+    ADJ_SET = set(fp.read().split("\n"))
 with open("puzzles/puzzlehandlers/animals.txt") as fp:
-    ANIMAL_SET = set(fp.readlines())
+    ANIMAL_SET = set(fp.read().split("\n"))
 
 COUNTRY_SET: List[str] = [
         "AFGHANISTAN", "ALBANIA", "ALGERIA", "AMERICA", "ANDORRA", "ANGOLA", "ARGENTINA", "ARMENIA",

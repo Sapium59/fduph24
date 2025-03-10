@@ -1,6 +1,7 @@
+import json
+import random
 import re
 import traceback
-import json
 from typing import Tuple, Dict, List, Callable
 from collections import OrderedDict
 
@@ -11,7 +12,11 @@ from ..models import Team
 from .r2q8_data import SPOIL_TEXT, IPA_DICT, CHEMICAL_ELEMENTS, VOWELS, WORD_SET, ADJ_SET, ANIMAL_SET, COUNTRY_SET
 
 SPOIL_COST = 50
+BUY_A_SAMPLE_COST = 1
 COIN_REWARD = 5
+
+MILESTONE = "DIYBINGOCARD"
+
 
 # utils
 def clear_word(word: str):
@@ -59,7 +64,6 @@ def contains_five_letter_word(word: str) -> bool:
     return False
 
 def is_alternating_vowel_consonant(word: str) -> bool:
-    
     for i in range(len(word) - 1):
         current_char = word[i]
         next_char = word[i + 1]
@@ -143,6 +147,25 @@ RULES_LIST: List[Tuple[int, str, Callable[[str], bool]]] = [
     (26, '恰在一条线上差一点BINGO', lambda word: has_almost_line(word)),
 ]
 
+def get_sample_word(rule_index: int) -> str:
+    if rule_index == 1:
+        word = random.sample(CHEMICAL_ELEMENTS, 1)[0]
+    elif rule_index == 12:
+        word = random.sample(ADJ_SET, 1)[0]
+    elif rule_index == 19:
+        word = random.sample(ANIMAL_SET, 1)[0]
+    elif rule_index == 23:
+        word = random.sample(COUNTRY_SET, 1)[0]
+    else:
+        checker = RULES_LIST[rule_index][2]
+        for trial, word in enumerate(random.sample(WORD_SET, len(WORD_SET))):
+            if checker(word):
+                print(f"trial: {trial}")
+                break
+        else:
+            word = "发生了些意外……请联系管理员。"
+    print("word: ", word)
+    return word
 
 # key operations
 def _get_newly_known_indice(triggered_rules_indice: List[int]) -> List[int]:
@@ -215,19 +238,17 @@ def submit(request):
                     'bingo_coin_num': bingo_coin_num,
                     'bingo_spoiled': bingo_spoiled
                 }
-
-            triggered_rules_indice = [item[0] for item in RULES_LIST if item[2](word)]
-            # TODO update user data
-            puzzle_bingo_game_data = update(puzzle_bingo_game_data, triggered_rules_indice, guessed_word=word)
-            request.context.team.save()
-            ret_dict = {
-                'error': '', 
-                'correct': True,
-                # 'known_rules': puzzle_bingo_game_data["known_rules"],
-                'triggered_rules': {idx: word for idx in triggered_rules_indice},  # trigger时不给rule内容，五个连成一线变成known才给
-                'bingo_coin_num': bingo_coin_num,
-                'bingo_spoiled': bingo_spoiled
-            }
+            else:
+                triggered_rules_indice = [item[0] for item in RULES_LIST if item[2](word)]
+                puzzle_bingo_game_data = update(puzzle_bingo_game_data, triggered_rules_indice, guessed_word=word)
+                request.context.team.save()
+                ret_dict = {
+                    'error': 'BINGO! FDUPH账户已到账 999999999 金。现在给我们发送一份你自己制作的BINGO卡片吧~' if word == MILESTONE else '', 
+                    'correct': True,
+                    'triggered_rules': {idx: word for idx in triggered_rules_indice},  # trigger时不给rule内容，五个连成一线变成known才给
+                    'bingo_coin_num': bingo_coin_num,
+                    'bingo_spoiled': bingo_spoiled
+                }
         elif mode == "do_spoil":
             if bingo_coin_num >= SPOIL_COST and not bingo_spoiled:
                 puzzle_bingo_game_data["bingo_spoiled"] = SPOIL_TEXT
@@ -260,21 +281,32 @@ def submit(request):
                     'bingo_spoiled': bingo_spoiled
                 }
         elif mode == "buy_a_sample":
-            pass  # TODO
-            ret_dict = {
-                'error': '',
-                'correct': True,
-                'triggered_rules': {},
-                'bingo_coin_num': bingo_coin_num,
-                'bingo_spoiled': bingo_spoiled
-            }
+            if 'rule_index' in body and isinstance(body['rule_index'], int) and 0 <= body['rule_index'] <= 26:
+                sample_word = get_sample_word(body['rule_index'])  # FIXME
+                puzzle_bingo_game_data["bingo_coin_num"] -= BUY_A_SAMPLE_COST
+                request.context.team.save()
+                ret_dict = {
+                    'error': '',
+                    'correct': True,
+                    'sample_word': sample_word,
+                    'bingo_coin_num': bingo_coin_num,
+                    'bingo_spoiled': bingo_spoiled
+                }
+            else:
+                ret_dict = {
+                    'error': '发生未知错误，请联系管理员。',
+                    'correct': True,
+                    'sample_word': '',
+                    'bingo_coin_num': bingo_coin_num,
+                    'bingo_spoiled': bingo_spoiled
+                }
         else:
             print(f"Warning: unknown mode in r2q8: {mode}")
-            ret_dict = {'error': '发生未知错误，请联系管理员。',}
+            ret_dict = {'error': '发生未知错误，请联系管理员。'}
 
         # when no error, ret_dict['error'] must be empty
         # ret_dict['error'] = ''
-        print(f"[I] r2q8: ret_dict={ret_dict}")
+        # print(f"[I] r2q8: ret_dict={ret_dict}")
         return ret_dict
     except:
         print(traceback.print_exc())

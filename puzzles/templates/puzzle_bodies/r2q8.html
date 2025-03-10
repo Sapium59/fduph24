@@ -38,9 +38,15 @@
         <div align="center" id="spoiler_div" style="margin: 0 10%;">
             <form id="r2q8-do_spoil" autocomplete="off" action="javascript:void(0);">
                 {% csrf_token %}
-                <input type="submit" value="暗箱操作（耗费50/{{team.puzzle_bingo_game_data.bingo_coin_num}}金币）">
+                <input type="submit" value="暗箱操作 花费50金">
             </form>
         </div>
+
+        <!-- 当前金币 -->
+        <div align="center">
+            <p> 你当前拥有 {{team.puzzle_bingo_game_data.bingo_coin_num}} 金</p>
+        </div>
+
     </div>
 
     <!-- 历史记录 -->
@@ -61,6 +67,22 @@
 
 
 <script type="text/javascript">
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+
     function create_base_block(id) {
         const square = document.createElement('div');
         square.id = id;
@@ -73,6 +95,19 @@
         square.style.justifyContent = 'center';
         square.style.fontSize = '12px';
         square.style.border = '2px solid black';
+        return square;
+    }
+    function create_index_block(index) {
+        const square = document.createElement('div');
+        square.style.width = '50px';
+        square.style.height = '50px';
+        square.style.backgroundColor = 'white';
+        square.style.color = 'black';
+        square.style.display = 'flex';
+        square.style.alignItems = 'center';
+        square.style.justifyContent = 'center';
+        square.style.fontSize = '20px';
+        square.textContent = `${index}`;
         return square;
     }
 
@@ -89,13 +124,39 @@
             container.style.fontSize = '100%';
             container.style.lineHeight = '80%';
         }
-        grid_container_5_5.style.gridTemplateRows = 'repeat(5, 50px)'; // 5 rows
-        grid_container_5_5.style.gridTemplateColumns = 'repeat(5, 50px)'; // 5 columns
+        grid_container_5_5.style.gridTemplateRows = 'repeat(6, 50px)'; // 5 rows
+        grid_container_5_5.style.gridTemplateColumns = 'repeat(7, 50px)'; // 5 columns
         grid_container_1_2.style.gridTemplateRows = 'repeat(1, 50px)'; // 1 rows
         grid_container_1_2.style.gridTemplateColumns = 'repeat(2, 50px)'; // 2 columns
     
         // Fill the grids
         for (let i = 0; i < 27; i++) {
+            if (i == 0) {
+                grid_container_5_5.appendChild(create_index_block(1));
+                grid_container_5_5.appendChild(create_index_block(2));
+                grid_container_5_5.appendChild(create_index_block(8));
+                grid_container_5_5.appendChild(create_index_block(3));
+                grid_container_5_5.appendChild(create_index_block(4));
+                grid_container_5_5.appendChild(create_index_block(7));
+                grid_container_5_5.appendChild(create_index_block(12));
+                grid_container_5_5.appendChild(create_index_block(6));
+            }
+            if (i == 5) {
+                grid_container_5_5.appendChild(create_index_block(''));
+                grid_container_5_5.appendChild(create_index_block(10));
+            }
+            if (i == 10) {
+                grid_container_5_5.appendChild(create_index_block(''));
+                grid_container_5_5.appendChild(create_index_block(7));
+            }
+            if (i == 15) {
+                grid_container_5_5.appendChild(create_index_block(''));
+                grid_container_5_5.appendChild(create_index_block(5));
+            }
+            if (i == 20) {
+                grid_container_5_5.appendChild(create_index_block(''));
+                grid_container_5_5.appendChild(create_index_block(11));
+            }
             const square = create_base_block(i);
             // For known rules, tick it and hover to show rule content
             const is_known = known_rules.find(([key]) => parseInt(key) === i);
@@ -112,11 +173,16 @@
             // For unknown rules, allow buy_a_sample
             } else {
                 square.addEventListener('mouseover', () => {
-                    square.textContent = '';
+                    square.textContent = '随机示例 花费1金';
                 });
                 square.addEventListener('click', () => {
-                    buy_a_sample(i);  // FIXME
+                    buy_a_sample(i);
                 });
+                square.addEventListener('click', (index => {
+                    return () => {
+                        buy_a_sample(index);
+                    };
+                })(i));
                 square.addEventListener('mouseout', () => {
                     square.textContent = '';
                 });
@@ -143,11 +209,7 @@
         }
     }
 
-// This demo code uses jQuery and modern JavaScript features flagrantly.
-// You should evaluate your own needs.
-document.addEventListener('DOMContentLoaded', () => {
-    create_base_page();
-    
+
     async function guess_a_word() {
         const wordInput = document.getElementById('wordInput');
         const outputDiv = document.getElementById('output');
@@ -241,6 +303,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function buy_a_sample(i) {
+        const outputDiv = document.getElementById('output');
+        
         let csrftoken = getCookie('csrftoken');
         try {
             let result = await fetch("/puzzle/r2q8/submit", {
@@ -264,18 +328,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (res.error) {
                     outputDiv.textContent = `${res.error}`;
                 } else {
-                    if (res.triggered_rules) {
-                        outputDiv.textContent = '';
-                        for (let i = 0; i < 27; i++) {
-                            // For triggered rules, reverse it color and bg-color
-                            const is_triggered = Object.entries(res.triggered_rules).find(([key]) => parseInt(key) === i);
-                            if (is_triggered) {
-                                $(`#${i}`).css({
-                                    backgroundColor: 'white',
-                                    color: 'black'
-                                });
-                            }
-                        }
+                    if (res.sample_word) {
+                        console.log(`$(res.sample_word)`);
+                        outputDiv.textContent = `${res.sample_word}`;
                     } else {
                         outputDiv.textContent = '发生未知错误，请联系管理员。';
                     }
@@ -286,26 +341,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
 
-    
-    $('#r2q8-form').on('submit', guess_a_word);
-    $('#r2q8-do_spoil').on('submit', do_spoil);
-    // TODO other submit function (buy_a_sample, do_spoil)
-});
+    // This demo code uses jQuery and modern JavaScript features flagrantly.
+    // You should evaluate your own needs.
+    document.addEventListener('DOMContentLoaded', () => {
+        create_base_page();
+        
+
+
+        
+        $('#r2q8-form').on('submit', guess_a_word);
+        $('#r2q8-do_spoil').on('submit', do_spoil);
+        // TODO other submit function (buy_a_sample, do_spoil)
+    });
 </script>
 
 
