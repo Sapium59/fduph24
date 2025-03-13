@@ -5,6 +5,151 @@
     本题有中间答案验证。
 </div>
 
+我们《谜神》已经开服5周年了，但有玩家反馈说，这次的周年池老版本到新版本都有角色抽不出来？
+{.flavor}
+
+
+
+<div style="display: flex">
+    <div style="width:55%; margin-right: 24px">
+        <!-- 抽卡结果 -->
+        <div id="output" align="center"></div>
+                
+        <!-- 抽卡按钮 -->
+        <div>
+            <table align="center">
+                <tr>
+                    <td style="border-color: transparent;">
+                        <form id="r3q3_get_1" autocomplete="off" action="javascript:void(0);" onclick="r3q3_submit(1)">
+                            {% csrf_token %}
+                            <input type="submit" value="单抽">
+                        </form>
+                    </td>
+                    <td style="border-color: transparent;">
+                        <form id="r3q3_get_10" autocomplete="off" action="javascript:void(0);" onclick="r3q3_submit(10)">
+                            {% csrf_token %}
+                            <input type="submit" value="十连">
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div style="font-size: 50%;">*注：新版本卡的抽取概率大于旧版本卡。</div>
+    </div>
+
+    <!-- 历史记录 -->
+    {% if team %}
+    <div style="width: 45%; margin-left: 24px;">
+        <div id="history">
+            ...
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    const outputDiv = document.getElementById('output');
+    const historyDiv = document.getElementById('history');
+
+    function initHistory() {
+        let history = Object.entries({{ team.puzzle_genshin_game_data.history|safe }}).reverse();
+    
+        let historyTable = document.createElement('table');
+        let tr = document.createElement('tr');
+        let th_0 = document.createElement('th');
+        th_0.textContent = '抽取历史';
+        th_0.style.width = '65%';
+        tr.appendChild(th_0);
+        let th_1 = document.createElement('th');
+        th_1.textContent = '卡池版本';
+        th_1.style.width = '35%';
+        tr.appendChild(th_1);
+        historyTable.appendChild(tr);
+        
+        for (sample of history) {
+            let key = Object.getOwnPropertyNames(sample[1]);
+            let tr = document.createElement('tr');
+            let td_0 = document.createElement('td');
+            td_0.textContent = key;
+            tr.appendChild(td_0);
+            let td_1 = document.createElement('td');
+            td_1.textContent = sample[1][key];
+            tr.appendChild(td_1);
+            historyTable.appendChild(tr);
+        }
+    
+        historyDiv.innerHTML = '';
+        historyDiv.appendChild(historyTable);
+    }
+    
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    async function r3q3_submit(num) {
+        let csrftoken = getCookie('csrftoken');
+        try {
+            let result = await fetch("/puzzle/r3q3/submit", {
+                method: 'POST',
+                body: JSON.stringify({
+                    num: num
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": csrftoken,
+                },
+            });
+
+            if (!result.ok) {
+                outputDiv.textContent = `Error: ${result.status} ${result.statusText}`;
+            } else {
+                let res = await result.json();
+                if (res.error) {
+                    outputDiv.textContent = `${res.error}`;
+                } else {
+                    new_items_text = res.new_items_text;  // list of dict, like [{'text1': 'type1'}, {'text2': 'typ2'}, ...]
+                    outputDiv.innerHTML = '';
+                    // TODO display the keys of new_items, each in a sub div, such that I can modify the div style with other function
+                            // Iterate over each item in new_items
+                    for (item of new_items_text) {
+                        let key = Object.getOwnPropertyNames(item);
+
+                        let itemDiv = document.createElement('div');
+                        itemDiv.textContent = `${key}`; // itemDiv.textContent = `${key}: ${item[key]}`;
+                        outputDiv.appendChild(itemDiv);
+                        
+                        let tr = document.createElement('tr');
+                        let td_0 = document.createElement('td');
+                        td_0.textContent = key;
+                        tr.appendChild(td_0);
+                        let td_1 = document.createElement('td');
+                        td_1.textContent = item[key];
+                        tr.appendChild(td_1);
+                        historyDiv.firstChild.insertBefore(tr, historyDiv.firstChild.childNodes[1]);
+                    };
+                } 
+            }
+        } catch (e) {
+            console.log(e);
+            outputDiv.textContent = '发生未知错误，请联系管理员。'
+        }
+    }
+
+    initHistory();
+</script>
+
 <button class="btn clipboard-button"></button>
 
 {% endblock %}

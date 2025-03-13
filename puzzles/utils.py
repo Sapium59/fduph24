@@ -9,5 +9,5 @@ def get_default_puzzle_bingo_game_data():
 
 def get_default_puzzle_genshin_game_data():
     return {
-        "placeholder": 1,  # TODO
+        "history": []
     }
