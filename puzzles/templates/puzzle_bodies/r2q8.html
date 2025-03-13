@@ -43,7 +43,7 @@
         </div>
 
         <!-- 当前金币 -->
-        <div align="center">
+        <div align="center" id="current_gold">
             <p> 你当前拥有 {{team.puzzle_bingo_game_data.bingo_coin_num}} 金</p>
         </div>
 
@@ -178,11 +178,6 @@
                 square.addEventListener('click', () => {
                     buy_a_sample(i);
                 });
-                square.addEventListener('click', (index => {
-                    return () => {
-                        buy_a_sample(index);
-                    };
-                })(i));
                 square.addEventListener('mouseout', () => {
                     square.textContent = '';
                 });
@@ -329,8 +324,9 @@
                     outputDiv.textContent = `${res.error}`;
                 } else {
                     if (res.sample_word) {
-                        console.log(`$(res.sample_word)`);
                         outputDiv.textContent = `${res.sample_word}`;
+                        console.log(`<p> 你当前拥有 ${res.bingo_coin_num} 金</p>`);
+                        document.getElementById('current_gold').innerHTML = `<p> 你当前拥有 ${res.bingo_coin_num} 金</p>`;
                     } else {
                         outputDiv.textContent = '发生未知错误，请联系管理员。';
                     }
