@@ -5,15 +5,15 @@
 <h1 id="countdown" style="text-align: center"></h1>
 
 {% if team %}
-    <div>
+    <div align="center">
         <form method="post" action="{% url 'claim_start' %}">
             {% csrf_token %}
-            <button class="btn btn-dark" type="submit" id="claim_start">点击开始</button>
+            <button class="btn btn-dark" type="submit" id="claim_start">立刻开始</button>
         </form>
     </div>
 {% else %}
     <div>
-        <p>login to unlock the start button</p>
+        <p>请登录以访问本页面。</p>
     </div>
 {% endif %}
 
@@ -23,14 +23,19 @@ setInterval(function() {
     var diff = (start - new Date) / 1000;
     var elt = document.getElementById('countdown');
     if (diff >= 0) {
-        var min = diff / 60 | 0;
         var sec = diff % 60 | 0;
         if (sec < 10) {
             sec = '0' + sec;
         }
-        elt.textContent = min + ':' + sec;
+        var min_ = diff / 60 | 0;
+        var min = min_ % 60 | 0;
+        if (min < 10) {
+            min = '0' + min;
+        }
+        var hrs = min_ / 60 | 0;
+        elt.textContent = hrs + ':' + min + ':' + sec;
     } else {
-        elt.textContent = '{% translate "Refresh the page!" %}';
+        elt.textContent = '活动开始倒计时已结束，请刷新页面。';
     }
 }, 100);
 </script>
