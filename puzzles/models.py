@@ -100,6 +100,8 @@ class Puzzle(models.Model):
         help_text=_('Answer (fine if unnormalized)'),
     )
 
+    max_guess = models.IntegerField(default=MAX_GUESSES_PER_PUZZLE, verbose_name='默认最大回答次数')
+
     round = models.ForeignKey(Round, on_delete=models.CASCADE, verbose_name='所在轮次')
     order = models.IntegerField(default=0, verbose_name='轮内编号')
     is_meta = models.BooleanField(default=False, verbose_name='Is meta')
@@ -267,7 +269,7 @@ class Team(models.Model):
 
     def guesses_remaining(self, puzzle):
         return (
-            MAX_GUESSES_PER_PUZZLE +
+            getattr(puzzle, 'max_guess', MAX_GUESSES_PER_PUZZLE) +
             self.num_extra_guesses(puzzle) -
             self.num_wrong_guesses(puzzle)
         )
