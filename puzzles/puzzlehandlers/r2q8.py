@@ -239,6 +239,7 @@ def submit(request):
                     'bingo_spoiled': bingo_spoiled
                 }
             else:
+                print(f"{word} in ADJ_SET: {word in ADJ_SET}")
                 triggered_rules_indice = [item[0] for item in RULES_LIST if item[2](word)]
                 puzzle_bingo_game_data = update(puzzle_bingo_game_data, triggered_rules_indice, guessed_word=word)
                 request.context.team.save()
@@ -281,8 +282,16 @@ def submit(request):
                     'bingo_spoiled': bingo_spoiled
                 }
         elif mode == "buy_a_sample":
-            if 'rule_index' in body and isinstance(body['rule_index'], int) and 0 <= body['rule_index'] <= 26:
-                sample_word = get_sample_word(body['rule_index'])  # FIXME
+            if bingo_coin_num < BUY_A_SAMPLE_COST:
+                ret_dict = {
+                    'error': '请先凭借智慧积累一些财富吧……',
+                    'correct': True,
+                    'sample_word': '',
+                    'bingo_coin_num': bingo_coin_num,
+                    'bingo_spoiled': bingo_spoiled
+                }
+            elif 'rule_index' in body and isinstance(body['rule_index'], int) and 0 <= body['rule_index'] <= 26:
+                sample_word = get_sample_word(body['rule_index'])
                 puzzle_bingo_game_data["bingo_coin_num"] -= BUY_A_SAMPLE_COST
                 request.context.team.save()
                 ret_dict = {

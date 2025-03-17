@@ -6,9 +6,9 @@ SPOIL_TEXT = "BADGER BLAMEWORTHY CLIMBED DOUBTING ICELAND METABOLIC PLATINUM POI
 with open("puzzles/puzzlehandlers/dictionary.txt") as fp:
     WORD_SET = set(fp.read().split("\n"))
 with open("puzzles/puzzlehandlers/adjectives.txt") as fp:
-    ADJ_SET = set(fp.read().split("\n"))
+    ADJ_SET = set([word.upper() for word in fp.read().split("\n")]).intersection(WORD_SET)
 with open("puzzles/puzzlehandlers/animals.txt") as fp:
-    ANIMAL_SET = set(fp.read().split("\n"))
+    ANIMAL_SET = set([word.upper() for word in fp.read().split("\n")])
 
 COUNTRY_SET: List[str] = [
         "AFGHANISTAN", "ALBANIA", "ALGERIA", "AMERICA", "ANDORRA", "ANGOLA", "ARGENTINA", "ARMENIA",
@@ -63383,7 +63383,7 @@ IPA_DICT: Dict[str, str] = {
     "ZYGOTE": "/zaɪɡoʊt/"
 }
 
-CHEMICAL_ELEMENTS: List[str] = [
+_CHEMICAL_ELEMENTS: List[str] = [
     "Hydrogen", "Helium", "Lithium", "Beryllium", "Boron", "Carbon", 
     "Nitrogen", "Oxygen", "Fluorine", "Neon", "Sodium", "Magnesium", 
     "Aluminum", "Silicon", "Phosphorus", "Sulfur", "Chlorine", "Argon", 
@@ -63407,6 +63407,8 @@ CHEMICAL_ELEMENTS: List[str] = [
     "Copernicium", "Nihonium", "Flerovium", "Moscovium", "Livermorium", 
     "Tennessine", "Oganesson"
 ]
+
+CHEMICAL_ELEMENTS = [word.upper() for word in _CHEMICAL_ELEMENTS]
 
 VOWELS: str = 'AEIOUaeiou'
 
