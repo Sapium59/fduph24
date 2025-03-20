@@ -4,7 +4,7 @@ html {
     
     --fdu-rgb: 36, 90, 165;
     --sidebar-bg-rgb: 45, 59, 69;
-    --page-bg-rgb: var(--white-color);
+    --page-bg-rgb: 249, 248, 245;
     --accent-bg-rgb: 40, 26, 33;
     --dark-accent-rgb: 13, 4, 26;
     --accent-rgb: var(--dark-accent-rgb);
