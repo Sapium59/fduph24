@@ -171,7 +171,7 @@ def get_sample_word(rule_index: int) -> str:
 def _get_newly_known_indice(triggered_rules_indice: List[int]) -> List[int]:
     LINES = [{i + 5 * j for i in range(5)} for j in range(5)] + \
         [{j + 5 * i for i in range(5)} for j in range(5)] + \
-        [{0, 6, 12, 18, 24}, {5, 9, 13, 17, 21}]
+        [{0, 6, 12, 18, 24}, {4, 8, 12, 16, 20}]
     newly_known_lines = [line for line in LINES if all(index in triggered_rules_indice for index in line)]
     newly_known_indice = set([idx for line in newly_known_lines for idx in line])
     return sorted(list(newly_known_indice))
