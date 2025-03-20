@@ -323,9 +323,15 @@ class HintsConsumer(AdminWebsocketConsumer):
     group_id = 'hints'
 
 def show_unlock_notification(context, unlock):
+    if unlock.puzzle.slug == META_META_SLUG:
+        text = "终于快写完了！就差最后一个部分了……"
+    elif unlock.puzzle.is_meta:
+        text = '又到了写月度总结的时候……'
+    else:
+        text = '导师布置了新的课题，请注意查收'
     data = json.dumps({
         'title': str(unlock.puzzle),
-        'text': _('You’ve unlocked a new puzzle!'),
+        'text': text,
         'link': reverse('puzzle', args=(unlock.puzzle.slug,)),
     })
     # There's an awkward edge case where the person/browser tab that actually
