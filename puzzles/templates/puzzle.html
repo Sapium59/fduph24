@@ -47,7 +47,11 @@
 
 {% if puzzle_answer and puzzle.is_meta %}    
     <div class="notice_info">
-        你推动了<a href="/story">剧情</a>发展……
+        {% if puzzle.slug == 'meta-meta' %}    
+            你推动了<b>重大的<a href="/victory">剧情</b></a>发展……
+        {% else %}
+            你推动了<a href="/story">剧情</a>发展……
+        {% endif %}
     </div>
 {% endif %}
 
