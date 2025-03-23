@@ -65,7 +65,7 @@ def get_bell() -> Dict[str, str]:
 
 def get_wndw() -> Dict[str, str]:
     """ 观测窗 """
-    src = ['S', 'A', 'M', 'P', 'L', 'I', 'N', 'G']
+    src = ['S', 'A', 'M', 'P', 'L', 'I', '_', 'G']
     show_idx = random.choice(list(range(len(src))))
     show_str = ' '.join(['_' if idx != show_idx else src[idx] for idx in range(len(src))])
     return {show_str: "观测窗"}
@@ -73,7 +73,7 @@ def get_wndw() -> Dict[str, str]:
 
 def get_one() -> Dict[str, Literal['poem', 'freq', 'prob', 'bell', 'wndw']]:
     funcs = [get_poem, get_bell, get_wndw, get_prob, get_freq ]
-    weights = [1,2,3,4,5]
+    weights = [2,4,1,3,5]
     func = random.choices(funcs, weights=weights)[0]
     return func()
 
@@ -91,6 +91,11 @@ def submit(request):
         get_num = body.get("num")
         if get_num not in [1, 10]:
             raise ValueError('Expect get num to be 1 or 10.')
+        if len(puzzle_genshin_game_data["history"]) >= 2000:
+            return {
+                'error': '你并不需要那么多次抽取来解决本题。', 
+                'correct': True,
+            }
 
         new_items = [get_one() for _ in range(get_num)]
         puzzle_genshin_game_data["history"].extend(new_items)

@@ -208,12 +208,18 @@ def submit(request):
             puzzle_bingo_game_data = team.get_default_puzzle_bingo_game_data()
         else:
             print(puzzle_bingo_game_data)
-            # 数据结构改动，暂时兼容性
-            # if isinstance(puzzle_bingo_game_data["known_rules"], list):
-            if True:
-                puzzle_bingo_game_data["known_rules"] = {int(idx): RULES_LIST[int(idx)][1] for idx in puzzle_bingo_game_data["known_rules"]}
-                print('puzzle_bingo_game_data["known_rules"]', puzzle_bingo_game_data["known_rules"])
-                request.context.team.save()
+            # 数据结构改动: 版本兼容性
+            if isinstance(puzzle_bingo_game_data["known_rules"], list):
+                indice = puzzle_bingo_game_data["known_rules"]
+            else:
+                indice = list(puzzle_bingo_game_data["known_rules"].keys())
+            if 25 not in indice:
+                indice.append(25)
+            if 26 not in indice:
+                indice.append(26)
+            puzzle_bingo_game_data["known_rules"] = {int(idx): RULES_LIST[int(idx)][1] for idx in indice}
+            request.context.team.save()
+
             if puzzle_bingo_game_data["bingo_spoiled"] == True:
                 puzzle_bingo_game_data["bingo_spoiled"] = SPOIL_TEXT
             # elif puzzle_bingo_game_data["bingo_spoiled"] == False:
