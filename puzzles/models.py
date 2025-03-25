@@ -3,6 +3,7 @@ import datetime
 import re
 import unicodedata
 from urllib.parse import quote
+from datetime import timedelta
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -33,10 +34,10 @@ from puzzles.messaging import (
 )
 
 from puzzles.hunt_config import (
+    HUNT_START_TIME,
     HUNT_END_TIME,
     MAX_GUESSES_PER_PUZZLE,
     HINTS_ENABLED,
-    HINTS_PER_INTERVAL,
     HINT_INTERVAL,
     HINT_TIME,
     TEAM_AGE_BEFORE_HINTS,
@@ -186,8 +187,10 @@ class Team(models.Model):
     )
 
     # Time of creation of team
-    creation_time = models.DateTimeField(auto_now_add=True, verbose_name='注册时间')
-
+    creation_time = models.DateTimeField(
+        default=timezone.now() + timedelta(hours=8),
+        verbose_name='注册时间')
+        
     start_offset = models.DurationField(
         default=datetime.timedelta, verbose_name='提前开始时间',
         help_text=_('''How much earlier this team should start, for early-testing
@@ -341,12 +344,33 @@ class Team(models.Model):
 
         if not HINTS_ENABLED or self.hunt_is_over:
             return 0
-        if self.now < self.creation_time + TEAM_AGE_BEFORE_HINTS:
+        if self.now < self.creation_time:
             return self.total_hints_awarded
-        intervals = max(0, (self.now - (HINT_TIME - self.start_offset)) // HINT_INTERVAL + 1)
-        return self.total_hints_awarded + sum(HINTS_PER_INTERVAL[:intervals])
+        
+        start_time = HUNT_START_TIME - self.start_offset
+        num_days = self.now.day - start_time.day + 1  # include both ends
+        
+        count_mornings = num_days
+        count_evenings = num_days
+
+        if start_time.hour > 8:  # the team missed
+            count_mornings -= 1
+        if start_time.hour > 20:  # the team missed
+            count_evenings -= 1
+        count_evenings -= 1  # we dont grant hints in first evening
+        
+        if self.now.hour < 20:  # not yet granted
+            count_evenings -= 1
+        if self.now.hour < 8:  # not yet granted
+            count_evenings -= 1
+        
+        # 1 granted on beginning, 2 per morning and 2 per evening
+        count_hints_by_time = 1 + 2 * (count_mornings + count_evenings)
+        return self.total_hints_awarded + count_hints_by_time
+
 
     def num_hints_used(self):
+        print(self.team_name, "num_hints_used", sum(hint.consumes_hint for hint in self.asked_hints))
         return sum(hint.consumes_hint for hint in self.asked_hints)
 
     def num_hints_remaining(self):

@@ -136,9 +136,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-LANGUAGE_CODE = 'en-us' #FIXME
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'America/New_York' #FIXME
+TIME_ZONE = 'Asia/Shanghai'
+
 
 USE_I18N = True
 
@@ -160,12 +161,12 @@ STATICFILES_STORAGE = 'gph.storage.CustomStorage'
 # Email SMTP information
 
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'FIXME'
-EMAIL_HOST_USER = 'FIXME'
-EMAIL_HOST_PASSWORD = 'FIXME'
-EMAIL_PORT = 'FIXME'
+EMAIL_HOST = 'fdupuzzle.fun'
+EMAIL_HOST_USER = 'contact'
+EMAIL_HOST_PASSWORD = 'WeDoHave1Hunt!'
+EMAIL_PORT = '25'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_SUBJECT_PREFIX = '[FIXME Puzzle Hunt] '
+EMAIL_SUBJECT_PREFIX = '[FDUPH] '
 
 # https://docs.djangoproject.com/en/3.1/topics/logging/
 

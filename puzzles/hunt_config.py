@@ -7,13 +7,13 @@ from django.utils import timezone
 # it, maybe check those are what you want.
 HUNT_TITLE = 'Final Deadline Upcoming'
 # included in various templates and displayed on the static site
-HUNT_ORGANIZERS = 'FDUPH筹备组'
+HUNT_ORGANIZERS = '复旦大学推理协会谜题分部'
 # included in various templates and set as reply-to for automatic emails
-CONTACT_EMAIL = 'FIXME@example.com'
+CONTACT_EMAIL = 'contact@fdupuzzle.fun'
 # the sender from which automatic emails are sent; your mail sending service
 # might require you set this to something (check settings/base.py to put your
 # actual mail sending service credentials)
-MESSAGING_SENDER_EMAIL = 'no-reply@FIXME.example.com'
+MESSAGING_SENDER_EMAIL = 'no-reply@fdupuzzle.fun'
 
 # Change this to True to reveal the story page to everyone.
 STORY_PAGE_VISIBLE = True
@@ -35,12 +35,7 @@ MAX_MEMBERS_PER_TEAM = 6
 
 # If this is disabled, teams will not get any hints.
 HINTS_ENABLED = True
-# Teams accumulate this many hints each HINT_INTERVAL.
-HINTS_PER_INTERVAL = (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
-# Teams get hints every HINT_INTERVAL, starting at HINT_TIME.
 HINT_INTERVAL = datetime.timedelta(hours=12)
-# Teams get the first number in HINTS_PER_INTERVAL at this time, and subsequent
-# numbers every HINT_INTERVAL after until the end of HINTS_PER_INTERVAL.
 HINT_TIME = HUNT_START_TIME + HINT_INTERVAL
 # To discourage teams from creating sockpuppets to grab more hints, teams
 # created less than this time ago get nothing. Once the time elapses, they
@@ -50,7 +45,7 @@ HINT_TIME = HUNT_START_TIME + HINT_INTERVAL
 # many hints they would get, since we advertised that there would be intro
 # hints or extra hints released at this or that time. Feel free to change the
 # logic in models.py to suit your needs.)
-TEAM_AGE_BEFORE_HINTS = HINT_INTERVAL
+TEAM_AGE_BEFORE_HINTS = 0
 # If set, a team's first N hints are usable only on puzzles in the intro round.
 # (They don't go away or convert into regular hints after some time; if a team
 # doesn't use them, they can still use regular hints they receive afterward.)
@@ -70,4 +65,4 @@ TEAM_AGE_BEFORE_FREE_ANSWERS = datetime.timedelta(days=3)
 # they can view) and to classify puzzles as intro-round or not. They won't make
 # sense for every hunt.
 INTRO_ROUND_SLUG = 'intro'
-META_META_SLUG = 'meta-meta'
+META_META_SLUG = 'fm'

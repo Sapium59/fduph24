@@ -14,21 +14,3 @@ def get_default_puzzle_genshin_game_data():
     return {
         "history": []
     }
-
-from datetime import timedelta
-from django.utils import timezone
-def count_6am_6pm_between(start_time, end_time):
-    # Calculate the number of days between the start and end times
-    num_days = (end_time - start_time).days
-
-    # Calculate the number of occurrences of 6 am and 6 pm
-    count_6am = num_days * 2  # Two occurrences per day (6 am and 6 pm)
-    count_6pm = num_days * 2
-
-    # Adjust the counts based on the actual hours of the start and end times
-    if start_time.hour > 8:
-        count_6am -= 1
-    if end_time.hour < 20:
-        count_6pm -= 1
-
-    return count_6am, count_6pm
