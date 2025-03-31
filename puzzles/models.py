@@ -4,7 +4,8 @@ import re
 import unicodedata
 from urllib.parse import quote
 from datetime import timedelta
-
+import logging
+logger = logging.getLogger(__name__)
 from django import forms
 from django.core.exceptions import ValidationError
 from django.conf import settings
@@ -23,11 +24,11 @@ from django.db.models import JSONField  # Use this if you're using Django 3.1 or
 from puzzles.context import context_cache
 
 from puzzles.messaging import (
-    dispatch_general_alert,
-    dispatch_free_answer_alert,
-    dispatch_submission_alert,
+    # dispatch_general_alert,
+    # dispatch_free_answer_alert,
+    # dispatch_submission_alert,
     send_mail_wrapper,
-    discord_interface,
+    # discord_interface,
     show_unlock_notification,
     show_solve_notification,
     show_hint_notification,
@@ -341,36 +342,41 @@ class Team(models.Model):
         '''
         Compute the total number of hints (used + remaining) available to this team.
         '''
-
+        logger.info(f"self.now: {self.now}")
         if not HINTS_ENABLED or self.hunt_is_over:
             return 0
-        if self.now < self.creation_time:
+        # HACK dirty timezone process
+        if self.now < self.creation_time + datetime.timedelta(hours=-8):
             return self.total_hints_awarded
-        
-        start_time = HUNT_START_TIME - self.start_offset
-        num_days = self.now.day - start_time.day + 1  # include both ends
-        
-        count_mornings = num_days
-        count_evenings = num_days
+        import traceback
+        try:
+            start_time = HUNT_START_TIME - self.start_offset
+            num_days = self.now.day - start_time.day + 1  # include both ends
+            
+            count_mornings = num_days
+            count_evenings = num_days
 
-        if start_time.hour > 8:  # the team missed
-            count_mornings -= 1
-        if start_time.hour > 20:  # the team missed
-            count_evenings -= 1
-        count_evenings -= 1  # we dont grant hints in first evening
-        
-        if self.now.hour < 20:  # not yet granted
-            count_evenings -= 1
-        if self.now.hour < 8:  # not yet granted
-            count_evenings -= 1
-        
-        # 1 granted on beginning, 2 per morning and 2 per evening
-        count_hints_by_time = 1 + 2 * (count_mornings + count_evenings)
+            if start_time.hour > 8:  # the team missed
+                count_mornings -= 1
+            if start_time.hour > 20:  # the team missed
+                count_evenings -= 1
+            count_evenings -= 1  # we dont grant hints in first evening
+            
+            if self.now.hour < 20:  # not yet granted
+                count_evenings -= 1
+            if self.now.hour < 8:  # not yet granted
+                count_evenings -= 1
+            logger.info(f"count_hints_by_time = {1 + 2 * (count_mornings + count_evenings)} = 1 + 2 * ({count_mornings} + {count_evenings})")
+            # 1 granted on beginning, 2 per morning and 2 per evening
+            count_hints_by_time = 1 + 2 * (count_mornings + count_evenings)
+        except:
+            logger.warning(traceback.format_exc())
+            count_hints_by_time = 0
         return self.total_hints_awarded + count_hints_by_time
 
 
     def num_hints_used(self):
-        print(self.team_name, "num_hints_used", sum(hint.consumes_hint for hint in self.asked_hints))
+        logger.info(f"{self.team_name} - num_hints_used: {sum(hint.consumes_hint for hint in self.asked_hints)}")
         return sum(hint.consumes_hint for hint in self.asked_hints)
 
     def num_hints_remaining(self):
@@ -475,7 +481,6 @@ class Team(models.Model):
                     unlocked_at = context.team.db_unlocks[puzzle.id].unlock_datetime
                 elif unlocked_at:
                     unlocks.append(Team.unlock_puzzle(context, puzzle, unlocked_at))
-                # print(puzzle, global_solves, local_solves, unlocked_at, context.team)
             if unlocked_at:
                 puzzles_unlocked[puzzle] = unlocked_at
         if unlocks:
@@ -496,8 +501,9 @@ class Team(models.Model):
 
 @receiver(post_save, sender=Team)
 def notify_on_team_creation(sender, instance, created, **kwargs):
-    if created:
-        dispatch_general_alert(_('Team created: {}').format(instance.team_name))
+    pass
+    # if created:
+    #     dispatch_general_alert(_('Team created: {}').format(instance.team_name))
 
 
 class TeamMember(models.Model):
@@ -519,8 +525,9 @@ class TeamMember(models.Model):
 @receiver(post_save, sender=TeamMember)
 def notify_on_team_member_creation(sender, instance, created, **kwargs):
     if created:
-        dispatch_general_alert(_('Team {} added member {} ({})').format(
-            instance.team, instance.name, instance.email))
+        pass
+        # dispatch_general_alert(_('Team {} added member {} ({})').format(
+        #     instance.team, instance.name, instance.email))
 
 
 class PuzzleUnlock(models.Model):
@@ -595,10 +602,10 @@ def notify_on_answer_submission(sender, instance, created, **kwargs):
                 hint.get_status_display(),
                 format_time_ago(hint.answered_datetime),
             ) for hint in hints)
-        if instance.used_free_answer:
-            dispatch_free_answer_alert(
-                _(':question: {} Team {} used a free answer on {}!{}').format(
-                    instance.puzzle.emoji, instance.team, instance.puzzle, hint_line))
+        # if instance.used_free_answer:
+        #     dispatch_free_answer_alert(
+        #         _(':question: {} Team {} used a free answer on {}!{}').format(
+        #             instance.puzzle.emoji, instance.team, instance.puzzle, hint_line))
         else:
             submitted_teams = AnswerSubmission.objects.filter(
                 puzzle=instance.puzzle,
@@ -613,14 +620,14 @@ def notify_on_answer_submission(sender, instance, created, **kwargs):
                 }.get(submitted_teams, ':white_check_mark:')
             elif submitted_teams > 1:
                 sigil = ':skull_crossbones:'
-            dispatch_submission_alert(
-                _('{} {} Team {} submitted `{}` for {}: {}{}').format(
-                    sigil, instance.puzzle.emoji, instance.team,
-                    instance.submitted_answer, instance.puzzle,
-                    _('Correct!') if instance.is_correct else _('Incorrect.'),
-                    hint_line,
-                ),
-                correct=instance.is_correct)
+            # dispatch_submission_alert(
+            #     _('{} {} Team {} submitted `{}` for {}: {}{}').format(
+            #         sigil, instance.puzzle.emoji, instance.team,
+            #         instance.submitted_answer, instance.puzzle,
+            #         _('Correct!') if instance.is_correct else _('Incorrect.'),
+            #         hint_line,
+            #     ),
+            #     correct=instance.is_correct)
         if not instance.is_correct:
             return
         show_solve_notification(instance)
@@ -898,17 +905,19 @@ def notify_on_hint_update(sender, instance, created, update_fields, **kwargs):
         update_fields = ()
     if instance.status == Hint.NO_RESPONSE:
         if 'discord_id' not in update_fields:
-            discord_interface.update_hint(instance)
+            pass
+            # discord_interface.update_hint(instance)
     else:
-        if 'discord_id' not in update_fields:
-            discord_interface.clear_hint(instance)
+        # if 'discord_id' not in update_fields:
+        #     discord_interface.clear_hint(instance)
         if 'response' in update_fields:
             link = settings.DOMAIN.rstrip('/') + reverse(
                 'hints', args=(instance.puzzle.slug,))
-            send_mail_wrapper(
-                _('Hint answered for {}').format(instance.puzzle),
-                'hint_answered_email',
-                {'hint': instance, 'link': link},
-                instance.recipients())
+            # FIXME smtp
+            # send_mail_wrapper(
+            #     _('Hint answered for {}').format(instance.puzzle),
+            #     'hint_answered_email',
+            #     {'hint': instance, 'link': link},
+            #     instance.recipients())
             show_hint_notification(instance)
 

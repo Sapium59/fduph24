@@ -3,6 +3,7 @@ import datetime
 import itertools
 import json
 import logging
+logger = logging.getLogger(__name__)
 import os
 import re
 import requests
@@ -71,7 +72,7 @@ from puzzles.hunt_config import (
     META_META_SLUG,
 )
 
-from puzzles.messaging import send_mail_wrapper, dispatch_victory_alert, show_victory_notification
+from puzzles.messaging import send_mail_wrapper, show_victory_notification
 from puzzles.shortcuts import dispatch_shortcut
 
 
@@ -245,6 +246,7 @@ def register(request):
             team_link = request.build_absolute_uri(
                 reverse('team', args=(data.get('team_name'),))
             )
+            # FIXME smtp
             send_mail_wrapper(
                 _('Team created'), 'registration_email',
                 {
@@ -291,7 +293,7 @@ def password_reset(request):
                 'password_reset_confirm',
                 kwargs={'uidb64': uid, 'token': token},
             ))
-
+            # FIXME smtp
             send_mail_wrapper(
                 _('Password reset'), 'password_reset_email',
                 {'team_name': team.team_name, 'reset_link': reset_link},
@@ -619,6 +621,8 @@ def solve(request):
         is_correct = normalized_answer == puzzle.normalized_answer
 
         form = SubmitAnswerForm(request.POST)
+        if request.context.now > HUNT_END_TIME - team.start_offset:
+            form.add_error(None, f'你只能在 {HUNT_END_TIME - team.start_offset} 前提交答案。请耐心等待本活动于 {HUNT_END_TIME} 结束。')
         if puzzle_messages:
             for message in puzzle_messages:
                 form.add_error(None, mark_safe(message.response))
@@ -641,9 +645,9 @@ def solve(request):
                     team.save()
                 messages.success(request, '回答正确！答案： %s ' % puzzle.answer)
                 if puzzle.slug == META_META_SLUG:
-                    dispatch_victory_alert(
-                        '恭喜 %s 率先解出最终谜题！' % team +
-                        _('\n**Emails:** <%s>') % request.build_absolute_uri(reverse('finishers')))
+                    # dispatch_victory_alert(
+                    #     '恭喜 %s 率先解出最终谜题！' % team +
+                    #     _('\n**Emails:** <%s>') % request.build_absolute_uri(reverse('finishers')))
                     show_victory_notification(request.context)
                     return redirect('victory')
             else:
@@ -1488,7 +1492,7 @@ def shortcuts(request):
     try:
         dispatch_shortcut(request)
     except Exception as e:
-        print('Shortcut exception:', traceback.format_exc())
+        logger.warning(f'Shortcut exception: {traceback.format_exc()}')
         response.write('<script>top.toastr.error(%s)</script>' % (
             json.dumps('<br>'.join(escape(str(part)) for part in e.args))))
     else:
@@ -1518,8 +1522,8 @@ def claim_start(request):
     try:
         team = request.context.team
         team.start_offset = HUNT_START_TIME - request.context.now
-        print(f"[D] HUNT_START_TIME {HUNT_START_TIME} | request.context.now={request.context.now}")
+        logger.info(f"[D] {team} claimed start at request.context.now={request.context.now}")
         return render(request, 'puzzles.html', {'rounds': render_puzzles(request)})
     except:
-        print("[E] claim_start request has no team!")
+        logger.warning("[E] claim_start request has no team!")
         return render(request, 'countdown.html', {'start': request.context.start_time})

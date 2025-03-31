@@ -157,14 +157,16 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'static'))
 SOLUTION_STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'puzzles/templates/solution_bodies'))
 STATICFILES_STORAGE = 'gph.storage.CustomStorage'
+# STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 # Email SMTP information
 
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'fdupuzzle.fun'
-EMAIL_HOST_USER = 'contact'
-EMAIL_HOST_PASSWORD = 'WeDoHave1Hunt!'
-EMAIL_PORT = '25'
+EMAIL_HOST = 'smtp.163.com'
+EMAIL_HOST_USER = 'fdupuzzle@163.com'
+EMAIL_HOST_PASSWORD = 'XR3w48fCMgUk9X3X'
+# EMAIL_HOST_PASSWORD = 'Fduph2025'
+EMAIL_PORT = '465'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_SUBJECT_PREFIX = '[FDUPH] '
 

@@ -30,50 +30,50 @@ from puzzles.hunt_config import (
 logger = logging.getLogger('puzzles.messaging')
 
 
-# Usernames that the bot will send messages to Discord with when various things
-# happen. It's really not important that these are different. It's just for
-# flavor.
-ALERT_DISCORD_USERNAME = 'FIXME PH AlertBot'
-CORRECT_SUBMISSION_DISCORD_USERNAME = 'FIXME PH WinBot'
-INCORRECT_SUBMISSION_DISCORD_USERNAME = 'FIXME PH FailBot'
-FREE_ANSWER_DISCORD_USERNAME = 'FIXME PH HelpBot'
-VICTORY_DISCORD_USERNAME = 'FIXME PH CongratBot'
+# # Usernames that the bot will send messages to Discord with when various things
+# # happen. It's really not important that these are different. It's just for
+# # flavor.
+# ALERT_DISCORD_USERNAME = 'FIXME PH AlertBot'
+# CORRECT_SUBMISSION_DISCORD_USERNAME = 'FIXME PH WinBot'
+# INCORRECT_SUBMISSION_DISCORD_USERNAME = 'FIXME PH FailBot'
+# FREE_ANSWER_DISCORD_USERNAME = 'FIXME PH HelpBot'
+# VICTORY_DISCORD_USERNAME = 'FIXME PH CongratBot'
 
-# Should be Discord webhook URLs that look like
-# https://discordapp.com/api/webhooks/(numbers)/(letters)
-# From a channel you can create them under Integrations > Webhooks.
-# They can be the same webhook if you don't care about keeping them in separate
-# channels.
-ALERT_WEBHOOK_URL = 'FIXME'
-SUBMISSION_WEBHOOK_URL = 'FIXME'
-FREE_ANSWER_WEBHOOK_URL = 'FIXME'
-VICTORY_WEBHOOK_URL = 'FIXME'
+# # Should be Discord webhook URLs that look like
+# # https://discordapp.com/api/webhooks/(numbers)/(letters)
+# # From a channel you can create them under Integrations > Webhooks.
+# # They can be the same webhook if you don't care about keeping them in separate
+# # channels.
+# ALERT_WEBHOOK_URL = 'FIXME'
+# SUBMISSION_WEBHOOK_URL = 'FIXME'
+# FREE_ANSWER_WEBHOOK_URL = 'FIXME'
+# VICTORY_WEBHOOK_URL = 'FIXME'
 
-# Assuming you want messages on a messaging platform that's not Discord but
-# supports at least a vaguely similar API, change the following code
-# accordingly:
-def dispatch_discord_alert(webhook, content, username):
-    content = '[{}] {}'.format(timezone.localtime().strftime('%H:%M:%S'), content)
-    if len(content) >= 2000:
-        content = content[:1996] + '...'
-    if settings.IS_TEST:
-        logger.info(_('(Test) Discord alert:\n') + content)
-        return
-    logger.info(_('(Real) Discord alert:\n') + content)
-    requests.post(webhook, json={'username': username, 'content': content, 'allowed_mentions': {'parse': []}})
+# # Assuming you want messages on a messaging platform that's not Discord but
+# # supports at least a vaguely similar API, change the following code
+# # accordingly:
+# def dispatch_discord_alert(webhook, content, username):
+#     content = '[{}] {}'.format(timezone.localtime().strftime('%H:%M:%S'), content)
+#     if len(content) >= 2000:
+#         content = content[:1996] + '...'
+#     if settings.IS_TEST:
+#         logger.info(_('(Test) Discord alert:\n') + content)
+#         return
+#     logger.info(_('(Real) Discord alert:\n') + content)
+#     requests.post(webhook, json={'username': username, 'content': content, 'allowed_mentions': {'parse': []}})
 
-def dispatch_general_alert(content):
-    dispatch_discord_alert(ALERT_WEBHOOK_URL, content, ALERT_DISCORD_USERNAME)
+# def dispatch_general_alert(content):
+#     dispatch_discord_alert(ALERT_WEBHOOK_URL, content, ALERT_DISCORD_USERNAME)
 
-def dispatch_submission_alert(content, correct):
-    username = CORRECT_SUBMISSION_DISCORD_USERNAME if correct else INCORRECT_SUBMISSION_DISCORD_USERNAME
-    dispatch_discord_alert(SUBMISSION_WEBHOOK_URL, content, username)
+# def dispatch_submission_alert(content, correct):
+#     username = CORRECT_SUBMISSION_DISCORD_USERNAME if correct else INCORRECT_SUBMISSION_DISCORD_USERNAME
+#     dispatch_discord_alert(SUBMISSION_WEBHOOK_URL, content, username)
 
-def dispatch_free_answer_alert(content):
-    dispatch_discord_alert(FREE_ANSWER_WEBHOOK_URL, content, FREE_ANSWER_DISCORD_USERNAME)
+# def dispatch_free_answer_alert(content):
+#     dispatch_discord_alert(FREE_ANSWER_WEBHOOK_URL, content, FREE_ANSWER_DISCORD_USERNAME)
 
-def dispatch_victory_alert(content):
-    dispatch_discord_alert(VICTORY_WEBHOOK_URL, content, VICTORY_DISCORD_USERNAME)
+# def dispatch_victory_alert(content):
+#     dispatch_discord_alert(VICTORY_WEBHOOK_URL, content, VICTORY_DISCORD_USERNAME)
 
 
 puzzle_logger = logging.getLogger('puzzles.puzzle')
@@ -100,9 +100,9 @@ def send_mail_wrapper(subject, template, context, recipients):
     context['hunt_organizers'] = HUNT_ORGANIZERS
     subject = settings.EMAIL_SUBJECT_PREFIX + subject
     body = render_to_string(template + '.txt', context)
-    if settings.IS_TEST:
-        logger.info(_('Sending mail <{}> to <{}>:\n{}').format(
+    logger.info(_('Sending mail <{}> to <{}>:\n{}').format(
             subject, ', '.join(recipients), body))
+    if settings.IS_TEST:
         return
     mail = EmailMultiAlternatives(
         subject=subject,
@@ -115,136 +115,138 @@ def send_mail_wrapper(subject, template, context, recipients):
         if mail.send() != 1:
             raise RuntimeError(_('Unknown failure???'))
     except Exception:
-        dispatch_general_alert(_('Could not send mail <{}> to <{}>:\n{}').format(
-            subject, ', '.join(recipients), traceback.format_exc()))
+        logger.info(('Could not send mail <{}> to <{}>:\n{}').format(
+                subject, ', '.join(recipients), traceback.format_exc()))
+        # dispatch_general_alert(_('Could not send mail <{}> to <{}>:\n{}').format(
+        #     subject, ', '.join(recipients), traceback.format_exc()))
 
 
-class DiscordInterface:
-    TOKEN = None # FIXME a long token from Discord
+# class DiscordInterface:
+#     TOKEN = None # FIXME a long token from Discord
 
-    # the next two should be big decimal numbers; in Discord, you can right
-    # click and Copy ID to get them
-    GUILD = 'FIXME'
-    HINT_CHANNEL = 'FIXME'
+#     # the next two should be big decimal numbers; in Discord, you can right
+#     # click and Copy ID to get them
+#     GUILD = 'FIXME'
+#     HINT_CHANNEL = 'FIXME'
 
-    # You also need to enable the "Server Members Intent" under the "Privileged
-    # Gateway Intents" section of the "Bot" page of your application from the
-    # Discord Developer Portal. Or you can comment out the code that
-    # initializes `self.avatars` below.
+#     # You also need to enable the "Server Members Intent" under the "Privileged
+#     # Gateway Intents" section of the "Bot" page of your application from the
+#     # Discord Developer Portal. Or you can comment out the code that
+#     # initializes `self.avatars` below.
 
-    def __init__(self):
-        self.client = None
-        self.avatars = None
-        if self.TOKEN and not settings.IS_TEST:
-            self.client = discord.Client()
-            self.client.loop = asyncio.new_event_loop()
-            self.client.loop.run_until_complete(self.client.login(self.TOKEN))
-            # Look man, I dunno. I have no clue how Python async works and this
-            # is all a house of cards that probably works totally differently
-            # depending on your environment. If you can find a way to reliably
-            # call these async things from here, please send us a PR.
+#     def __init__(self):
+#         self.client = None
+#         self.avatars = None
+#         if self.TOKEN and not settings.IS_TEST:
+#             self.client = discord.Client()
+#             self.client.loop = asyncio.new_event_loop()
+#             self.client.loop.run_until_complete(self.client.login(self.TOKEN))
+#             # Look man, I dunno. I have no clue how Python async works and this
+#             # is all a house of cards that probably works totally differently
+#             # depending on your environment. If you can find a way to reliably
+#             # call these async things from here, please send us a PR.
 
-    def get_avatar(self, claimer):
-        if self.avatars is None:
-            self.avatars = {}
-            if self.client is not None:
-                guild = discord.Guild(data=self.client.loop.run_until_complete(
-                    self.client.http.get_guild(self.GUILD)), state=self.client._connection)
-                for data in self.client.loop.run_until_complete(
-                    self.client.http.get_members(self.GUILD, limit=1000, after=None)):
-                    avatar = discord.Member(data=data, guild=guild, state=self.client._connection).display_avatar.url
-                    for name in (data.get('nick'), data['user'].get('username'), data['user'].get('global_name')):
-                        if name: self.avatars[name] = avatar
-        return self.avatars.get(claimer)
+#     def get_avatar(self, claimer):
+#         if self.avatars is None:
+#             self.avatars = {}
+#             if self.client is not None:
+#                 guild = discord.Guild(data=self.client.loop.run_until_complete(
+#                     self.client.http.get_guild(self.GUILD)), state=self.client._connection)
+#                 for data in self.client.loop.run_until_complete(
+#                     self.client.http.get_members(self.GUILD, limit=1000, after=None)):
+#                     avatar = discord.Member(data=data, guild=guild, state=self.client._connection).display_avatar.url
+#                     for name in (data.get('nick'), data['user'].get('username'), data['user'].get('global_name')):
+#                         if name: self.avatars[name] = avatar
+#         return self.avatars.get(claimer)
 
-    # If you get an error code 50001 when trying to create a message, even
-    # though you're sure your bot has all the permissions, it might be because
-    # you need to "connect to and identify with a gateway at least once"??
-    # https://discord.com/developers/docs/resources/channel#create-message
+#     # If you get an error code 50001 when trying to create a message, even
+#     # though you're sure your bot has all the permissions, it might be because
+#     # you need to "connect to and identify with a gateway at least once"??
+#     # https://discord.com/developers/docs/resources/channel#create-message
 
-    # I spent like four hours trying to find weird asynchronous ways to do this
-    # right before each time I send a message, but it seems maybe you actually
-    # just need to do this once and your bot can create messages forever?
-    # pycord's Client does this. So I believe you can fix this by running a
-    # script like the following *once* on your local machine (it will, as
-    # advertised, run forever; just kill it after a few seconds)?
+#     # I spent like four hours trying to find weird asynchronous ways to do this
+#     # right before each time I send a message, but it seems maybe you actually
+#     # just need to do this once and your bot can create messages forever?
+#     # pycord's Client does this. So I believe you can fix this by running a
+#     # script like the following *once* on your local machine (it will, as
+#     # advertised, run forever; just kill it after a few seconds)?
 
-    # import discord
-    # discord.Client().run(TOKEN)
+#     # import discord
+#     # discord.Client().run(TOKEN)
 
-    def update_hint(self, hint):
-        HintsConsumer.send_to_all(json.dumps({'id': hint.id,
-            'content': render_to_string('hint_list_entry.html', {
-                'hint': hint, 'now': timezone.localtime()})}))
-        embed = collections.defaultdict(lambda: collections.defaultdict(dict))
-        embed['author']['url'] = hint.full_url()
-        if hint.claimed_datetime:
-            embed['color'] = 0xdddddd
-            embed['timestamp'] = hint.claimed_datetime.isoformat()
-            embed['author']['name'] = _('Claimed by {}').format(hint.claimer)
-            avatar = self.get_avatar(hint.claimer)
-            if avatar: embed['author']['icon_url'] = avatar
-            debug = _('claimed by {}').format(hint.claimer)
-        else:
-            embed['color'] = 0xff00ff
-            embed['author']['name'] = _('U N C L A I M E D')
-            claim_url = hint.full_url(claim=True)
-            embed['title'] = _('Claim: ') + claim_url
-            embed['url'] = claim_url
-            debug = 'unclaimed'
+#     def update_hint(self, hint):
+#         HintsConsumer.send_to_all(json.dumps({'id': hint.id,
+#             'content': render_to_string('hint_list_entry.html', {
+#                 'hint': hint, 'now': timezone.localtime()})}))
+#         embed = collections.defaultdict(lambda: collections.defaultdict(dict))
+#         embed['author']['url'] = hint.full_url()
+#         if hint.claimed_datetime:
+#             embed['color'] = 0xdddddd
+#             embed['timestamp'] = hint.claimed_datetime.isoformat()
+#             embed['author']['name'] = _('Claimed by {}').format(hint.claimer)
+#             avatar = self.get_avatar(hint.claimer)
+#             if avatar: embed['author']['icon_url'] = avatar
+#             debug = _('claimed by {}').format(hint.claimer)
+#         else:
+#             embed['color'] = 0xff00ff
+#             embed['author']['name'] = _('U N C L A I M E D')
+#             claim_url = hint.full_url(claim=True)
+#             embed['title'] = _('Claim: ') + claim_url
+#             embed['url'] = claim_url
+#             debug = 'unclaimed'
 
-        if self.client is None:
-            message = hint.long_discord_message()
-            logger.info(_('Hint, {}: {}\n{}').format(debug, hint, message))
-            logger.info(_('Embed: {}').format(embed))
-        elif hint.discord_id:
-            try:
-                self.client.loop.run_until_complete(self.client.http.edit_message(
-                    self.HINT_CHANNEL, hint.discord_id, embeds=[embed]))
-            except Exception:
-                dispatch_general_alert(_('Discord API failure: modify\n{}').format(
-                    traceback.format_exc()))
-        else:
-            message = hint.long_discord_message()
-            try:
-                discord_id = self.client.loop.run_until_complete(self.client.http.send_message(
-                    self.HINT_CHANNEL, message, embeds=[embed]))['id']
-            except Exception:
-                dispatch_general_alert(_('Discord API failure: create\n{}').format(
-                    traceback.format_exc()))
-                return
-            hint.discord_id = discord_id
-            hint.save(update_fields=('discord_id',))
+#         if self.client is None:
+#             message = hint.long_discord_message()
+#             logger.info(_('Hint, {}: {}\n{}').format(debug, hint, message))
+#             logger.info(_('Embed: {}').format(embed))
+#         elif hint.discord_id:
+#             try:
+#                 self.client.loop.run_until_complete(self.client.http.edit_message(
+#                     self.HINT_CHANNEL, hint.discord_id, embeds=[embed]))
+#             except Exception:
+#                 dispatch_general_alert(_('Discord API failure: modify\n{}').format(
+#                     traceback.format_exc()))
+#         else:
+#             message = hint.long_discord_message()
+#             try:
+#                 discord_id = self.client.loop.run_until_complete(self.client.http.send_message(
+#                     self.HINT_CHANNEL, message, embeds=[embed]))['id']
+#             except Exception:
+#                 dispatch_general_alert(_('Discord API failure: create\n{}').format(
+#                     traceback.format_exc()))
+#                 return
+#             hint.discord_id = discord_id
+#             hint.save(update_fields=('discord_id',))
 
-    def clear_hint(self, hint):
-        HintsConsumer.send_to_all(json.dumps({'id': hint.id}))
-        if self.client is None:
-            logger.info(_('Hint done: {}').format(hint))
-        elif hint.discord_id:
-            # what DPPH did instead of deleting messages:
-            # (nb. I tried to make these colors color-blind friendly)
+#     def clear_hint(self, hint):
+#         HintsConsumer.send_to_all(json.dumps({'id': hint.id}))
+#         if self.client is None:
+#             logger.info(_('Hint done: {}').format(hint))
+#         elif hint.discord_id:
+#             # what DPPH did instead of deleting messages:
+#             # (nb. I tried to make these colors color-blind friendly)
 
-            embed = collections.defaultdict(lambda: collections.defaultdict(dict))
-            if hint.status == hint.ANSWERED:
-                embed['color'] = 0xaaffaa
-            elif hint.status == hint.REFUNDED:
-                embed['color'] = 0xcc6600
-            # nothing for obsolete
+#             embed = collections.defaultdict(lambda: collections.defaultdict(dict))
+#             if hint.status == hint.ANSWERED:
+#                 embed['color'] = 0xaaffaa
+#             elif hint.status == hint.REFUNDED:
+#                 embed['color'] = 0xcc6600
+#             # nothing for obsolete
 
-            embed['author']['name'] = _('{} by {}').format(hint.get_status_display(), hint.claimer)
-            embed['author']['url'] = hint.full_url()
-            embed['description'] = hint.response[:250]
-            avatar = self.get_avatar(hint.claimer)
-            if avatar: embed['author']['icon_url'] = avatar
-            debug = _('claimed by {}').format(hint.claimer)
-            try:
-                self.client.loop.run_until_complete(self.client.http.edit_message(
-                    self.HINT_CHANNEL, hint.discord_id, content=hint.short_discord_message(), embeds=[embed]))
-            except Exception:
-                dispatch_general_alert(_('Discord API failure: modify\n{}').format(
-                    traceback.format_exc()))
+#             embed['author']['name'] = _('{} by {}').format(hint.get_status_display(), hint.claimer)
+#             embed['author']['url'] = hint.full_url()
+#             embed['description'] = hint.response[:250]
+#             avatar = self.get_avatar(hint.claimer)
+#             if avatar: embed['author']['icon_url'] = avatar
+#             debug = _('claimed by {}').format(hint.claimer)
+#             try:
+#                 self.client.loop.run_until_complete(self.client.http.edit_message(
+#                     self.HINT_CHANNEL, hint.discord_id, content=hint.short_discord_message(), embeds=[embed]))
+#             except Exception:
+#                 dispatch_general_alert(_('Discord API failure: modify\n{}').format(
+#                     traceback.format_exc()))
 
-discord_interface = DiscordInterface()
+# discord_interface = DiscordInterface()
 
 
 # A WebsocketConsumer subclass that can exchange messages with a single
@@ -296,6 +298,11 @@ class TeamWebsocketConsumer(BroadcastWebsocketConsumer):
 
     @classmethod
     def send_to_team(cls, team, text_data):
+        try:
+            _text_data = json.dumps(text_data.encode('ascii').decode('unicode-escape'), ensure_ascii=False)
+        except:
+            _text_data = text_data
+        logger.info(f"TeamWebsocketConsumer text_data: {_text_data}")
         async_to_sync(get_channel_layer().group_send)(
             '%s-%d' % (cls.group_id, team.user_id),
             {'type': 'channel.receive_broadcast', 'data': text_data})

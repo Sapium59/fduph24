@@ -6,7 +6,8 @@
 import datetime
 import inspect
 import types
-
+import logging
+logger = logging.getLogger(__name__)
 from django.conf import settings
 from django.urls import reverse
 from django.utils import timezone
@@ -85,7 +86,7 @@ class BaseContext:
         try:
             return HUNT_START_TIME - self.team.start_offset if self.team else HUNT_START_TIME
         except:
-            print("[E] uncertain bug about start time")
+            logger.info("[E] uncertain bug about start time")
             return HUNT_START_TIME
 
     def time_since_start(self):

@@ -1,4 +1,5 @@
 import json
+import logging
 import random
 import re
 import traceback
@@ -11,6 +12,7 @@ from puzzles.messaging import log_puzzle_info
 from ..models import Team
 from .r2q8_data import SPOIL_TEXT, IPA_DICT, CHEMICAL_ELEMENTS, VOWELS, WORD_SET, ADJ_SET, ANIMAL_SET, COUNTRY_SET
 
+logger = logging.getLogger(__name__)
 SPOIL_COST = 50
 BUY_A_SAMPLE_COST = 1
 COIN_REWARD = 5
@@ -119,7 +121,7 @@ def has_almost_line(word: str) -> bool:
 
 RULES_LIST: List[Tuple[int, str, Callable[[str], bool]]] = [
     (0,  '含有音标/ɪ/', lambda word: bool(word in IPA_DICT and 'ɪ' in IPA_DICT[word])),
-    (1,  '化学元素',    lambda word: bool(word.capitalize() in CHEMICAL_ELEMENTS)),
+    (1,  '化学元素',    lambda word: bool(word in CHEMICAL_ELEMENTS)),
     (2,  '偶数长度',    lambda word: bool(len(word) % 2 == 0)),
     (3,  '含有E和L',    lambda word: bool('E' in word and 'L' in word)),
     (4,  '长度为6',     lambda word: bool(len(word) == 6)),
@@ -144,7 +146,7 @@ RULES_LIST: List[Tuple[int, str, Callable[[str], bool]]] = [
     (23, '国家',       lambda word: is_country_name(word)),
     (24, '含有A和E',   lambda word: bool('A' in word and 'E' in word)),
     (25, '无重复字母',  lambda word: not has_duplicate_letters(word)),
-    (26, '恰在一条线上差一点BINGO', lambda word: has_almost_line(word)),
+    (26, '恰在一条线上差一点BIJNGO', lambda word: has_almost_line(word)),
 ]
 
 def get_sample_word(rule_index: int) -> str:
@@ -160,11 +162,11 @@ def get_sample_word(rule_index: int) -> str:
         checker = RULES_LIST[rule_index][2]
         for trial, word in enumerate(random.sample(WORD_SET, len(WORD_SET))):
             if checker(word):
-                print(f"trial: {trial}")
+                logger.info(f"trial: {trial}")
                 break
         else:
             word = "发生了些意外……请联系管理员。"
-    print("word: ", word)
+    logger.info(f"word: {word}")
     return word
 
 # key operations
@@ -207,7 +209,7 @@ def submit(request):
         if not puzzle_bingo_game_data:
             puzzle_bingo_game_data = team.get_default_puzzle_bingo_game_data()
         else:
-            print(puzzle_bingo_game_data)
+            # logger.info(puzzle_bingo_game_data)
             # 数据结构改动: 版本兼容性
             if isinstance(puzzle_bingo_game_data["known_rules"], list):
                 indice = puzzle_bingo_game_data["known_rules"]
@@ -231,7 +233,7 @@ def submit(request):
         # switch case guess_a_word / do_spoil / buy_a_sample
         body = json.loads(request.body)
         mode = body.get("mode")
-        print(f"[I] r2q8: mode={mode}, body={body}")
+        logger.info(f"[I] r2q8: mode={mode}, body={body}")
         if mode == "guess_a_word":
             # submittion & rules check
             word = body.get("word", "")
@@ -245,7 +247,7 @@ def submit(request):
                     'bingo_spoiled': bingo_spoiled
                 }
             else:
-                print(f"{word} in ADJ_SET: {word in ADJ_SET}")
+                logger.info(f"{word} in ADJ_SET: {word in ADJ_SET}")
                 triggered_rules_indice = [item[0] for item in RULES_LIST if item[2](word)]
                 puzzle_bingo_game_data = update(puzzle_bingo_game_data, triggered_rules_indice, guessed_word=word)
                 request.context.team.save()
@@ -316,15 +318,15 @@ def submit(request):
                     'bingo_spoiled': bingo_spoiled
                 }
         else:
-            print(f"Warning: unknown mode in r2q8: {mode}")
+            logger.info(f"Warning: unknown mode in r2q8: {mode}")
             ret_dict = {'error': '发生未知错误，请联系管理员。'}
 
         # when no error, ret_dict['error'] must be empty
         # ret_dict['error'] = ''
-        # print(f"[I] r2q8: ret_dict={ret_dict}")
+        # logger.info(f"[I] r2q8: ret_dict={ret_dict}")
         return ret_dict
     except:
-        print(traceback.print_exc())
+        logger.info(traceback.format_exc())
         return {
             'error': '发生未知错误，请联系管理员。',
             'correct': True,

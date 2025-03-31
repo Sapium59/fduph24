@@ -4,7 +4,7 @@ DEBUG = True
 
 IS_TEST = True
 
-DOMAIN = 'http://localhost:8000/'
+DOMAIN = 'http://localhost:5000/'
 
 ALLOWED_HOSTS = ['*']
 
@@ -114,3 +114,25 @@ LOGGING = {
         },
     },
 }
+
+HUNT_START_TIME = timezone.make_aware(datetime.datetime(
+    year=2025,
+    month=3,
+    day=24,
+    hour=18,
+    minute=0,
+), timezone=datetime.timezone(datetime.timedelta(hours=8)))
+HUNT_END_TIME = timezone.make_aware(datetime.datetime(
+    year=2025,
+    month=3,
+    day=31,
+    hour=18,
+    minute=0,
+), timezone=datetime.timezone(datetime.timedelta(hours=8)))
+HUNT_CLOSE_TIME = timezone.make_aware(datetime.datetime(
+    year=2025,
+    month=3,
+    day=31,
+    hour=18,
+    minute=0,
+), timezone=datetime.timezone(datetime.timedelta(hours=8)))

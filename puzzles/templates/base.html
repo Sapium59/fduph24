@@ -11,7 +11,7 @@
     {% block page-title %}
     <title>{{ hunt_title }}</title>
     {% endblock %}
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=0.5"> -->
+
     <meta property="og:title" content="FIXME">
     <meta property="og:description" content="{% blocktranslate with hunt=hunt_title%}Registration for this year's {{ hunt }} is now open!{% endblocktranslate %}">
     <meta property="og:image" content="{{ domain|slice:'-1' }}FIXME">
@@ -30,43 +30,12 @@
     <script src="{% static "js/notify.js" %}"></script>
     <script src="{% static "js/time.js" %}"></script>
     
-    <!-- deprecated icon -->
-    <!-- <link rel="icon" sizes="16x16 32x32 48x48 64x64" href="{% static "images/favicon.ico" %}" type="image/vnd.microsoft.icon"> -->
-    <!-- tmp icon -->
-    <!--<link rel="icon" sizes="16x16 32x32 48x48 64x64" href="{% static "/elearning_style/favicon.ico" %}" type="image/vnd.microsoft.icon">-->
-    <!-- FIXME: we have a new icon from Lithium -->
-    <link rel="icon" href="{% static "/images/logo.webp" %}">
+    <link rel="icon" href="{% static 'images/logo.webp' %}">
 
 
-    <!-- copied and modified form elearning -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#394B58">
     <meta name="robots" content="noindex,nofollow">
-
-    <!-- original version of elearning downloadings, not suitable for production -->
-    <!-- <link rel="stylesheet" href="./elearning_style/fonts-d8f4814aae.css" media="screen">
-    <link rel="stylesheet" href="./elearning_style/variables-7dd4b80918af0e0218ec0229e4bd5873.css" media="all">
-    <link rel="stylesheet" href="./elearning_style/common-56d52a60f7.css" media="all">
-    <link rel="stylesheet" href="./elearning_style/context_list-e43e971339.css" media="screen">
-    <link rel="stylesheet" href="./elearning_style/course_list-b33ee0ba11.css" media="screen">
-    <link rel="stylesheet" href="./elearning_style/new_user_tutorials-9f099dbed9.css" media="screen">
-    <link rel="icon" type="image/x-icon" href="./elearning_style/favicon.ico">
-    <link rel="stylesheet" href="./elearning_style/overrides.css" media="all"> -->
-    
-    <!-- modifired version -->
-    <!-- <link rel="stylesheet" href="{% static 'elearning_style/fonts.css' %}" media="screen"> -->
-    
-    <!-- NOTE: this common.css overwrites `content` class -->
-    <!-- <link rel="stylesheet" href="{% static 'elearning_style/common.css' %}" media="screen"> -->
-    
-    <!-- WIP -->
-    <!-- <link rel="stylesheet" href="./elearning_style/variables-7dd4b80918af0e0218ec0229e4bd5873.css" media="all">
-    <link rel="stylesheet" href="./elearning_style/common.css" media="all">
-    <link rel="stylesheet" href="./elearning_style/context_list-e43e971339.css" media="screen">
-    <link rel="stylesheet" href="./elearning_style/course_list-b33ee0ba11.css" media="screen">
-    <link rel="stylesheet" href="./elearning_style/new_user_tutorials-9f099dbed9.css" media="screen"> -->
-    <!-- <link rel="icon" type="image/x-icon" href="./elearning_style/favicon.ico"> -->
-    <!-- <link rel="stylesheet" href="./elearning_style/overrides.css" media="all"> -->
 
     <style type="text/css"></style>
 
@@ -78,7 +47,7 @@
      <div class="sidebar">
         <a href="{% url 'index' %}">
             <div style="background-color: #f9f8f5;">
-                <img src="/static/images/logo.webp">
+                <img src="{% static 'images/logo.webp' %}">
             </div>
         </a>
         <ul>
