@@ -247,13 +247,13 @@ def register(request):
                 reverse('team', args=(data.get('team_name'),))
             )
             # FIXME smtp
-            send_mail_wrapper(
-                _('Team created'), 'registration_email',
-                {
-                    'team_name': data.get('team_name'),
-                    'team_link': team_link,
-                },
-                team.get_emails())
+            # send_mail_wrapper(
+            #     _('Team created'), 'registration_email',
+            #     {
+            #         'team_name': data.get('team_name'),
+            #         'team_link': team_link,
+            #     },
+            #     team.get_emails())
             return redirect('index')
     else:
         form = RegisterForm()
@@ -293,11 +293,11 @@ def password_reset(request):
                 'password_reset_confirm',
                 kwargs={'uidb64': uid, 'token': token},
             ))
-            # FIXME smtp
-            send_mail_wrapper(
-                _('Password reset'), 'password_reset_email',
-                {'team_name': team.team_name, 'reset_link': reset_link},
-                team.get_emails())
+            # # FIXME smtp
+            # send_mail_wrapper(
+            #     _('Password reset'), 'password_reset_email',
+            #     {'team_name': team.team_name, 'reset_link': reset_link},
+            #     team.get_emails())
             return redirect('password_reset_done')
     else:
         form = PasswordResetForm()
