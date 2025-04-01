@@ -411,7 +411,7 @@ def teams_unhidden(request):
 def edit_team(request):
     team = request.context.team
     if team is None:
-        messages.error(request, '请先登陆以使用此功能。')
+        messages.error(request, '请先登录以使用此功能。')
         return redirect('login')
     team_members_formset = modelformset_factory(
         TeamMember,
@@ -854,7 +854,8 @@ def hints(request):
         if puzzle.round.slug == INTRO_ROUND_SLUG
         else team.num_nonintro_hints_remaining)
     puzzle_hints = [hint for hint in reversed(team.asked_hints) if hint.puzzle == puzzle]
-    can_followup = bool(puzzle_hints) and puzzle_hints[0].status == Hint.ANSWERED
+    can_followup = False
+    # can_followup = bool(puzzle_hints) and puzzle_hints[0].status == Hint.ANSWERED
 
     error = None
     if request.context.hunt_is_over:
@@ -983,7 +984,7 @@ def hint(request, id):
     })
 
 @require_GET
-@require_after_hunt_end_or_finished
+@require_admin
 def hunt_stats(request):
     '''After hunt ends, view stats for the entire hunt.'''
 
@@ -1053,7 +1054,7 @@ def hunt_stats(request):
 
 @require_GET
 @validate_puzzle()
-@require_after_hunt_end_or_admin
+@require_admin
 def stats(request):
     '''After hunt ends, view stats for a specific puzzle.'''
 
@@ -1177,7 +1178,7 @@ def wrapup(request):
 
 
 @require_GET
-@require_after_hunt_end_or_finished
+@require_admin
 def finishers(request):
     unlocks = OrderedDict()
     solves = {}
@@ -1370,7 +1371,7 @@ def bigboard_generic(request, hide_hidden):
     })
 
 @require_GET
-@require_after_hunt_end_or_admin
+@require_admin
 def bigboard(request):
     return bigboard_generic(request, hide_hidden=True)
 
@@ -1380,7 +1381,7 @@ def bigboard_unhidden(request):
     return bigboard_generic(request, hide_hidden=False)
 
 @require_GET
-@require_after_hunt_end_or_finished
+@require_admin
 def biggraph(request):
     puzzles = request.context.all_puzzles
     puzzle_map = {}

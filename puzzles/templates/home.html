@@ -47,15 +47,12 @@
 <h1>{{ hunt_title }}</h1>
 
 <div align="center">
-    <img src="{% static 'images/poster.webp' %}" style="height: 100vh; object-fit: cover;">
+    <img src="{% static 'images/poster.webp' %}" style="height: 100vh; object-fit: cover;margin-bottom: 40px;">
 </div>
 
 {% if not hunt_is_closed and not request.user.is_authenticated %}
 <div class="register">
-    <a href="{% url 'register' %}" class="btn">{% translate "Register your team!" %}</a>
+    <a href="{% url 'register' %}" class="btn">点击注册</a>
 </div>
-<h3 class="print-register">
-    <a>{% translate "Register at" %} https://FIXME</a>
-</h3>
 {% endif %}
 {% endblock %}

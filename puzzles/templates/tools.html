@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load puzzle_tags %}
+{% load static %}
 
 {% block content %}
 
@@ -72,6 +73,10 @@
             </li>
             <li>
                 <a href="https://phenomist.wordpress.com/storage/sets/">Sets of things</a>：puzzle hunt常见数据集整理。
+            </li>
+            <li>
+                由解谜爱好者 CALS 制作的常用密码表：<br>
+                <img src="{% static 'images/cals.webp' %}" style="height: 60vh; object-fit: cover;">
             </li>
         </ul>
     </div>

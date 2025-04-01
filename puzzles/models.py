@@ -369,6 +369,7 @@ class Team(models.Model):
             logger.info(f"count_hints_by_time = {1 + 2 * (count_mornings + count_evenings)} = 1 + 2 * ({count_mornings} + {count_evenings})")
             # 1 granted on beginning, 2 per morning and 2 per evening
             count_hints_by_time = 1 + 2 * (count_mornings + count_evenings)
+            count_hints_by_time = max(0, count_hints_by_time)
         except:
             logger.warning(traceback.format_exc())
             count_hints_by_time = 0

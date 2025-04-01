@@ -78,7 +78,7 @@ class Shortcuts:
     def prerelease_testsolver(team):
         team.is_prerelease_testsolver ^= True
         team.save()
-    prerelease_testsolver.__doc__ = _('Toggle testsolver')
+    prerelease_testsolver.__doc__ = "切换是否内测"
 
     @heading
     def LINE_BREAK(team):
@@ -87,7 +87,7 @@ class Shortcuts:
     def set_offset_to_start_now(team, now):
         team.start_offset = hunt_config.HUNT_START_TIME - now
         team.save()
-    set_offset_to_start_now.__doc__ = _('Offset to start now')
+    set_offset_to_start_now.__doc__ = "立刻开始"
 
     if hunt_config.HINTS_ENABLED:
         @heading
@@ -153,15 +153,15 @@ class Shortcuts:
         )
     solve.__doc__ = _('Solve')
 
-    def free_answer(puzzle, team):
-        team.answersubmission_set.filter(puzzle=puzzle, is_correct=True).delete()
-        team.answersubmission_set.create(
-            puzzle=puzzle,
-            submitted_answer=puzzle.normalized_answer,
-            is_correct=True,
-            used_free_answer=True,
-        )
-    free_answer.__doc__ = _('Free')
+    # def free_answer(puzzle, team):
+    #     team.answersubmission_set.filter(puzzle=puzzle, is_correct=True).delete()
+    #     team.answersubmission_set.create(
+    #         puzzle=puzzle,
+    #         submitted_answer=puzzle.normalized_answer,
+    #         is_correct=True,
+    #         used_free_answer=True,
+    #     )
+    # free_answer.__doc__ = _('Free')
 
     def unsolve(puzzle, team):
         team.answersubmission_set.filter(puzzle=puzzle, is_correct=True).delete()

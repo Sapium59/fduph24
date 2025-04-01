@@ -2,21 +2,21 @@
 {% load i18n %}
 
 {% block page-title %}
-<title>{% blocktranslate with puzzle_name=puzzle.name %}Check: {{ puzzle_name }}{% endblocktranslate %}</title>
+<title>核对答案: {{ puzzle.name }}</title>
 {% endblock %}
 
 {% block top-left-actions %}
-<a href="{% url 'puzzle' puzzle.slug %}" class="btn">{% translate "返回题目页" %}</a>
+<a href="{% url 'puzzle' puzzle.slug %}" class="btn">"返回题目页"</a>
 {% endblock %}
 
 {% block content %}
 
 <h1>
-    {% blocktranslate with puzzle_name=puzzle.name %}Check: {{ puzzle_name }}{% endblocktranslate %}
+    核对答案: {{ puzzle.name }}
     {% if is_correct %}
-    <div class="solved-title-marker">{% translate "Solved!" %} <span class="solved-title-answer">{{ puzzle.answer }}</span></div>
+    <div class="solved-title-marker">正确<span class="solved-title-answer">{{ puzzle.answer }}</span></div>
     {% elif is_wrong %}
-    <div class="solved-title-marker">{% translate "Incorrect!" %}</div>
+    <div class="solved-title-marker">错误</div>
     {% endif %}
 </h1>
 

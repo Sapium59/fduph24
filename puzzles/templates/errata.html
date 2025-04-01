@@ -4,18 +4,18 @@
 
 {% block top-left-actions %}
 {% if is_superuser %}
-<a href="{% url 'admin:puzzles_erratum_add' %}" class="btn">{% translate "New erratum" %}</a>
+<a href="{% url 'admin:puzzles_erratum_add' %}" class="btn">新建更新公告</a>
 {% endif %}
 {% endblock %}
 
 {% block content %}
-<h1>{% translate "Errata / Updates" %}</h1>
+<h1>更新公告</h1>
 <main>
     {% for erratum in visible_errata %}
     {% if erratum.updates_text %}
     <div class="puzzle-erratum">
         {% if not erratum.published %}
-        <strong>[<a href="{% url 'admin:puzzles_erratum_change' erratum.id %}">{% translate "UNPUBLISHED" %}</a>]</strong>
+        <strong>[<a href="{% url 'admin:puzzles_erratum_change' erratum.id %}">尚未发布</a>]</strong>
         {% endif %}
         {% format_time erratum.timestamp "DATE_AT_TIME" as erratum_time %}
         {% blocktranslate %}On {{ erratum_time }}, {% endblocktranslate %}

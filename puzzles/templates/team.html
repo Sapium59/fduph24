@@ -9,16 +9,10 @@
 
 {% block top-left-actions %}
 {% if modify_info_available %}
-<a href="{% url 'edit-team' %}" class="btn">{% translate "Edit team members" %}</a>
-<a href="{% url 'password_change' %}" class="btn">{% translate "Change password" %}</a>
+<a href="{% url 'edit-team' %}" class="btn">编辑队伍成员</a>
+<a href="{% url 'password_change' %}" class="btn">修改密码</a>
 {% if not hunt_is_over %}
-<a href="javascript:toggleTimeUnlocks()" class="btn">
-    {% if team.allow_time_unlocks %}
-    {% translate "Disable time unlocks" %}
-    {% else %}
-    {% translate "Enable time unlocks" %}
-    {% endif %}
-</a>
+
 <form method="post" id="time_unlocks" style="display: none">
     {% csrf_token %}
     <input type="hidden" name="enable" value="{{ team.allow_time_unlocks|yesno:'false,true' }}">
@@ -82,11 +76,11 @@ main {
         <col style="width: 10%">
         <col style="width: 20%">
         <tr>
-            <th>{% translate "Puzzle" %}</th>
-            <th>{% translate "Incorrect guesses" %}</th>
-            <th>{% translate "Unlock time" %} ({{ start_time|date:"T" }})</th>
-            <th>{% translate "Time to solve" %}</th>
-            <th>{% translate "Solve time" %} ({{ start_time|date:"T" }})</th>
+            <th> 谜题 </th>
+            <th> 答错次数 </th>
+            <th> 解锁时间 ({{ start_time|date:"T" }})</th>
+            <th> 解出用时 </th>
+            <th> 解出时间 ({{ start_time|date:"T" }})</th>
         </tr>
         {% for s in submissions %}
         <tr{% if s.submission.used_free_answer %} class="free"{% endif %}>

@@ -3,11 +3,11 @@
 {% load puzzle_tags %}
 
 {% block page-title %}
-<title>{% blocktranslate with puzzle_name=puzzle.name %}Solution: {{ puzzle_name }}{% endblocktranslate %}</title>
+<title>解答: {{ puzzle.name }}</title>
 {% endblock %}
 
 {% block top-left-actions %}
-<a href="{% url 'puzzle' puzzle.slug %}" class="btn">{% translate "返回题目页" %}</a>
+<a href="{% url 'puzzle' puzzle.slug %}" class="btn">返回题目页</a>
 {% endblock %}
 
 {% block content %}
@@ -28,35 +28,34 @@ h4 {
 </style>
 
 <h1>
-    {% blocktranslate with puzzle_name=puzzle.name %}Solution: {{ puzzle_name }}{% endblocktranslate %}
-    {% if puzzle.answer %}<div class="solved-title-marker">{% translate "Answer:" %} <span class="solved-title-answer spoiler">{{ puzzle.answer }}</span></div>{% endif %}
+    解答: {{ puzzle.name }}
+    {% if puzzle.answer %}<div class="solved-title-marker">答案: <span class="solved-title-answer spoiler">{{ puzzle.answer }}</span></div>{% endif %}
 </h1>
 
 <main class="puzzle-main">
     <h2 style="margin-top: 0">
-        {% translate "Written by" %}
+        作者:
         {% block puzzle-author %}
-        {% translate "aliens" %}
+        佚名
         {% endblock %}
     </h2>
 
     {% puzzleblock solution-body %}
-    {% if solution_body %}{{ solution_body }}{% elif template_name %}
-    {% blocktranslate %}This solution doesn&rsquo;t seem to exist yet.
-    Searched for a solution template named <code>{{ template_name }}</code>{% endblocktranslate %}
+    {% if solution_body %}
+        {{ solution_body }}
     {% else %}
-    {% translate "This solution template exists, but it doesn&rsquo;t seem to define a solution content block. Check the post production guide?" %}
+        解答尚未写完……请静候佳音。
     {% endif %}
 
     {% puzzleblock author-notes %}
     {% if author_notes %}
-    <h2 id="authors-notes">{% translate "Author&rsquo;s Notes" %}</h2>
+    <h2 id="authors-notes">作者的话: </h2>
     {{ author_notes }}
     {% endif %}
 
     {% puzzleblock appendix %}
     {% if appendix %}
-    <h2 id="appendix">{% block appendix-title %}{% translate "Appendix" %}{% endblock %}</h2>
+    <h2 id="appendix">{% block appendix-title %}附录: {% endblock %}</h2>
     {{ appendix }}
     {% endif %}
 </main>
