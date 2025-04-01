@@ -9,7 +9,7 @@ IS_TEST = False
 # DOMAIN = 'http://fduph24.sapium.site/'
 # DOMAIN = 'http://localhost:8000/'
 # FIXME 
-DOMAIN = 'https://fduph24.fdupuzzle.fun/'
+DOMAIN = 'https://fduph25.fdupuzzle.fun/'
 
 # STATIC_ROOT = '/static/'
 
@@ -18,7 +18,7 @@ DOMAIN = 'https://fduph24.fdupuzzle.fun/'
 ALLOWED_HOSTS = [
   '127.0.0.1', 'localhost',
   'fduph24.sapium.site', 'sapium.site',
-  'fduph24.fdupuzzle.fun', 'fdupuzzle.fun'
+  'fduph25.fdupuzzle.fun', 'fdupuzzle.fun'
 ]
 ALLOWED_HOSTS = ['*']
 
@@ -33,22 +33,22 @@ GA_CODE = '''
 
 HUNT_START_TIME = timezone.make_aware(datetime.datetime(
     year=2025,
-    month=3,
-    day=29,
+    month=4,
+    day=18,
     hour=20,
     minute=00,
 ), timezone=datetime.timezone(datetime.timedelta(hours=8)))
 HUNT_END_TIME = timezone.make_aware(datetime.datetime(
     year=2025,
     month=4,
-    day=8,
+    day=27,
     hour=20,
     minute=00,
 ), timezone=datetime.timezone(datetime.timedelta(hours=8)))
 HUNT_CLOSE_TIME = timezone.make_aware(datetime.datetime(
     year=2025,
     month=4,
-    day=8,
+    day=27,
     hour=20,
     minute=00,
 ), timezone=datetime.timezone(datetime.timedelta(hours=8)))
