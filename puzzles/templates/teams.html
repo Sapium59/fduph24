@@ -28,7 +28,7 @@
                     {{ team.team_member_joint_string }}
                 </td>
                 <td>
-                    {{ team.creation_time }}
+                    {% format_time team.creation_time 'DATE_AT_TIME' %}
                 </td>
             </tr>
             {% endfor %}

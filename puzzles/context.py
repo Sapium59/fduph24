@@ -108,6 +108,7 @@ class BaseContext:
         return self.hunt_is_prereleased or self.now >= self.start_time
 
     def hunt_has_almost_started(self):
+        logger.debug(f"computing hunt_has_almost_started: {self.start_time} - {self.now} = {self.start_time - self.now }")
         return self.start_time - self.now < datetime.timedelta(hours=4)
 
     def hunt_is_over(self):

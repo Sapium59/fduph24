@@ -39,8 +39,6 @@ from puzzles.hunt_config import (
     HUNT_END_TIME,
     MAX_GUESSES_PER_PUZZLE,
     HINTS_ENABLED,
-    HINT_INTERVAL,
-    HINT_TIME,
     TEAM_AGE_BEFORE_HINTS,
     INTRO_HINTS,
     FREE_ANSWERS_ENABLED,
@@ -189,7 +187,8 @@ class Team(models.Model):
 
     # Time of creation of team
     creation_time = models.DateTimeField(
-        default=timezone.now() + timedelta(hours=8),
+        # default=timezone.now() + timedelta(hours=8),
+        default=timezone.now,
         verbose_name='注册时间')
         
     start_offset = models.DurationField(
@@ -323,7 +322,8 @@ class Team(models.Model):
                 'metameta_solve_time': meta_times.get(team.id),
                 'team': team,
                 'team_member_joint_string': ', '.join([it.name for it in team.teammember_set.all()]),
-                'creation_time': team.creation_time.strftime('%m/%d %H:%M:%S'),
+                # 'creation_time': team.creation_time.strftime('%m/%d %H:%M:%S'),
+                'creation_time': team.creation_time,
             } for team in all_teams]
         return sorted(
             unsorted_teams,
@@ -346,7 +346,8 @@ class Team(models.Model):
         if not HINTS_ENABLED or self.hunt_is_over:
             return 0
         # HACK dirty timezone process
-        if self.now < self.creation_time + datetime.timedelta(hours=-8):
+        # if self.now < self.creation_time + datetime.timedelta(hours=-8):
+        if self.now < self.creation_time:
             return self.total_hints_awarded
         import traceback
         try:
@@ -465,7 +466,7 @@ class Team(models.Model):
                     unlocked_at = unlock_time
             if context.hunt_is_prereleased or context.hunt_is_over:
                 unlocked_at = context.start_time
-            elif context.team:
+            elif context.team and context.hunt_has_started:
                 (global_solves, local_solves) = context.team.main_round_solves
                 if 0 <= puzzle.unlock_global <= global_solves and (global_solves or any(metas_solved)):
                     unlocked_at = context.now
