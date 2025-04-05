@@ -1,5 +1,5 @@
 DATE_TIME = 'n月j日 H:i'
-DATE_AT_TIME = 'Y年n月j日 \a\t g:i A T'
+DATE_AT_TIME = 'Y年n月j日 \t g:i A T'
 TIME = 'H:i A T'
 WEEKDATE = 'Y年n月j日 l'
-WEEKDATE_AT_TIME = 'Y年n月j日 l \a\t g:i A T'
+WEEKDATE_AT_TIME = 'Y年n月j日 l \t g:i A T'
