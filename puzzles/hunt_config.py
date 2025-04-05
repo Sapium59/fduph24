@@ -35,8 +35,6 @@ MAX_MEMBERS_PER_TEAM = 6
 
 # If this is disabled, teams will not get any hints.
 HINTS_ENABLED = True
-HINT_INTERVAL = datetime.timedelta(hours=12)
-HINT_TIME = HUNT_START_TIME + HINT_INTERVAL
 # To discourage teams from creating sockpuppets to grab more hints, teams
 # created less than this time ago get nothing. Once the time elapses, they
 # get the full number of hints, including retroactively.
