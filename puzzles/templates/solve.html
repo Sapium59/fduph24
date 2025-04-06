@@ -188,7 +188,16 @@
     <h4>历史回答</h4>
     <ul>
         {% for submission in puzzle_submissions %}
-        <li>{{ submission.submitted_answer }}</li>
+        <li>
+            {{ submission.submitted_answer }}
+            {% for pm in puzzle.puzzlemessage_set.all %}
+                {% if submission.submitted_answer == pm.semicleaned_guess %}
+                    <span style="color:white; background-color: rgba(64, 176, 32, 0.8)">
+                        {{pm.response}}
+                    </span>
+                {% endif %}
+            {% endfor %}
+        </li>
         {% endfor %}
     </ul>
 {% endif %}

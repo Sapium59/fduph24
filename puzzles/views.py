@@ -607,7 +607,11 @@ def solve(request):
         if request.context.guesses_remaining <= 0:
             messages.error(request, '你在本题的回答次数已用尽。若需要补充更多回答次数，请联系管理员。')
             return redirect('solve', puzzle.slug)
-
+        
+        # Currently they are implemented in the same way:
+        # `PuzzleMessage.semiclean_guess` and `Puzzle.normalize_answer`
+        # This is why the trick can work: compare in `solve.html`
+        # submitted_answer (normalized_answer) vs. semicleaned_guess (semiclean_guess)
         semicleaned_guess = PuzzleMessage.semiclean_guess(request.POST.get('answer'))
         normalized_answer = Puzzle.normalize_answer(request.POST.get('answer'))
         puzzle_messages = [
@@ -623,7 +627,20 @@ def solve(request):
         form = SubmitAnswerForm(request.POST)
         if request.context.now > HUNT_END_TIME - team.start_offset:
             form.add_error(None, f'你只能在 {HUNT_END_TIME - team.start_offset} 前提交答案。请耐心等待本活动于 {HUNT_END_TIME} 结束。')
-        if puzzle_messages:
+        if puzzle_messages and not tried_before:
+            # Save milestones to show in `solve` page. Instead, players are not allow to re-enter the milestone triggers.
+            AnswerSubmission(
+                team=team,
+                puzzle=puzzle,
+                submitted_answer=normalized_answer,
+                is_correct=False,
+                used_free_answer=False,
+            ).save()
+            grant, _ = team.extraguessgrant_set.get_or_create(puzzle=puzzle,
+                defaults={'extra_guesses': 0})
+            grant.extra_guesses += 1
+            grant.save()
+
             for message in puzzle_messages:
                 form.add_error(None, mark_safe(message.response))
         elif not normalized_answer:
