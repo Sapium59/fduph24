@@ -5,3 +5,5 @@ puzzles/migrations
 nohup.out
 logs/
 static/
+db*
+gph/cert*
