@@ -63386,7 +63386,7 @@ IPA_DICT: Dict[str, str] = {
 _CHEMICAL_ELEMENTS: List[str] = [
     "Hydrogen", "Helium", "Lithium", "Beryllium", "Boron", "Carbon", 
     "Nitrogen", "Oxygen", "Fluorine", "Neon", "Sodium", "Magnesium", 
-    "Aluminum", "Silicon", "Phosphorus", "Sulfur", "Chlorine", "Argon", 
+    "Aluminum", "Aluminium", "Silicon", "Phosphorus", "Sulfur", "Chlorine", "Argon",
     "Potassium", "Calcium", "Scandium", "Titanium", "Vanadium", 
     "Chromium", "Manganese", "Iron", "Cobalt", "Nickel", "Copper", 
     "Zinc", "Gallium", "Germanium", "Arsenic", "Selenium", "Bromine", 
