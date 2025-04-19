@@ -109,7 +109,7 @@ class BaseContext:
 
     def hunt_has_almost_started(self):
         logger.debug(f"computing hunt_has_almost_started: {self.start_time} - {self.now} = {self.start_time - self.now }")
-        return self.start_time - self.now < datetime.timedelta(hours=4)
+        return self.start_time - self.now < datetime.timedelta(hours=5)
 
     def hunt_is_over(self):
         return self.now >= self.end_time
