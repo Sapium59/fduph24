@@ -197,7 +197,7 @@
 
         // a little hack: json boolean false -> string 'False'
         const spoil_text = `{{ team.puzzle_bingo_game_data.bingo_spoiled|safe }}`;
-        if (spoil_text != 'False') {
+        if (spoil_text != '') {
             $(`#spoiler_div`).html(`
                 <p>${spoil_text}</p>
             `);
