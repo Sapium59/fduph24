@@ -91,7 +91,7 @@ def submit(request):
         get_num = body.get("num")
         if get_num not in [1, 10]:
             raise ValueError('Expect get num to be 1 or 10.')
-        if len(puzzle_genshin_game_data["history"]) >= 2000:
+        if len(puzzle_genshin_game_data["history"]) >= 6000:
             return {
                 'error': '你并不需要那么多次抽取来解决本题。', 
                 'correct': True,
