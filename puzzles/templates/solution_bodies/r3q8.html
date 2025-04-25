@@ -1,0 +1,86 @@
+{% extends "solution.html" %}
+
+{% block puzzle-author %}
+小大圣
+{% endblock %}
+
+{% block solution-body-md %}
+
+本题题面为由字典序排列的一些clue，每个clue给出了enumeration以及提取的字母。并且可以发现每个clue都包含至少一个二次元角色。首先解出这些clue并列出它们涉及到的二次元角色及作品：
+
+|clue|答案|角色|作品|提取字母|
+|--|--|--|--|--|
+|A traditional Japanese cuisine Konoe kanata may cook, where she will use shrimp, flour, etc. (4/7)|Tempura|近江彼方|Lovelive!虹咲学园偶像同好会|p|
+|Cherry blossom blooms in this season, so does Uehara ayumu. (4/6)|Spring|上原步梦|Lovelive!虹咲学园偶像同好会|i|
+|Hanesaki ayano plays this sports. (6/9)|Badminton|羽咲绫乃|轻羽飞扬！|n|
+|Hikawa sayo and Hikawa hina have become ______ students this year. (8/13)|Undergraduate|冰川纱夜/冰川日菜|BanG Dream!|a|
+|Hoto moka will wear this if she take her little sister for a ride on a motorcycle. (5/6)|Helmet|保登摩卡|请问你今天要来点兔子吗？|e|
+|In her school, Tennoji rina always play with this stray animal. (2/3)|Cat|天王寺璃奈|Lovelive!虹咲学园偶像同好会|a|
+|Mia Taylor played this instrument on a concert. (3/5)|Piano|米娅·泰勒|Lovelive!虹咲学园偶像同好会|a|
+|Misaka ______ is found by the esper abilities of Sisters (Misaka imoto). (6/7)|Network|御坂妹妹|魔法禁书目录/科学超电磁炮|r|
+|Misaka mikoto have broken serveral this type of buildings in order to destroy a certain research plan. (2/10)|Laboratory|御坂美琴|魔法禁书目录/科学超电磁炮|a|
+|Miyanaga teru got ______ed before the competition starts. (9/9)|Interview|宫永照|天才麻将少女|w|
+|Miyashita ai loves to say puns to her ______. (3/4)|Fans|宫下爱|Lovelive!虹咲学园偶像同好会|n|
+|Nakasu kasumi got a very bad ______ in her final test. (3/6)|Result|中须霞|Lovelive!虹咲学园偶像同好会|s|
+|Omae kumiko plays in a band of this type. (6/9)|Orchestra|黄前久美子|吹响！上低音号|s|
+|Osaka shizuku may act like this in the drama club if they are going to run a haunted house. (3/6)|Zombie|樱坂雫|Lovelive!虹咲学园偶像同好会|m|
+|Shirai kuroko uses ______ mechanics and String theory to explain her Esper Abilities. (7/7)|Quantum|白井黑子|魔法禁书目录/科学超电磁炮|m|
+|Sofy Twilight is a ______. (6/7)|Vampire|苏菲·托莱特|邻家吸血鬼|r|
+|Takasaki yu is ______. (-/3)|You|高咲侑|Lovelive!虹咲学园偶像同好会|-|
+|The color represents Emma Verde and the nature. (5/5)|Green|艾玛·维尔德|Lovelive!虹咲学园偶像同好会|n|
+|The creature drawn by Kouzuki mahiru on a wall. (5/9)|Jellyfish|光月真昼|夜晚的水母不会游泳|y|
+|The instrument played by PAREO (a.k.a. Nyubara reona). (2/8)|Keyboard|PAREO|BanG Dream!|e|
+|The instrument similar with marimba, which Kamaya tsubame are good with. (6/9)|Xylophone|釜屋燕|吹响！上低音号|h|
+|The student union that Mifune shioriko need to settle these every day. (9/9)|Documents|三船栞子|Lovelive!虹咲学园偶像同好会|s|
+|There is a song of Daiba nana that references ______ baroque. (6/10)|Wide-screen|大场奈奈|少女歌剧|c|
+|When Asaka karin get lost, she would refer to this. (3/3)|Map|朝香果林|Lovelive!虹咲学园偶像同好会|p|
+|Yuki setsuna loves to watch this. (3/5)|Anime|优木雪菜|Lovelive!虹咲学园偶像同好会|i|
+|Zhong lanzhu is fluent in Chinese, Japanese, and this language. (3/7)|English|钟岚珠|Lovelive!虹咲学园偶像同好会|g|
+
+在解clue的过程中，可以得到两个观察：答案的单词的首字母为A到Z，以及26个clue中包含了《Lovelive!虹咲学园偶像同好会》中的全部13名角色。将26个单词按首字母排序并提取出字母并不能得到有意义的短语，但是中间答案(3 4'1 5)长度为13可以提示我们，将来自虹咲与不来自虹咲的clue分成两部分考虑。将不来自虹咲的所有clue中提取出的字母连接可得到中间答案New year's march。
+
+|答案|作品|提取字母|
+|--|--|--|
+|Badminton|轻羽飞扬！|n|
+|Helmet|请问您今天要来点兔子吗？|e|
+|Interview|天才麻将少女|w|
+|Jellyfish|夜晚的水母不会游泳|y|
+|Keyboard|BanG Dream!|e|
+|Laboratory|魔法禁书目录/科学超电磁炮|a|
+|Network|魔法禁书目录/科学超电磁炮|r|
+|Orchestra|吹响！上低音号|s|
+|Quantum|魔法禁书目录/科学超电磁炮|m|
+|Undergraduate|BanG Dream!|a|
+|Vampire|邻家吸血鬼|r|
+|Wide-screen|少女歌剧|c|
+|Xylophone|吹响！上低音号|h|
+
+检索这个答案可以发现，这是一首《Lovelive!虹咲学园偶像同好会》的歌曲。歌曲中，一月直到十二月分别由十二名角色演唱。并且，没有参与演唱的第十三名角色高咲侑正好对应提取字母为一道横线的答案。于是我们将十二名角色对应的答案按照一月到十二月的顺序排列，并废弃掉高咲侑对应的答案不用，提取得到ans is mapping。
+
+|月份|角色|答案|提取字母|
+|--|--|--|--|
+|一月|天王寺璃奈|Cat|a|
+|二月|宫下爱|Fans|n|
+|三月|中须霞|Result|s|
+|四月|上原步梦|Spring|i|
+|五月|三船栞子|Documents|s|
+|六月|樱坂雫|Zombie|m|
+|七月|米娅·泰勒|Piano|a|
+|八月|近江彼方|Tempura|p|
+|九月|朝香果林|Map|p|
+|十月|优木雪菜|Anime|i|
+|十一月|艾玛·维尔德|Green|n|
+|十二月|钟岚珠|English|g|
+
+得到最终答案：Mapping。
+
+{% endblock %}
+
+
+{% block author-notes-html %}
+
+看到虹咲的《New year's march》这首歌刚出的时候就想到，这个一月到十二月的对应刚好可以拿来出题！由于New year's march需要作为中间答案，在发现它本身也是十三个字母之后，就出了这道题。
+<br>
+P.S. 虹咲在2025年从1月到12月将会每月发布一首角色单曲，对应关系和这个歌里的不一样。不过这个消息是在出完这题之后了。
+
+{% endblock %}

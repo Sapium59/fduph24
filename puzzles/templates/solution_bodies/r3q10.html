@@ -1,0 +1,45 @@
+{% extends "solution.html" %}
+
+{% block puzzle-author %}
+Inequality
+{% endblock %}
+
+{% block solution-body-md %}
+本题是Wordplay题目。首先根据ft和给出的植物与僵尸数量可以猜测每一波都有一个词不做变换。每个植物对应的变换可以通过猜测和试错得到，具体如下表：
+
+| 植物       | 对应变换                     |
+|------------|------------------------------|
+| 大嘴花     | 去掉单词的首字母             |
+| 阳光菇     | 将单词按词义变为成年后的单词 |
+| 毁灭菇     | 在单词中加入一个o            |
+| 窝瓜       | 将单词变为降一维后的单词     |
+| 花盆       | 将单词按词义提升一级         |
+| 双子向日葵 | 按词义双倍后得到新单词       |
+| 模仿者     | 去掉单词中的roygbiv          |
+
+因此可以把题目中的单词变换如下：
+
+| Wave1                      |                             |                      |                       |                        |                    |                        |                 |
+|----------------------------|-----------------------------|----------------------|-----------------------|------------------------|--------------------|------------------------|-----------------|
+| acute                      | child                       | fish                 | meter                 | observatory            | surface            | tower                  | wood            |
+| cute（大嘴花）             | adult（阳光菇）             | pisces（双子向日葵） | meteor（毁灭菇）      | seat（模仿者）         | line（窝瓜）       | star（花盆）（塔罗牌） |                 |
+| Wave2                      |                             |                      |                       |                        |                    |                        |                 |
+| caterpillar                | earl                        | fund                 | haunted               | imagined               | klein              | pi                     | show            |
+| butterfly（阳光菇）        | marquis（花盆）（爵位）     | found（毁灭菇）      |                       | maned（模仿者）        | mobius（窝瓜）     | tau（双子向日葵）      | how（大嘴花）   |
+| Wave3                      |                             |                      |                       |                        |                    |                        |                 |
+| class                      | ice                         | fawn                 | particle              | pen                    | quarter            | sphere                 | tractor         |
+| phylum（花盆）（生物分类） |                             | deer（阳光菇）       | article（大嘴花）     | open（毁灭菇）         | half（双子向日葵） | circle（窝瓜）         | tract（模仿者） |
+| Wave4                      |                             |                      |                       |                        |                    |                        |                 |
+| curse                      | eagle                       | glance               | plotmon               | radius                 | surviving          | tesseract              | tree            |
+| course（毁灭菇）           | albatross（花盆）（高尔夫） | lance（大嘴花）      | tailmon（阳光菇）     | diameter（双子向日葵） | sun（模仿者）      | cube（窝瓜）           |                 |
+| Wave5                      |                             |                      |                       |                        |                    |                        |                 |
+| bicycle                    | brightly                    | engine               | jack                  | lamb                   | menger             | rad                    | rigorous        |
+| tandem（双子向日葵）       | rightly（大嘴花）           |                      | queen（花盆）（扑克） | sheep（阳光菇）        | sierpinski（窝瓜） | road（毁灭菇）         | us（模仿者）    |
+
+按照下方给出的index可以提取出** first formation **，这提示我们按照首字母和构词来提取剩下的单词。将剩下的单词wood, haunted, ice, tree, engine分别按两种方法提取得到**white**和**house**（都可以与house组词），因此本题答案为**WHITE HOUSE**。
+
+{% endblock %}
+
+{% block author-notes-html %}
+本题的原型是2020年Smogon hunt中的Moves like Swagger，看到这题和这个答案感觉可以很自然地对应到植物大战僵尸里，对几个变换和词语修改后就出成了这道题。最后的提取也是反复修改成现在的样子，提示更加明确，然而比赛中看上去并没有达到效果。
+{% endblock %}
