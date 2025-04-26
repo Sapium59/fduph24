@@ -1,0 +1,42 @@
+{% extends "solution.html" %}
+
+{% block puzzle-author %}
+
+{% endblock %}
+
+{% block solution-body-md %}
+由标题知小题都来自《纽约时报》的每日文字游戏，它们分别是Wordle、Strands、Connections。
+
+在Wordle中，我们需根据规则判断出打码的单词为ICONS。
+
+在Strands中，所有的theme words是REPTILE、LIZARD、SNAKE、CHAMELEON、TURTLE、DRAGON、CROC，其中REPTILE是spangram（在原版游戏中spangram是要分割盘面的，但本题为了最终提取不得不抛弃了这一条件），如下图所示。在完成Strands后，从上到下、从左到右地提取剩余的字母，得到WHITE。
+
+<img src="/static/puzzle_resources/s-r3q7-01.png" style="height: 40vh;">
+
+在Connections中，正确的分类如下图所示（分类排序并不重要）。可以发现所有的词都可以被转换为一个字母，按从上到下、从左到右的顺序，每个分类分别得到GREY、VAST、REST、CORE。结合题目最下方的指示，我们需要找到一个4字母词，它可以和上述4个词分别组词（组词也是Connections中的一种常见分类），这个词是AREA。
+
+<img src="/static/puzzle_resources/s-r3q7-02.png" style="height: 40vh;">
+
+将3道小题的答案连起来，得到ICON'S WHITE AREA。观察这些游戏在《纽约时报》网页中的图标（如下），可以发现3道小题分别有一部分区域与对应图标匹配，提取其中白色区域对应字母可得本题最终答案HUNDRED EYES。
+
+<div>
+    <img src="/static/puzzle_resources/s-r3q7-03.png" style="height: 40vh;">
+    <img src="/static/puzzle_resources/s-r3q7-04.png" style="height: 40vh;">
+</div>
+<div>
+    <img src="/static/puzzle_resources/s-r3q7-05.png" style="height: 40vh;">
+    <img src="/static/puzzle_resources/s-r3q7-06.png" style="height: 40vh;">
+</div>
+
+<img src="/static/puzzle_resources/s-r3q7-07.png" style="height: 40vh;">
+
+
+{% endblock %}
+
+{% block author-notes-md %}
+FDUPH出题阶段的最后一题。因为最近在玩NYT的Daily Word
+Games，就想出一道与此相关的题，瞪着这些游戏的图标——突然发现它们白色的区域实在太适合提取了，而且本题这三个游戏图标中白色区域总数正好等于剩下没出的那道题的答案字母数，真是验证了最近看到的一句话：Serendipity occurs
+when you're actively searching for good ideas。
+## funfact：
+<img src="/static/puzzle_resources/s-r3q7-08.png" style="height: 40vh;">
+{% endblock %}

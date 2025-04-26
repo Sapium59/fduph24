@@ -1,0 +1,230 @@
+{% extends "solution.html" %}
+
+{% block puzzle-author %}
+Lithium
+{% endblock %}
+
+{% block solution-body-md %}
+将每个5*5方格内的字母进行重新排列，每个方阵内可以组成4个5字母的英文单词和1个4字母的英文单词，这5个单词可以根据5张图片的暗示分为5类，分别为：宝可梦的种类、颜色、数字、花卉和希腊字母。提取每个方阵剩余的字母，得到答案“TRADE”。具体重排如下，加粗字为提取的字母。
+
+<table>
+    <tr>
+      <td>宝可梦种类</td>
+      <td>G</td>
+      <td>H</td>
+      <td>O</td>
+      <td>S</td>
+      <td>T</td>
+    </tr>
+    <tr>
+      <td>颜色</td>
+      <td>B</td>
+      <td>L</td>
+      <td>A</td>
+      <td>C</td>
+      <td>K</td>
+    </tr>
+    <tr>
+      <td>数字</td>
+      <td>T</td>
+      <td>H</td>
+      <td>R</td>
+      <td>E</td>
+      <td>E</td>
+    </tr>
+    <tr>
+      <td>希腊字母</td>
+      <td>G</td>
+      <td>A</td>
+      <td>M</td>
+      <td>M</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <td>花卉</td>
+      <td style="color: #4a2;"><strong>T</strong></td>
+      <td>R</td>
+      <td>O</td>
+      <td>S</td>
+      <td>E</td>
+    </tr>
+  </table>
+  
+  <table>
+    <tr>
+      <td>宝可梦种类</td>
+      <td>F</td>
+      <td>A</td>
+      <td>I</td>
+      <td>R</td>
+      <td>Y</td>
+    </tr>
+    <tr>
+      <td>颜色</td>
+      <td>B</td>
+      <td>R</td>
+      <td>O</td>
+      <td>W</td>
+      <td>N</td>
+    </tr>
+    <tr>
+      <td>数字</td>
+      <td>S</td>
+      <td>E</td>
+      <td>V</td>
+      <td>E</td>
+      <td>N</td>
+    </tr>
+    <tr>
+      <td>希腊字母</td>
+      <td>B</td>
+      <td style="color: #4a2;"><strong>R</strong></td>
+      <td>E</td>
+      <td>T</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <td>花卉</td>
+      <td>L</td>
+      <td>I</td>
+      <td>L</td>
+      <td>A</td>
+      <td>C</td>
+    </tr>
+  </table>
+  
+  <table>
+    <tr>
+      <td>宝可梦种类</td>
+      <td>S</td>
+      <td>T</td>
+      <td>E</td>
+      <td>E</td>
+      <td>L</td>
+    </tr>
+    <tr>
+      <td>颜色</td>
+      <td>O</td>
+      <td>L</td>
+      <td>I</td>
+      <td>V</td>
+      <td>E</td>
+    </tr>
+    <tr>
+      <td>数字</td>
+      <td>F</td>
+      <td>O</td>
+      <td style="color: #4a2;"><strong>A</strong></td>
+      <td>U</td>
+      <td>R</td>
+    </tr>
+    <tr>
+      <td>希腊字母</td>
+      <td>T</td>
+      <td>H</td>
+      <td>E</td>
+      <td>T</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <td>花卉</td>
+      <td>T</td>
+      <td>U</td>
+      <td>L</td>
+      <td>I</td>
+      <td>P</td>
+    </tr>
+  </table>
+  
+  <table>
+    <tr>
+      <td>宝可梦种类</td>
+      <td>W</td>
+      <td>A</td>
+      <td>T</td>
+      <td>E</td>
+      <td>R</td>
+    </tr>
+    <tr>
+      <td>颜色</td>
+      <td>B</td>
+      <td>L</td>
+      <td>U</td>
+      <td style="color: #4a2;"><strong>D</strong></td>
+      <td>E</td>
+    </tr>
+    <tr>
+      <td>数字</td>
+      <td>E</td>
+      <td>I</td>
+      <td>G</td>
+      <td>H</td>
+      <td>T</td>
+    </tr>
+    <tr>
+      <td>希腊字母</td>
+      <td>A</td>
+      <td>L</td>
+      <td>P</td>
+      <td>H</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <td>花卉</td>
+      <td>D</td>
+      <td>A</td>
+      <td>I</td>
+      <td>S</td>
+      <td>Y</td>
+    </tr>
+  </table>
+  
+  <table>
+    <tr>
+      <td>宝可梦种类</td>
+      <td>R</td>
+      <td>O</td>
+      <td>C</td>
+      <td>K</td>
+      <td style="color: #4a2;"><strong>E</strong></td>
+    </tr>
+    <tr>
+      <td>颜色</td>
+      <td>G</td>
+      <td>R</td>
+      <td>E</td>
+      <td>E</td>
+      <td>N</td>
+    </tr>
+    <tr>
+      <td>数字</td>
+      <td>F</td>
+      <td>O</td>
+      <td>R</td>
+      <td>T</td>
+      <td>Y</td>
+    </tr>
+    <tr>
+      <td>希腊字母</td>
+      <td>S</td>
+      <td>I</td>
+      <td>G</td>
+      <td>M</td>
+      <td>A</td>
+    </tr>
+    <tr>
+      <td>花卉</td>
+      <td>L</td>
+      <td>O</td>
+      <td>T</td>
+      <td>U</td>
+      <td>S</td>
+    </tr>
+  </table>
+  
+
+{% endblock %}
+
+{% block author-notes-md %}
+这个题目本来是inequality老师出的一个小demo的5个方阵的形式。内部测完之后wonderepublic提议可以进行扩充变成一个25个方阵的形式，再凑了一阵之后就凑成了一个25 groups。但是给内测组一测的时候明显感受到这个形式不可做，并且我也觉得25 groups纯粹就是在重复劳动，做起来会比较疲惫。为了玩家的做题体验就又nerf到了5 groups，并且加入了图片暗示分组。如果想要尝试一下25 groups的话可以点进去试一下。（以后附上腾讯文档链接。）
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "solution.html" %}
+
+{% block puzzle-author %}
+小汤圆
+{% endblock %}
+
+{% block solution-body-md %}
+本题为数桥（Hashi）变体。
+
+具体而言，在原版规则基础上，做出如下改动：
+
+1. 桥梁现在可以从任意岛屿建到任意岛屿，无视横竖限制。
+
+2. 桥不可穿越其他岛屿所在格，但可以接触其顶点。
+
+3. 同一岛屿的任意两座桥间夹角大小存在限制，标注在每题右上角。
+
+三题的详细推理步骤我会录视频讲解，到时候赛程结束再说。
+
+这里直接给出答案：
+<div>
+    <img src="/static/puzzle_resources/s-r3q9-01.png" style="height: 40vh;">
+    <img src="/static/puzzle_resources/s-r3q9-02.png" style="height: 40vh;">
+    <img src="/static/puzzle_resources/s-r3q9-03.png" style="height: 40vh;">
+</div>
+
+依据ft暗示，“独木桥”对应单桥，“阳关道”对应双桥。标题“阳关三叠”给出了指示：将三题中的双桥叠加，得到如下图案，象形读出答案SYLLABLE。
+
+<img src="/static/puzzle_resources/s-r3q9-04.png" style="height: 40vh;">
+
+
+{% endblock %}
+
+{% block author-notes-md %}
+本题灵感来自于想法“非网格（grid-free？）纸笔”。
+
+虽然本题中岛屿仍然处于网格中，至少桥不是横平竖直的了，所以也可以算是非网格。
+
+希望能较好展现这种类型的有趣性。
+
+
+网格和逻辑推理相性非常好，所以大部分纸笔都是基于网格的。
+
+网格中方向、区域接触的有限性都给推理带来了便利，而非网格中光是方向的无穷性就已经让人头大了。本题中通过桥连接与不允许跨越来限制可能性多少，从而找到了一个不可推与可推之间的平衡。
+
+
+我也在考虑做其他纸笔的非网格变体（实际上以前也有很多ph里出现过了），但是感觉都很难把那些网格中适用的规则转为非网格规则。要想真正脱离网格，还有更精妙的规则等待发现。
+{% endblock %}
