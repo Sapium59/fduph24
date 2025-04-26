@@ -1,44 +1,29 @@
 {% extends "solution.html" %}
-
 {% block puzzle-author %}
-amway
+Amway
 {% endblock %}
-
 {% block solution-body-md %}
-
 各道小题的解答依次为：
 
-1.  上下两行的字分别为“十二生肖的倒数第三个”、“葫芦娃雌性反派的原型”，答案依次为“鸡”、“蛇”，搜索可知鸡蛇（COCKATRICE）是一种缝合生物，符合上下两行字各切一半相拼接的语义。
-
-2.  注意到该像素字体大小为9*9，下面的数字恰好在高度/宽度的范围内，再联系古筝行动的主题和“你自己切割”，我们需要切割出汉字的某一行。观察线的走向可知切割方向为横向切割。而后可以发现切割的部分恰好是Morse code的形式（单独像素点为dot，连续2个像素点为dash，由1个空像素点分割），答案为OH ITS MORSE。
-
-3.  下方各碎片为上方某汉字3*3网格中的一块，碎片和汉字一一对应（乱序），我们需要辨认出各碎片来自哪个汉字的哪个方位，然后注意上方汉字词语两两分组，按照其对应碎片的方位用旗语提取，答案为OCEAN FLAGS。
-
-4.  该题的汉字被切分成4份并被打乱，把原汉字4部分看作正序，提取permutation index，答案为REARRANGES。
-
-5.  外环的汉字为“你用来吃饭的面部器官”，答案是“口”；内圈的汉字为“某些尊称的第一个汉字”，答案是“令”。按照切割模式把这两个汉字组合得八笔画字“囹”，意为监狱，结合圆形搜索可得答案PANOPTICON。
-
-6.  这题将若干二字词语拼接在一起，首先辨认出所有词语是“折射 胸腔 东方 业余 深沉 牧歌 植树 月薪 水手 电钻”，结合题中的喇叭符号，可以联想本题与汉字读音有关。 结合古筝行动“切割+拼接”的核心思想，考虑将左右汉字的拼音声母韵母结合，得到zhe xiang dang yu shen me zhu yin shou duan，即“这相当于什么注音手段”，答案是“反切（REVERSE CUT)”（这是维基百科给的英文直译）。
-
-7.  可以发现该题的切割方式是周围8块+中间1块，字母背景是Minecraft的合成界面。检索可知8 OBSIDIANS + EYE OF ENDER = ENDER CHEST。
-
-8.  这次我们将每行汉字切割一部分后再连接。一共9行字，像素字体的高也是9，所以正如原版的古筝行动，我们沿着箭头方向切割出第1行的第1部分，第2行的第2部分……可以得到下图：
-
-
+<ol>
+<li>上下两行的字分别为“十二生肖的倒数第三个”、“葫芦娃雌性反派的原型”，答案依次为“鸡”、“蛇”，搜索可知鸡蛇是一种缝合生物，符合上下两行字各切一半相拼接的语义，答案为COCKATRICE。</li>
+<li>注意到该像素字体大小为99，下面的数字恰好在高度/宽度的范围内，再联系古筝行动的主题和“你自己切割”，我们需要切割出汉字的某一行。观察线的走向可知切割方向为横向切割。而后可以发现切割的部分恰好是Morse code的形式（单独像素点为dot，连续2个像素点为dash，由1个空像素点分割），答案为OH ITS MORSE。</li>
+<li>下方各碎片为上方某汉字33网格中的一块，碎片和汉字一一对应（乱序），我们需要辨认出各碎片来自哪个汉字的哪个方位，然后注意上方汉字词语两两分组，按照其对应碎片的方位用旗语提取，答案为OCEAN FLAGS。</li>
+<li>该题的汉字被切分成4份并被打乱，把原汉字4部分看作正序，提取permutation index，答案为REARRANGES。</li>
+<li>观察可发现方块是由三字经中的句子拼接而成，且都是靠前的句子，按序号A1Z26转字母得LEFT IS ZERO。然后注意拼接部分来自汉字的左/中/右部分，按上一步指示将左/中/右三部分分别对应到数字0/1/2，按三进制提取，答案为TRILITERAL。</li>
+<li>这题将若干二字词语拼接在一起，首先辨认出所有词语是“着色 胸腔 东方 业余 深沉 牧歌 植树 月薪 水手 电钻”，结合题中的喇叭符号，可以联想本题与汉字读音有关。 结合古筝行动“切割+拼接”的核心思想，考虑将左右汉字的拼音声母韵母结合，得到zhe xiang dang yu shen me zhu yin shou duan，即“这相当于什么注音手段”，答案是REVERSE CUT（“反切”，维基百科给的英文直译）。</li>
+<li>可以发现该题的切割方式是周围8块+中间1块，字母背景是Minecraft的合成界面。检索可知外圈是8 OBSIDIANS，内圈是EYE OF ENDER，查询合成表，答案为ENDER CHEST。</li>
+<li>这次我们将每行汉字切割一部分后再连接。一共9行字，像素字体的高也是9，所以正如原版的古筝行动，我们沿着箭头方向切割出第1行的第1部分，第2行的第2部分……可以得到下图：
 <img src="/static/puzzle_resources/s-r2q1.webp" width="80%" height="auto">
+这是Wingdings字符，转为字母VISIBILITY。</li>
+<li>把盲文切3份，不同单词被分隔符（短竖线）分开。 nutri表达式依次为： "[lijstw]{2}[abehkloruvz]{2}[cdfgmnpqxy]{2}[abehkloruvz][lijstw][cdfgmnpqxy]{2}" "[ghjqrtw][denoyz]" "[bfilpsv][denoyz]{3}[ghjqrtw][bfilpsv]{2}[denoyz]" "[klmnopqrst]{3}[abcdefghij]" "[abcdefghij][klmnopqrst]{5}" 结合本题色调和其他小题不同，推断可知cluephrase为STRUGGLING TO IDENTIFY SOME COLORS（这些词都在nutri结果的前排），答案为COLOR-BLIND。</li>
+<li>把猪圈密码切割成2份，每个字母的可能性不多（1个或2个），可推断出cluephrase为THE DADDY OF PEPPA'S PAPA，答案为GRANDPA PIG。</li>
+</ol>
 
-这是Wingdings字符，转为字母VISIBILITY。
-
-9.  把盲文切3份，不同单词被分隔符（短竖线）分开。 nutri表达式依次为： "[lijstw]{2}[abehkloruvz]{2}[cdfgmnpqxy]{2}[abehkloruvz][lijstw][cdfgmnpqxy]{2}" "[ghjqrtw][denoyz]" "[bfilpsv][denoyz]{3}[ghjqrtw][bfilpsv]{2}[denoyz]" "[klmnopqrst]{3}[abcdefghij]" "[abcdefghij][klmnopqrst]{5}" 结合本题色调和其他小题不同，推断可知cluephrase为STRUGGLING TO IDENTIFY SOME COLORS（这些词都在nutri结果的前排），答案为COLOR-BLIND。
-
-10.  把猪圈密码切割成2份，每个字母的可能性不多（1个或2个），可推断出cluephrase为THE DADDY OF PEPPA'S PAPA，答案为GRANDPA PIG。
-
-*最终提取：*
-
-和原版《古筝行动》一样，但需要注意第5题中P的弯曲部分被标成灰色，我们需要抹去P的弯曲部分，使之变成I。答案为**CHERISHING**
-
+<i>最终提取：</i>
+小题答案组成了10*10的字母阵，取主对角线上的字母，得到答案<b>CHERISHING</b>。
 {% endblock %}
-
 {% block author-notes-html %}
-“通过部分残缺的信息还原出原本完整的信息”是一大类谜题背后的核心思想，甚至广义上可以说我们解谜的大部分时候都在做这件事。P&KU2的《古筝行动》简单直接地应用了这一思想，搭配上恰到好处的标题，构成一则小巧绝妙的实例。而正如本题的flavor text所言，本题试图探索了《古筝行动》其他的形态。
+amway：“通过部分残缺的信息还原出原本完整的信息”是一大类谜题背后的核心思想，甚至广义上可以说我们解谜的大部分时候都在做这件事。P&KU2的《古筝行动》简单直接地应用了这一思想，搭配上恰到好处的标题，构成一则小巧绝妙的实例，本题试图探索了《古筝行动》其他的形态。标题来自@Wonderepublic。
+Wonderepublic：第一轮内测时这道题的标题还是《古筝行动DLC》，后来觉得在标题里直接call back其他hunt的某道具体题目不是很好，于是头脑风暴了一轮新的标题。我一开始想到也许可以neta《解体诸因》命名为《解密诸因》，因为担心可能会有误导于是最后决定直接改成《解·密》，类似“庖丁解牛”一样取“分割密码”之意，意外地发现是对“解密”一词的二次诠释？
 {% endblock %}
