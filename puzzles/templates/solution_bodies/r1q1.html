@@ -1,0 +1,54 @@
+{% extends "solution.html" %}
+{% block puzzle-author %}
+Lithium
+{% endblock %}
+{% block solution-body-md %}
+识图之后检索图片信息可以发现，图片代表的都是台风的名字。根据台风命名规则，台风的名字由事先规定的命名表依次命名。而如果某个台风造成了巨大损失之后，这个台风的名字将会被除名，以一个新的名字替代。题目中的变换指的是被除名的台风名和新的命名。根据下划线位置提取之后可以得到答案AVAILABILITY。具体的对应关系如下：
+<table>
+<tr>
+<th>被除名台风</th>
+<th>提取</th>
+<th>新命名台风</th>
+<th>提取</th>
+</tr>
+<tr>
+<td>Kai-tak（启德）</td>
+<td>t</td>
+<td>Yun-yeung（鸳鸯）</td>
+<td>y</td>
+</tr>
+<tr>
+<td>Linfa（莲花）</td>
+<td>l</td>
+<td>Peilou（琵鹭）</td>
+<td>i</td>
+</tr>
+<tr>
+<td>Vamei（画眉）</td>
+<td>v</td>
+<td>Peipah（琵琶）</td>
+<td>a</td>
+</tr>
+<tr>
+<td>Haima（海马）</td>
+<td>a</td>
+<td>Mulan（木兰）</td>
+<td>l</td>
+</tr>
+<tr>
+<td>Longwang（龙王）</td>
+<td>a</td>
+<td>Haikui（海葵）</td>
+<td>i</td>
+</tr>
+<tr>
+<td>Nabi（彩蝶）</td>
+<td>b</td>
+<td>Doksuri（杜苏芮）</td>
+<td>i</td>
+</tr>
+</table>
+{% endblock %}
+{% block author-notes-html %}
+每年台风季各个自媒体都会不厌其烦地发台风是怎么命名的，在又一次看到台风命名的推送之后就有了这道题。出题的过程中发现很多音译的台风名字的本来的意思还是很有趣的，可惜因为答案的限制最后选取的台风大多都是中国或者港澳命名的名字，少了一点发现音译名字的本来意思的乐趣。不过作为第一题还好，实际上很多人通过爆破得到的，也是降低了爆破的难度。
+{% endblock %}

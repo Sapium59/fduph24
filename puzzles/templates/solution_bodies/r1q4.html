@@ -1,0 +1,42 @@
+{% extends "solution.html" %}
+{% block puzzle-author %}
+Lithium
+{% endblock %}
+{% block solution-body-md %}
+根据图片进行图寻可以定位到图片中的各个地点，注意到各个地点所在的道路均是以省份命名的。同时，结合每张图片中被去掉的“山”字以及标题“不畏浮云遮望眼”，可以知道本题需要提取所在道路命名的省份的最高的山峰，得到答案CHINA DAILY。具体如下：
+<table>
+<tr>
+<th>道路名</th>
+<th>最高山峰</th>
+<th>提取</th>
+</tr>
+<tr>
+<td>江苏昆山 黑龙江中路</td>
+<td>Datudingzishan（大秃顶子山）</td>
+<td>A, D</td>
+</tr>
+<tr>
+<td>上海 贵州路</td>
+<td>Jiucaiping（韭菜坪）</td>
+<td>C, I</td>
+</tr>
+<tr>
+<td>山东青岛 河南路</td>
+<td>Laoyachanao（老鸦岔垴）</td>
+<td>L, H</td>
+</tr>
+<tr>
+<td>广西北海 海南路</td>
+<td>Wuzhishan（五指山）</td>
+<td>I, A</td>
+</tr>
+<tr>
+<td>江苏南京 江苏路</td>
+<td>Yunvfeng（玉女峰）</td>
+<td>Y, N</td>
+</tr>
+</table>
+{% endblock %}
+{% block author-notes-html %}
+利用省份命名的道路出题的想法由来已久。最开始是注意到上海有着大量的以省份命名的道路，所以就有了这个想法。尝试过用公交车之类的进行提取，但是效果不是很好。有一次刷到了各省的最高峰的视频，于是就把这两者结合了起来。最开始的版本不是抹掉“山”，而是需要观察到所有图片中都有“山”，被说实在太抽象了，于是就抹掉了“山”。看起来大家都不是很喜欢图寻题，不过本题的图寻都是比较简单的，只需要搜索店铺名字和路名，应该是比较容易找到的。
+{% endblock %}
