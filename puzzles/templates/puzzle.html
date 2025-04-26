@@ -11,18 +11,17 @@
 {% if round.slug != intro_round_slug %}
 <a href="{% url 'round' round.slug %}" class="btn">{{ round.name }}</a>
 {% endif %}
-{% if team and not hunt_is_closed %}
+{% if team and not hunt_is_over %}
 <a href="{% url 'solve' puzzle.slug %}" class="btn">提交答案</a>
+{% endif %}
+{% if hunt_is_over %}
+<a href="{% url 'post-hunt-solve' puzzle.slug %}" class="btn">核对答案</a>
 {% endif %}
 {% if can_view_hints %}
 <a href="{% url 'hints' puzzle.slug %}" class="btn">{% if can_ask_for_hints %}索要提示{% else %}查看提示{% endif %}</a>
 {% endif %}
-{% if hunt_is_closed or not team and hunt_is_over %}
-<a href="{% url 'post-hunt-solve' puzzle.slug %}" class="btn">核对答案</a>
-{% endif %}
 {% if hunt_is_over or is_superuser %}
 <a href="{% url 'solution' puzzle.slug %}" class="btn">查看解答</a>
-<a href="{% url 'stats' puzzle.slug %}" class="btn">查看统计</a>
 {% endif %}
 {% endblock %}
 

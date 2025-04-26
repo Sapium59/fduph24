@@ -112,7 +112,10 @@ class BaseContext:
         return self.start_time - self.now < datetime.timedelta(hours=5)
 
     def hunt_is_over(self):
-        return self.now >= self.end_time
+        try:
+            return self.now + self.team.start_offset >= self.end_time
+        except:
+            return self.now >= self.end_time
 
     def hunt_is_closed(self):
         return self.now >= self.close_time
