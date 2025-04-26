@@ -1,0 +1,22 @@
+{% extends "solution.html" %}
+{% block puzzle-author %}
+inequality
+{% endblock %}
+{% block solution-body-md %}
+
+首先解决题目中的线索，在搜索过程中结合ft中的“数据”可能会意识到每个线索会对应某个数字，它们的数量级各不相同。结合剧情我们知道每个小题答案都是“数据”，那么“科学地对待数据”能够联想到科学计数法，我们将答案改写为aEb的形式。改写后它们的数量级恰好从10^0到10^8，因此可以考虑将它们作为排序，前面的数字作为index来提取线索的答案。过程见下表：
+
+|线索|答案|相关数字|科学计数法|对应小题答案|提取线索答案|
+|--|--|--|--|--|--|
+|毕淑敏游记题目中的地点(6)|Africa|30000|5E4|GOGO SENTAI|C|
+|James bond的职业(5)|agent|7|2E0|AGE|G|
+|The Musical Comedy Murders的作者(4 6)|John Bishop|1940|3E3|TAKE OFF|H|
+|把Brian Moriaty的演讲作为final meta的游戏制作人(8 4)|Jonathan Blow|46|8E1|AIRBNB USER|N|
+|宇宙中最快的速度(10或5 5)|lightspeed|300000000|1E8|JEJU ISLAND|L|
+|禁军教头的名字(3 5)|Lin chong|800000|3E5|AFTERMATH|N|
+|《茅屋为秋风所破歌》中一句里的事物（许渊冲翻译）(8)|mansions|10000000|2E7|CHERISHING|A|
+|元素周期表中为纪念诺贝尔而命名的元素(8)|nobelium|102|6E2|FIFTY CENT|I|
+|马克吐温的小说题目中的事物(5)|pound|1000000|3E6|KOBE BRYANT|U|
+
+最终从大到小排序可以得到Launching。
+{% endblock %}

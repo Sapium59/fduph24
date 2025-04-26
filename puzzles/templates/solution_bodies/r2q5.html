@@ -1,0 +1,75 @@
+{% extends "solution.html" %}
+{% block puzzle-author %}
+xxuurruuii
+{% endblock %}
+{% block solution-body-md %}
+### 获取前置知识
+
+本题是游戏题，根据标题提示的arcaea我们可以找到这个游戏的wiki：
+
+<img src="/static/puzzle_resources/r2q5/s-r2q5-01.png" style="height: 25vh;">
+
+在wiki主页的侧栏有一个游戏玩法页面：
+
+<img src="/static/puzzle_resources/r2q5/s-r2q5-02.png" style="height: 25vh;">
+
+在这里我们可以找到做本题需要的前置知识：
+
+(1) 在游玩结算界面可以知道成绩图中数据的含义
+
+<img src="/static/puzzle_resources/r2q5/s-r2q5-03.png" style="height: 10vh;">
+
+(2) 在机制页可以找到部分俗称的含义，虽然文章很长但用网页搜索功能可以快速定位词语：
+
+<img src="/static/puzzle_resources/r2q5/s-r2q5-04.png" style="height: 10vh;">
+
+<img src="/static/puzzle_resources/r2q5/s-r2q5-05.png" style="height: 10vh;">
+
+    “物量”一词在wiki中没有明确定义，但联系上下文不难猜测指的是谱面note总量：
+
+<img src="/static/puzzle_resources/r2q5/s-r2q5-06.png" style="height: 25vh;">
+
+(3) 在判定中可以找到蛇只要击中一定是 大Pure 判定：
+
+<img src="/static/puzzle_resources/r2q5/s-r2q5-07.png" style="height: 40vh;">
+
+(4) 在wiki中搜索曲名可以找到歌曲的单独页面，在这个页面中可以找到谱面的物量和定数等信息：
+
+<img src="/static/puzzle_resources/r2q5/s-r2q5-08.png" style="height: 15vh;">
+
+<img src="/static/puzzle_resources/r2q5/s-r2q5-09.png" style="height: 15vh;">
+
+以上是所有前置知识的获取，这些知识是在做题过程中随时查找的，并不要求玩家一开始就全部掌握。
+
+### 解题
+由 ft 前半句 “唉怎么打什么歌都得掉几个 lost” 尝试用 lost 数对曲名提取，得到中间答案 seeBV1ys421u7BY，该答案指向bilibili的一个视频: <a href="https://www.bilibili.com/video/BV1ys421u7BY">https://www.bilibili.com/video/BV1ys421u7BY</a>。
+
+仔细观看该视频，发现它描述了一个 “#框排名得分公式”（1:00），并提到了 k 取100（1:11）和玩家更倾向于计算失分，即距离满分还有多少分（3:05），因此尝试对每个成绩计算失分。注意到 ft 的后半句 “lost还都是蛇，要是都pm了就好了”，因此在计算失分前需要先将所有 lost 视为大 p 后再计算失分。计算需要的定数等数据可以在 arcaea wiki 获取。计算结果如下：
+
+|曲名|难度|定数|大p|小p|Pure|物量|失分|提取|
+|--|--|--|--|--|--|--|--|--|
+|Purple Verse|BYD|10.6|1190|12|1202|1202|5.282362729|E|
+|Designant.|BYD|11.9|2146|38|2184|2184|14.75512821|N|
+|Vexaria|FTR|7.0|709|25|734|734|20.34196185|T|
+|Breach of Faith|BYD|10.9|1433|15|1448|1448|5.841436464|E|
+|LIVHT MY WΔY|FTR|9.8|931|23|954|954|18.72683438|R|
+|1F√|FTR|8.2|744|14|758|758|11.04511873|K|
+|Syro|FTR|9.3|1125|25|1150|1150|15.5673913|O|
+|Tempestissimo|BYD|11.7|1529|11|1540|1540|2.507142857|B|
+|FREEF4LL|BYD|9.8|1322|14|1336|1336|5.369461078|E|
+|Bookmaker (2D Version)|BYD|10.0|1277|10|1287|1287|2.77000777|B|
+|#1f1e33|FTR|11.1|1542|34|1576|1576|18.39670051|R|
+|Dual Doom Deathmatch|ETR|10.3|1254|38|1292|1292|25.14411765|Y|
+|7thSense|FTR|9.9|919|6|925|925|1.471621622|A|
+|BlazinG AIR|ETR|10.1|1107|22|1129|1129|14.63113375|N|
+|CYCLES|FTR|8.8|675|20|695|695|20.92374101|T|
+
+尝试将失分下取整后a1z26得到结果 ENTER KOBE BRYANT，因此本题的答案为 KOBE BRYANT。
+{% endblock %}
+
+{% block author-notes-md %}
+
+作为私货题的非常失败的一个尝试。
+
+出这题时的最初想法是想塞一个私货题和如果出一道需要筛选数据的纯计算题会怎么样，但即使我确认了所有应该知道的信息都能在视频中获得，从结果来看这题在各方面都是失败的：少部分人没有发现k=100，大部分人没有发现应该计算失分而不是得分，大部分人由于对游戏机制不了解而不知道ft的后半句的意思。即使在做这题的过程中没有踩任何坑，它作为一个纯列表计算题没有任何aha点，仍然是一个非常无趣的题目。有些题目类型天生就不适合出现在ph中。
+{% endblock %}
