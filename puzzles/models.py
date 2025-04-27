@@ -251,6 +251,10 @@ class Team(models.Model):
             ((member.email, str(member)) if with_names else member.email)
             for member in self.teammember_set.all() if member.email
         ]
+    @property
+    def emails(self):
+        emails = self.get_emails()
+        return emails
 
     def puzzle_submissions(self, puzzle):
         return [
@@ -322,6 +326,7 @@ class Team(models.Model):
                 'metameta_solve_time': meta_times.get(team.id),
                 'team': team,
                 'team_member_joint_string': ', '.join([it.name for it in team.teammember_set.all()]),
+                'emails': team.emails,
                 # 'creation_time': team.creation_time.strftime('%m/%d %H:%M:%S'),
                 'creation_time': team.creation_time,
             } for team in all_teams]
