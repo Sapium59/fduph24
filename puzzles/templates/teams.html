@@ -16,7 +16,6 @@
                 <th>队名</th>
                 <th>成员</th>
                 <th>成立时间</th>
-                <th>e-mail</th>
             </tr>
             {% for team in teams %}
             <tr {% if team.id == current_team.id %}class="current-team"{% endif %}>
@@ -31,11 +30,6 @@
                 </td>
                 <td>
                     {% format_time team.creation_time 'DATE_AT_TIME' %}
-                </td>
-                <td>
-                    {% for email in team.emails %}
-                        {{ email }} <br>
-                    {% endfor %}            
                 </td>
             </tr>
             {% endfor %}
