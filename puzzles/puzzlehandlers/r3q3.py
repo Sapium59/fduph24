@@ -111,5 +111,5 @@ def submit(request):
 
         # You may wish to provide more details or a call to action. Do you want
         # the solvers to retry, or email you?
-        return {'error': '发生未知错误，请联系管理员。', 'correct': False}
+        return {'error': '发生未知错误，请联系管理员。', 'correct': False, 'new_items_text': []}
 

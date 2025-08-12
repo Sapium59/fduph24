@@ -1,73 +1,281 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load puzzle_tags %}
+
 
 {% block top-left-actions %}
+{% if is_superuser %}
 <a href="{% url 'hunt-stats' %}" class="btn">{% translate "Hunt Stats" %}</a>
 <a href="{% url 'finishers' %}" class="btn">{% translate "Finishers" %}</a>
 <a href="{% url 'biggraph' %}" class="btn">{% translate "Big Graph" %}</a>
+{% endif %}
 {% endblock %}
+
 
 {% block content %}
 
-<style>
-  aside {
-    display: none;
-  }
-
-  @media screen and (min-width: 961px) {
-    aside {
-      display: block;
-      position: fixed;
-      width: 240px;
-      top: 120px;
-      left: 0;
-    }
-
-    aside div {
-      color: var(--link-text-color);
-      cursor: pointer;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    aside :hover {
-      text-decoration: underline;
-    }
-
-    aside .highlight {
-      font-weight: bold;
-    }
-
-    .content {
-      margin-left: calc(240px - 10vw);
-    }
-  }
-</style>
-
-<h1>{% translate "Wrap-Up" %}</h1>
+<h1>活动总结</h1>
 
 <main>
+  <div class="no-break">
+    <h4>活动数据</h4>
+    <ul>
+      <p>本次注册队伍数量为567支，有240支队伍通过了第一个区，有112支队伍顺利通关（所有通关队伍见文末）。</p>
+      <p>在活动期间一共收到了3023条提示请求，一共有9位staff参与了回复。</p>
+      <img src="/static/wrap-up/staff-hints.png">
+      <p>所有提示的分布：</p>
+      <img src="/static/wrap-up/hint-dist.png" style="width: 80vw;">
+      <p> 好评榜：</p>
+      <img src="/static/wrap-up/good-puzz.png" style="width: 80vw;">
+      <p>差评榜：</p>
+      <img src="/static/wrap-up/bad-puzz.png" style="width: 80vw;">
+      <p>有趣的提交记录：</p>
+      <ul>
+        <li>有7支队伍在《A Rule Explorer's Adventure》中提交了“AREA”——这竟然是中间答案！</li>
+        <li>有2支队伍在《xr在玩Arcaea》中提交了“RT今日俄罗斯”——请打开shift交流</li>
+        <li>有3支队伍在《破碎词句》中提交了“THIRTIETH HENTAI”——这种东西竟然有30多个！</li>
+        <li>有3支队伍在《Bingo!》中提交了“BUY BINGO CARD”——本hunt承诺免费游玩，无需消费</li>
+        <li>有5支队伍在《Bingo!》中提交了“DIG BINGO CARD”<br><img src="/static/wrap-up/i-ate-your-bingo-card.png"></li>
 
-<p>{% translate "Congratulations!" %}</p>
+        <li>有16支队伍在《必须修改的结论》中提交了“PLAYED GAMES”或者“GAMES PLAYED”——比起睡觉，显然是打游戏更有吸引力！</li>
+        <li>有6支队伍在《致谢》中提交了“FAMILY MEMBER”或“FAMILY MEMBERS”——感谢家人的支持！</li>
+        <li>有4支队伍在《致谢》中提交了“FDU PUZZLE HUNT”或“FUDAN PUZZLE HUNT”——我致谢我自己</li>
+        <li>有10支队伍在《致谢》中提交了“FDU”“FUDANUNIVERSITY”或“FUDANDAXUE”——很合理</li>
+        <li>有6支队伍在《致谢》中提交了“YOU”或“YOURSELF”——感谢所有参与FDUPH的玩家！</li>
+      </ul>
+    </ul>
+  </div>
 
+  <div class="no-break">
+    <h4>制作过程</h4>
+    <ul>
+      <p>提出要办一场属于FDU的puzzle
+        hunt最早是在2023年6月，在某次偶然发现了JUSThunt筹备早期的神秘网站后，有群友发问“我们能不能办一场ph”，当时并没有太大的热情，不过是觉得也只是跟我们办了十余年的校园定向差不太多的活动，于是回复道“看大家的意愿，如果想出题的人不少可以搞一个”。没想到响应者有十人左右，于是策划组就在那时成立了。
+      </p>
+      <p>那时的我们不过是一群刚刚入坑的萌新，完整参与过的活动不过是P&KU2和几个小型的公众号活动，对于谜题的认知相当青涩且肤浅，同时带着一种初生牛犊不怕虎的莽撞。当时给活动体量定下的基调是对标CMU
+        hunt，题量大概就是20-30题左右。我们很快敲定了一个final
+        meta的结构，凑完了小题答案，并确定了三个分区的设计。之后在一个月的时间内，我们陆续出了五六个小题。不过在CCBC1314后，我们决定推倒重来，不过苦于没有更好的想法，整个项目就此搁置。</p>
+      <p>转机出现在2024年3月，当时Wonderepublic和Lithium都身处毕业季，正在为论文而焦头烂额。在某次闲聊中Lithium提到他在致谢中感谢了puzzle
+        hunt，然后小大圣开玩笑说能不能在致谢里藏题，那时我们突然意识到论文的结构可以正好完美契合一个puzzle
+        hunt所需要的分——总的结构。几乎没有太多的犹豫，我们很快决定要将主题与剧情转向毕业论文，这样一个与学生党密切相关的主题也得到了其他成员的支持，于是筹备工作又重新展开了。</p>
+      <p>仅有主题是不够的，实际上在确定主题之后的两个月内我们一直无法决定整个活动的结构和final
+        meta的设计。终于我们觉得这种情况不能一直持续下去，在5月份五六个出题组成员线下开了一次会，也正是在那次会上我们头脑风暴出了final
+        meta的机制并确定了最终答案，同时也讨论了一下几个分区的大概对应，一区的国际单位制也是在那个时候确定的。</p>
+      <p>下面是我们当时讨论结束之后的留影，可以看到很多内容基本都呈现在了最终版本之中。</p>
+      <img src="/static/wrap-up/early-plan.jpeg" style="width: 80vw;">
+    </ul>
+  </div>
+
+  <div class="no-break">
+    <h4>题目数量与难度</h4>
+    <ul>
+      <p>
+        因为我们是第一次制作hunt，我们计划是一个中型大小的hunt。我们将本次hunt的体量与CMU
+        hunt定标，预计20到30个小题左右，分为3个区。在题目难度和厚度方面，我们希望能让经验丰富的队伍能够在1个周末的时间内完赛，因此没有出现非常难且厚的题目。由于final meta
+        的限制，我们没有办法随意地更换小题的顺序，但是最后呈现出来的难度曲线基本实现了3个区的难度梯度增长。</p>
+    </ul>
+  </div>
+
+  <div class="no-break">
+    <h4>档期</h4>
+    <ul>
+      <p>
+        选择这个档期主要有两个原因。一是这个时间段差不多是毕业生写完毕业论文之后送交盲审，在答辩之前最空闲的一段时间，对于毕业生来说可能是一个比较空闲的时间段。二是我们不太希望占用玩家的五一假期时间，毕竟对于上班党来说长假还是比较难得的。
+      </p>
+      <p>实际上这个时间段似乎撞上了一些学生党的期中季，也导致部分玩家没能很好地体验到整个活动，这一点还是比较遗憾的。</p>
+    </ul>
+  </div>
+
+  <div class="no-break">
+    <h4>结构</h4>
+
+    <p>
+      在早期的构想中，三个区原本应当是论文的不同章节，分区meta作为本章小结出现。但后来我们觉得meta用到的主题不太方便对应章节，因此改成了论文写作过程中遇到的各种需要解决的“课题”，而分区meta则是月度总结。预期上是希望将meta和小题进行区分，从而更明确在final
+      meta时不需要使用meta答案这一点。但是由于一些失误，没有将剧情中的介绍修改到更契合当前设计的版本，以及虽然在解锁meta时做了“月度总结”这样的弹窗，但毕竟这是一个不可追溯的信息，导致实际呈现出来没有能将这一点很好地传达给玩家。
+    </p>
+    <p>这次没有出现很多国内hunt中出现的metameta，可能也让一些玩家有些不适应。实际上在初期规划中是讨论过是否要编写一个metameta的，最终我们认为metameta在此前的大部分国内hunt中是起到一个进入final
+      meta前的过渡作用，答案往往会提示final meta的主题，但题目本身通常没有特别出彩，很多时候都是为了结构化而设置。因此没有太执着于metameta的设置这一点。</p>
+  </div>
+
+  <div class="no-break">
+    <h4>时间线</h4>
+
+    <li>2024年3月：提出了论文主题。</li>
+    <li>2024年5月：线下会议确定了FM的基本形式和大致框架。</li>
+    <li>2024年6月：凑完了所有答案。</li>
+    <li>2024年7月-11月：完成了大部分谜题的编写，同时构想了提示、排行榜、网站等各种事项。在11月中旬招募了第一轮内测。档期确定，同时决定在年底的puzzlers‘ day上进行首发。</li>
+    <li>2024年12月：基本完成第一轮内测，正式宣发。网站开始开发。</li>
+    <li>2025年3月：第二轮内测。调整解锁逻辑，在二三区过半后宽度+1。</li>
+    <li>2025年4月：第三轮内测。开放注册。</li>
+  </div>
+
+  <div class="no-break">
+    <h4>排行榜</h4>
+
+    <p>
+      取消排行榜这个想法其实在很早就提出来了，并不是跟风teammate。也没有什么非常深层次的原因，就是在见过了一些由排行榜带来的队伍内部之间的不愉快之后想尝试一次不以追求名次为目标的体验。一开始的计划是在活动期间不公开，在活动结束后公开前10名的队伍。但是在3月时，teammate也宣布他们将取消排行榜（当然teammate实际上有通过成就来显示队伍进度的部分，不过这是他们开赛之后才知道的）于是在那时决定做得更干净一点，直接砍掉所有的排行榜的展示部分。
+    </p>
+    <p>
+      从问卷调查的反馈来看，对于这一改变的支持与反对声音基本相当，更多的则是无所谓的态度。支持的原因集中于“更关注谜题本身”和“不影响正常作息”这两点上，反对的意见则集中于“希望记录成绩”和“借助排行榜规划进度”上。关于如何设置排行榜，主流的意见仍然是倾向于有排行榜展示，至于活动期间是否展示，这一点影响较小。
+    </p>
+  </div>
+
+  <div class="no-break">
+    <h4>提示系统</h4>
+
+    <p>采用纯人工提示确实是过于激进的一个选择，初衷是我们觉得人工提示相比于预设提示也许可以提供更细致和更定制化的帮助，因此采用了洋hunt中更常用的人工提示系统。</p>
+    <p>
+      为什么取消了追问：其实关于这一点在内部也是有争议的。取消派的论点主要来源于对关闭追问标准不统一的厌恶，不希望无限追问的出现，因此主张用更多的提示点来替换追问的功效。反对派的意见是追问作为一种“免费”的资源，队伍在使用时的心理负担会更小。另外追问还可以作为确认之前回复中模糊地方的验证手段，因此主张保留追问但是严格限制追问范围。两派的意见基本上在内部也是对半开的状态，最终是带着实验性质的心态决定采用最严格的提示资源完全等同于提示点的方案。
+    </p>
+    <p>
+      在实操过程中也确实暴露了很多问题，最大的一个问题就是在早期提示资源不够充分的情况下对于提示回复中模糊的地方没有联系staff的渠道，虽然预想中是可以通过邮箱进行联系，但这一点并没有在网站上有明确的相关说明，而且邮箱并非国内首选的通信方式，因此在站内信缺失的情况下很难让队伍意识到这点。再加上部分题目的bug和回复方式的原因，导致了部分队伍的提示体验比较差。这点可能会比题目本身的问题会更加影响到玩家体验。
+    </p>
+  </div>
+
+  <div class="no-break">
+    <h4>网站</h4>
+
+    <p>
+      网站按钮的颜色来自复旦大学的校徽，整体设计来自基于Canvas的复旦大学的教务系统elearning，由于国内不少高校的教务系统都是基于Canvas框架搭建的，因此不少复旦的同学以及其他高校的玩家在点开网站时产生了ptsd感。不过也有玩家反馈这个设计让他们可以放心地在课堂上点开网站。
+    </p>
+    <p>
+      由于技术人员只有乌桕一人且经常要加班，再加上在活动开始、排行榜和提示等各个系统上都有修改，以及《Bingo！》和《谜神》带来的交互需求，这些问题使得网站的搭建远没有想象中那么顺利。虽然预留了近4个月的时间准备网站，但还是有很多地方没能完全达到预期，甚至出现了不少bug。特别是分流开始时出现的问题导致没有达到预期的效果，实打实地影响到了活动开始时的一些体验。包括站内信也是因为时间原因没能来得及做，从而影响到了提示系统。
+    </p>
+  </div>
+
+
+  <div class="no-break">
+    <h4>未来计划</h4>
+
+    <p>可能会有FDUPH2，但并不保证。</p>
+    <p>在那之前可能会有另一个由相同staff参与制作的hunt，不过应该不会冠以FDUPH之名。</p>
+  </div>
+
+  <div style="word-break:break-all;">
+    <h4>所有通关队伍（排名不分先后）</h4>
+    <ul>
+      <li>_Walnutz_</li>
+      <li>《原神》开发团队</li>
+      <li>【 】</li>
+      <li>【小学语文】优秀范文《我爱丁香花》（节选）</li>
+      <li>【已深度思考】以下是几个长队名设计，结合了流行文化梗、谐音梗和夸张修辞：
+        重生之我在银河系敲退堂鼓表演艺术家联合地表最强熬夜冠军与猝死赛跑协会驻人间搞笑办事处五年修仙三年渡劫但今天外卖还没到之天庭在逃弼马温联名地狱首席摸鱼师共建反内卷战略同盟甲方需求毁灭者与乙方尊严守护者の禁忌の恋·这个需求做不了一点特别行动组穿越异世界却加载了Excel系统の社畜勇者说下班后魔王也要遵守劳动法之福报研究工作室
+      </li>
+      <li>↑↓↑→←→←→</li>
+      <li>211启动</li>
+      <li>AfterPhysics</li>
+      <li>Almost A Hunter</li>
+      <li>Alteleid</li>
+      <li>Bang Dream It's FDUPH!!!!!</li>
+      <li>Busy Pupil Catastrophe</li>
+      <li>Celestial <Catellite>
+      </li>
+      <li>ClashのRPC</li>
+      <li>Creative Catalyst&Empowered Explorers Union</li>
+      <li>CyFur</li>
+      <li>duthunter</li>
+      <li>First Deadline U Procrastinate Happily</li>
+      <li>FloorOfLava</li>
+      <li>Food and Drinks Union</li>
+      <li>generals.io</li>
+      <li>HUNGERGAME</li>
+      <li>IceCream</li>
+      <li>IWFans</li>
+      <li>liquid_oxygen</li>
+      <li>MEta/poLitan</li>
+      <li>mygygy@夫子我错了女乐真的不好看</li>
+      <li>New York City</li>
+      <li>Not A Hunter</li>
+      <li>NZND -「掘井九轫不及泉，犹为弃井」</li>
+      <li>OMO只是看看</li>
+      <li>Opera Epiclese</li>
+      <li>Project1</li>
+      <li>R.W.B.Y.</li>
+      <li>resetursef</li>
+      <li>Reviver Team</li>
+      <li>sflsph</li>
+      <li>shengqile.cpp</li>
+      <li>SYSUの解谜人</li>
+      <li>Team_202</li>
+      <li>TeamSUA</li>
+      <li>THEGENIUS</li>
+      <li>tungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungtungsahur</li>
+      <li>U</li>
+      <li>USTC解谜大队</li>
+      <li>White Maria</li>
+      <li>zitmen</li>
+      <li>-------🥇🥇🥇-------</li>
+      <li>暗夜呢喃</li>
+      <li>抱歉实在整不出活了</li>
+      <li>爆宗门肥肚平衡</li>
+      <li>冰糖雪梨队</li>
+      <li>不观光队</li>
+      <li>参赛就是胜利！</li>
+      <li>超酷贝斯手出场</li>
+      <li>稠环芳烃</li>
+      <li>
+        从前法海爱上了一条白蛇，话说这白蛇可大有来头！这是一条玉米蛇，种类是雪白（Snow），但是由于某比赛导致法海现在非常不想看到玉米蛇！这说明什么，这说明法海得了“玉米蛇铍锑锶镝”。为此，法海在白蛇的必经之路“神秘的GOING
+        TOGETHER FOREVER之路”上天天留“一下子逛完八十一公顷神秘公园”功法。白蛇于是叫上了好姐妹小青一起做功（WORK），两蛇终修成人猿形。法海瞬间爆炸起飞，刚要提亲，</li>
+      <li>的做会都么什我吧题眼一看我让你求求</li>
+      <li>丁香鱼徒步运动</li>
+      <li>队名包含不适宜内容</li>
+      <li>额额额啊啊啊额额额</li>
+      <li>反卷没教练</li>
+      <li>反卷没破轮</li>
+      <li>反卷石榴粥</li>
+      <li>服务器繁忙，请稍后再试</li>
+      <li>复读机</li>
+      <li>国际木瓜圈养组织</li>
+      <li>何以为我</li>
+      <li>花水魔芋</li>
+      <li>几人对</li>
+      <li>狼兰兰</li>
+      <li>澪</li>
+      <li>猫头</li>
+      <li>密斯卡，穆斯卡，米老鼠</li>
+      <li>你在为难我胖虎</li>
+      <li>哦咩嘎芜</li>
+      <li>炮灰破坏平衡</li>
+      <li>七宝小圆</li>
+      <li>求求你让我看一眼题吧我什么都会做的</li>
+      <li>全军偷🐔</li>
+      <li>赛尔赛尔</li>
+      <li>少爷，该初缤了</li>
+      <li>深色墨点</li>
+      <li>识文解意的追迹者</li>
+      <li>世界美食official</li>
+      <li>同位素解谜联盟IPU</li>
+      <li>歪脚芋头</li>
+      <li>王家大院</li>
+      <li>我爸爸acidice来全秒了</li>
+      <li>我的队友都太强了！</li>
+      <li>我是取名废物</li>
+      <li>我真幸运，刚打完二刺螈比烧酒魂游就可以玩只虫影逝二度s2了</li>
+      <li>握握手🤝握握双手🤝握握双手🤝握握双手🤝 握握双手🤝 握握双手🤝握握手🤝握握双手🤝握握双手🤝 握握手🤝握握手🤝握握手🤝</li>
+      <li>闲散解谜！</li>
+      <li>盐水和面</li>
+      <li>耶斯特队</li>
+      <li>野炊组</li>
+      <li>野兽先辈探案组</li>
+      <li>一辈子爱摸鱼</li>
+      <li>一川明月疏星</li>
+      <li>以在此略整小活</li>
+      <li>饮水思源</li>
+      <li>应该还能改吧</li>
+      <li>影孤作變後退異差對 正吉雅為稱有處明 猶光燭游浮音奏伴如 久不行流案圖的似 近是可者使勁至的 宛杭遇一新自過悔 意立者食飲至落墜 體軀說誰第及未折 曲涯生經局對的馭 駕鬆輕如動不住站 還復反來往數禮體 大的失散駭威武以
+        敗頹腐蔫法說新有 塊大帶地伏潛嗎說 聽有沒化開體來原 化死與怠懈化退已 脈血吧對意在別力 盡罪重下犯器兵為 成且暫壁林圍重戰 之家贏作換置化度 過觀值價住握感私 那出說段手的誤錯</li>
+      <li>幼稚园的小猫咪</li>
+      <li>柚子÷真恶心</li>
+      <li>
+        在你面前的是：CCBC13&14被小行星命中未完赛、、CCBC15听小白狐唱歌唱死了未完赛、P&KU2、3沉迷剧情未完赛、JustPuzzleHunt学日语去了导致未完赛、MiaoHunt后台爆炸未完赛、MITPH看都没看、GPH2025抽卡抽爆炸了、CRYPTEXHUNT睡过头了、TEAMMATEHUNT遗失在太空里了、亦乐杯&蛇蛇hunt打酱油的、咚咚谜&丁香谜准点查看题目的【精神状态超棒队】
+      </li>
+      <li>在团队列表展示的队伍名，您可以在此略整小活。</li>
+      <li>只有队长不打雀</li>
+      <li>重生之我在大观园当植物</li>
+      <li>重重重重重力加速度</li>
+      <li>组一辈子乐</li>
+    </ul>
+  </div>
 </main>
-
-<aside>
-  <script>
-    const heads = [...$('h1,h2,h3,h4,h5,h6')].map(head => [head, $('<div>')
-      .text(head.textContent)
-      .css('padding-left', head.tagName.substr(1) + 'em')
-      .click(() => head.scrollIntoView())
-      .appendTo('aside')]);
-    function highlight() {
-      const rects = heads.map(([head]) => head.getBoundingClientRect());
-      heads.forEach(([head, link], i) => link.toggleClass('highlight',
-        (!rects[i + 1] || rects[i + 1].top > 0) && rects[i].top < innerHeight));
-    }
-    document.addEventListener('scroll', highlight, { passive: true });
-    highlight();
-  </script>
-</aside>
 
 {% endblock %}

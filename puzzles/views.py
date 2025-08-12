@@ -1154,7 +1154,7 @@ def story(request):
         ('round2_open', False), 
         ('round3_open', False), 
         ('fm_open', any([puzzle.slug == META_META_SLUG for puzzle in request.context.unlocks])),
-        ('victory', request.context.has_finished_hunt)
+        ('victory', request.context.has_finished_hunt or request.context.hunt_is_over)
     ))
     if request.context.hunt_has_started:
         for puzzle in request.context.unlocks:

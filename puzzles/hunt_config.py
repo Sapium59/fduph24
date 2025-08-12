@@ -18,7 +18,7 @@ MESSAGING_SENDER_EMAIL = 'no-reply@fdupuzzle.fun'
 # Change this to True to reveal the story page to everyone.
 STORY_PAGE_VISIBLE = True
 # Change this to True when the wrapup exists.
-WRAPUP_PAGE_VISIBLE = False
+WRAPUP_PAGE_VISIBLE = True
 # Change this to True to start showing solve and guess counts on each puzzle.
 # Full stats are automatically available to superusers and after hunt end.
 INITIAL_STATS_AVAILABLE = False
